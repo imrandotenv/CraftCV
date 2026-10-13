@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>CVForge - Build Your Resume in 3 Steps</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+<style>
+:root{--accent:#2563eb;--bg:#eef1f6;--panel:#fff;--ink:#1f2937;--muted:#6b7280;--line:#d1d5db}
+@media(prefers-color-scheme:dark){:root{--bg:#0f172a;--panel:#1e293b;--ink:#e5e7eb;--muted:#94a3b8;--line:#334155}}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Inter,system-ui,sans-serif;background:var(--bg);color:var(--ink);min-height:100vh}
+.wrap{max-width:860px;margin:0 auto;padding:20px 14px 60px}
+.brand{text-align:center;margin:10px 0 18px}
+.brand h1{font-size:1.7rem;color:var(--accent)}
+.brand p{color:var(--muted);font-size:.9rem}
+
+/* progress */
+.steps{display:flex;justify-content:center;gap:8px;margin-bottom:18px}
+.dot{display:flex;align-items:center;gap:6px;font-size:.8rem;color:var(--muted);font-weight:600}
+.dot i{width:26px;height:26px;border-radius:50%;background:var(--line);color:#fff;display:grid;place-items:center;font-style:normal;transition:.3s}
+.dot.on{color:var(--ink)}.dot.on i{background:var(--accent)}
+.dot+.dot::before{content:"";width:30px;height:2px;background:var(--line);margin-right:2px}
+
+.step{display:none;animation:in .4s ease}
+.step.active{display:block}
+@keyframes in{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+.card{background:var(--panel);border-radius:14px;padding:20px;box-shadow:0 4px 20px #0001;margin-bottom:16px}
+.card h2{font-size:1rem;margin-bottom:12px;color:var(--accent)}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.full{grid-column:1/-1}
+label.f{display:block;font-size:.72rem;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.05em}
+input,textarea{width:100%;margin-top:4px;padding:9px 11px;border:1.5px solid var(--line);border-radius:8px;background:transparent;color:var(--ink);font:inherit;font-size:.9rem;transition:.2s}
+input:focus,textarea:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px #2563eb22}
+textarea{resize:vertical;min-height:62px}
+.row{border:1.5px dashed var(--line);border-radius:10px;padding:12px;margin-bottom:10px;position:relative}
+.row .x{position:absolute;top:6px;right:8px;border:0;background:none;color:#e11d48;font-size:1.1rem;cursor:pointer}
+.btn{border:0;border-radius:9px;padding:10px 18px;font:inherit;font-weight:600;font-size:.85rem;cursor:pointer;transition:.2s}
+.btn:hover{transform:translateY(-2px)}
+.pri{background:var(--accent);color:#fff}
+.sec{background:transparent;border:1.5px solid var(--line);color:var(--ink)}
+.add{background:transparent;color:var(--accent);border:1.5px solid var(--accent);padding:6px 12px;font-size:.78rem}
+.nav{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap}
+
+/* theme picker */
+.themes{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px}
+.th{border:2.5px solid var(--line);border-radius:12px;padding:10px;cursor:pointer;transition:.25s;background:var(--panel)}
+.th:hover{transform:translateY(-4px)}
+.th.sel{border-color:var(--accent);box-shadow:0 0 0 4px #2563eb22}
+.th b{display:block;font-size:.85rem;margin-top:8px}.th small{color:var(--muted)}
+.mini{height:96px;border-radius:6px;background:#fff;border:1px solid #e5e7eb;position:relative;overflow:hidden}
+.mini::before,.mini::after{content:"";position:absolute;background:#d1d5db;border-radius:2px}
+.m-classic::before{left:20%;right:20%;top:12px;height:8px;background:var(--accent)}
+.m-classic::after{left:10px;right:10px;top:34px;height:40px;background:repeating-linear-gradient(#d1d5db 0 4px,#fff 4px 10px)}
+.m-modern::before{left:0;top:0;bottom:0;width:34%;background:var(--accent)}
+.m-modern::after{left:42%;right:10px;top:12px;height:70px;background:repeating-linear-gradient(#d1d5db 0 4px,#fff 4px 10px)}
+.m-minimal::before{left:12px;top:12px;width:50%;height:6px;background:#374151}
+.m-minimal::after{left:12px;right:12px;top:32px;height:50px;border-left:3px solid var(--accent);background:repeating-linear-gradient(#d1d5db 0 4px,#fff 4px 10px)}
+.m-bold::before{left:0;right:0;top:0;height:34px;background:linear-gradient(120deg,var(--accent),#111827)}
+.m-bold::after{left:10px;right:10px;top:46px;height:40px;background:repeating-linear-gradient(#d1d5db 0 4px,#fff 4px 10px)}
+.colors{display:flex;gap:10px;margin:14px 0 6px}
+.cd{width:30px;height:30px;border-radius:50%;cursor:pointer;border:3px solid transparent;transition:.2s}
+.cd:hover{transform:scale(1.15)}.cd.sel{border-color:var(--ink)}
+
+/* ===== CV SHEET ===== */
+.stage{display:flex;justify-content:center;overflow-x:auto;padding:4px}
+.sheet{width:210mm;min-height:297mm;background:#fff;color:#1f2937;box-shadow:0 10px 40px #0004;font-size:10.5pt;line-height:1.5;flex-shrink:0}
+.sheet h1{font-size:26pt;line-height:1.1}
+.sheet .role{color:var(--accent);font-weight:600;font-size:12pt}
+.sheet h3{font-size:10pt;text-transform:uppercase;letter-spacing:.12em;color:var(--accent);border-bottom:2px solid var(--accent);padding-bottom:3px;margin:16px 0 8px}
+.sheet ul{margin:3px 0 0 18px}.sheet ul.p{list-style:none;margin:0}.sheet ul.p li{margin-bottom:3px}
+.sheet .it{margin-bottom:10px}.sheet .it b{display:block}.sheet .it span{color:#6b7280;font-size:9.5pt}
+.sheet .tags{display:flex;flex-wrap:wrap;gap:5px}
+.sheet .tags li{list-style:none;margin:0;background:#f3f4f6;border:1px solid var(--accent);color:#1f2937;padding:1px 9px;border-radius:99px;font-size:9pt}
+.sheet main>section:first-child h3,.sheet aside>section:first-child h3{margin-top:0}
+
+.t-classic{font-family:Georgia,"Playfair Display",serif;padding:16mm}
+.t-classic h1{font-family:"Playfair Display",Georgia,serif}
+.t-classic header{text-align:center;border-bottom:3px double var(--accent);padding-bottom:10px}
+.t-classic aside{margin-top:8px}
+
+.t-modern,.t-bold{display:grid;grid-template-columns:34% 66%;grid-template-areas:"h h" "s m";font-family:Inter,sans-serif}
+.t-modern header{grid-area:h;background:var(--accent);color:#fff;padding:14mm 12mm 10mm}
+.t-modern header .role{color:#ffffffcc}
+.t-modern aside,.t-bold aside{grid-area:s;background:#f3f4f6;padding:8mm}
+.t-modern main,.t-bold main{grid-area:m;padding:8mm 10mm}
+
+.t-bold header{grid-area:h;background:linear-gradient(120deg,var(--accent),#111827);color:#fff;padding:16mm 12mm 12mm}
+.t-bold header h1{font-size:30pt;letter-spacing:.03em;text-transform:uppercase}
+.t-bold header .role{color:#fff;opacity:.85}
+.t-bold h3{border:0;background:var(--accent);color:#fff;padding:2px 8px;border-radius:3px}
+
+.t-minimal{font-family:Inter,sans-serif;padding:16mm;font-size:10pt}
+.t-minimal h1{font-weight:400;font-size:30pt;letter-spacing:.04em}
+.t-minimal h3{border:0;border-left:4px solid var(--accent);padding-left:8px;letter-spacing:.2em}
+.t-minimal aside{margin-top:6px}
+
+.err{color:#e11d48;font-size:.8rem;margin-bottom:8px;display:none}
+@media(max-width:640px){.grid{grid-template-columns:1fr}.dot span{display:none}}
+
+@page{size:A4;margin:0}
+@media print{
+  body{background:#fff}
+  .wrap{padding:0;max-width:none}
+  .brand,.steps,.noprint{display:none!important}
+  .step{display:none!important}#s3{display:block!important}
+  .stage{padding:0;overflow:visible}
+  .sheet{box-shadow:none}
+  *{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="brand"><h1>📄 CVForge</h1><p>Build a professional resume in 3 simple steps</p></div>
+  <div class="steps">
+    <div class="dot on" id="d1"><i>1</i><span>Details</span></div>
+    <div class="dot" id="d2"><i>2</i><span>Theme</span></div>
+    <div class="dot" id="d3"><i>3</i><span>Download</span></div>
+  </div>
+
+  <!-- STEP 1 -->
+  <section class="step active" id="s1">
+    <form id="form" onsubmit="return false">
+      <div class="card"><h2>👤 Personal Info</h2>
+        <div class="grid">
+          <label class="f">Full name *<input name="name" placeholder="Aarav Kumar"></label>
+          <label class="f">Job title / Course<input name="title" placeholder="B.Tech CSE Student"></label>
+          <label class="f">Email<input name="email" type="email" placeholder="you@email.com"></label>
+          <label class="f">Phone<input name="phone" placeholder="+91 98765 43210"></label>
+          <label class="f">Location<input name="loc" placeholder="Darbhanga, Bihar"></label>
+          <label class="f">Link (GitHub / LinkedIn)<input name="link" placeholder="github.com/you"></label>
+          <label class="f full">Summary<textarea name="sum" placeholder="2-3 lines about you and your goals"></textarea></label>
+        </div>
+      </div>
+      <div class="card"><h2>🛠 Skills &amp; Languages</h2>
+        <label class="f">Skills (comma separated)<input name="skills" placeholder="HTML, CSS, Python, C, Git"></label>
+        <label class="f" style="margin-top:10px">Languages (comma separated)<input name="langs" placeholder="English, Hindi"></label>
+      </div>
+      <div class="card"><h2>🎓 Education</h2><div id="g-edu"></div><button type="button" class="btn add" data-g="edu">+ Add education</button></div>
+      <div class="card"><h2>💼 Experience / Internships</h2><div id="g-exp"></div><button type="button" class="btn add" data-g="exp">+ Add experience</button></div>
+      <div class="card"><h2>🚀 Projects</h2><div id="g-proj"></div><button type="button" class="btn add" data-g="proj">+ Add project</button></div>
+      <div class="card"><h2>🏅 Certifications &amp; Achievements</h2>
+        <label class="f">One per line<textarea name="certs" placeholder="Python for Everybody - Coursera"></textarea></label>
+      </div>
+    </form>
+    <p class="err" id="err">Please enter your name to continue.</p>
+    <div class="nav"><button class="btn sec" id="sample">✨ Fill sample data</button><button class="btn pri" id="to2">Next: Choose Theme →</button></div>
+  </section>
+
+  <!-- STEP 2 -->
+  <section class="step" id="s2">
+    <div class="card"><h2>🎨 Pick a template</h2>
+      <div class="themes" id="themes">
+        <div class="th sel" data-t="classic"><div class="mini m-classic"></div><b>Classic</b><small>Elegant serif, centered</small></div>
+        <div class="th" data-t="modern"><div class="mini m-modern"></div><b>Modern</b><small>Two columns, bold header</small></div>
+        <div class="th" data-t="minimal"><div class="mini m-minimal"></div><b>Minimal</b><small>Clean and airy</small></div>
+        <div class="th" data-t="bold"><div class="mini m-bold"></div><b>Bold</b><small>Gradient, high impact</small></div>
+      </div>
+      <h2 style="margin-top:18px">Accent colour</h2>
+      <div class="colors" id="colors"></div>
+    </div>
+    <div class="nav"><button class="btn sec" data-go="1">← Back</button><button class="btn pri" id="to3">Generate my CV →</button></div>
+  </section>
+
+  <!-- STEP 3 -->
+  <section class="step" id="s3">
+    <div class="nav noprint" style="margin-bottom:14px">
+      <button class="btn sec" data-go="1">✏️ Edit details</button>
+      <button class="btn sec" data-go="2">🎨 Change theme</button>
+      <button class="btn pri" onclick="window.print()">🖨 Print / Save as PDF</button>
+    </div>
+    <p class="noprint" style="font-size:.78rem;color:var(--muted);margin-bottom:10px">Tip: in the print dialog choose "Save as PDF", set margins to <b>None</b> and turn on <b>Background graphics</b>.</p>
+    <div class="stage"><article class="sheet" id="cv"></article></div>
+  </section>
+</div>
+
+<script>
+const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
+const esc=s=>String(s||'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const COLORS=['#2563eb','#059669','#e11d48','#d97706','#7c3aed','#0f766e'];
+let theme='classic', accent=COLORS[0];
+
+/* ---------- repeatable groups ---------- */
+const LABELS={edu:['Degree / Class','College / School','Year','Marks / CGPA (optional)'],
+  exp:['Role','Company','Dates','What you did (one point per line)'],
+  proj:['Project name','Tech used','Link / Year','What it does (one point per line)']};
+function addRow(g,d={}){
+  const L=LABELS[g], r=document.createElement('div'); r.className='row';
+  r.innerHTML=`<button type="button" class="x" title="Remove">×</button><div class="grid">
+   <label class="f">${L[0]}<input data-k="a" value="${esc(d.a)}"></label>
+   <label class="f">${L[1]}<input data-k="b" value="${esc(d.b)}"></label>
+   <label class="f">${L[2]}<input data-k="c" value="${esc(d.c)}"></label>
+   <label class="f">${g==='edu'?L[3]:'&nbsp;'}<input data-k="e" value="${esc(d.e)}" ${g==='edu'?'':'style="visibility:hidden"'}></label>
+   ${g==='edu'?'':`<label class="f full">${L[3]}<textarea data-k="d">${esc(d.d)}</textarea></label>`}</div>`;
+  r.querySelector('.x').onclick=()=>r.remove();
+  $('#g-'+g).appendChild(r);
+}
+$$('.add').forEach(b=>b.onclick=()=>addRow(b.dataset.g));
+['edu','exp','proj'].forEach(g=>addRow(g));
+
+const rows=g=>$$('#g-'+g+' .row').map(r=>{const o={};r.querySelectorAll('[data-k]').forEach(i=>o[i.dataset.k]=i.value.trim());return o}).filter(o=>o.a||o.b);
+const val=n=>$('#form').elements[n].value.trim();
+const list=s=>s.split(/[,\n]/).map(x=>x.trim()).filter(Boolean);
+
+/* ---------- navigation ---------- */
+function go(n){
+  $$('.step').forEach(s=>s.classList.remove('active')); $('#s'+n).classList.add('active');
+  [1,2,3].forEach(i=>$('#d'+i).classList.toggle('on',i<=n));
+  if(n===3) render(); scrollTo({top:0,behavior:'smooth'});
+}
+$$('[data-go]').forEach(b=>b.onclick=()=>go(+b.dataset.go));
+$('#to2').onclick=()=>{ if(!val('name')){$('#err').style.display='block';return} $('#err').style.display='none'; go(2) };
+$('#to3').onclick=()=>go(3);
+
+/* ---------- theme picker ---------- */
+$('#themes').onclick=e=>{const t=e.target.closest('.th');if(!t)return;theme=t.dataset.t;$$('.th').forEach(x=>x.classList.toggle('sel',x===t))};
+COLORS.forEach((c,i)=>{const d=document.createElement('div');d.className='cd'+(i?'':' sel');d.style.background=c;
+  d.onclick=()=>{accent=c;document.documentElement.style.setProperty('--accent',c);$$('.cd').forEach(x=>x.classList.toggle('sel',x===d))};
+  $('#colors').appendChild(d)});
+
+/* ---------- build the CV ---------- */
+function render(){
+  const f=n=>esc(val(n)), bullets=t=>t?`<ul>${t.split('\n').filter(x=>x.trim()).map(x=>`<li>${esc(x)}</li>`).join('')}</ul>`:'';
+  const item=(o,sub)=>`<div class="it"><b>${esc(o.a)}</b><span>${esc(sub)}</span>${bullets(o.d)}</div>`;
+  const contact=[['✉',val('email')],['☎',val('phone')],['📍',val('loc')],['🔗',val('link')]].filter(x=>x[1]).map(x=>`<li>${x[0]} ${esc(x[1])}</li>`).join('');
+  const skills=list(val('skills')), langs=list(val('langs')), certs=val('certs').split('\n').filter(x=>x.trim());
+  const edu=rows('edu'), exp=rows('exp'), proj=rows('proj'), sum=val('sum');
+  const sec=(t,h)=>h?`<section><h3>${t}</h3>${h}</section>`:'';
+  $('#cv').className='sheet t-'+theme;
+  $('#cv').innerHTML=`
+   <header><h1>${f('name')}</h1><p class="role">${f('title')}</p></header>
+   <aside>
+     ${sec('Contact',contact&&`<ul class="p">${contact}</ul>`)}
+     ${sec('Skills',skills.length&&`<ul class="tags">${skills.map(s=>`<li>${esc(s)}</li>`).join('')}</ul>`)}
+     ${sec('Languages',langs.length&&`<ul class="p">${langs.map(s=>`<li>${esc(s)}</li>`).join('')}</ul>`)}
+   </aside>
+   <main>
+     ${sec('Summary',sum&&`<p>${esc(sum)}</p>`)}
+     ${sec('Experience',exp.map(o=>item(o,[o.b,o.c].filter(Boolean).join(' · '))).join(''))}
+     ${sec('Projects',proj.map(o=>item(o,[o.b,o.c].filter(Boolean).join(' · '))).join(''))}
+     ${sec('Education',edu.map(o=>item(o,[o.b,o.c,o.e].filter(Boolean).join(' · '))).join(''))}
+     ${sec('Certifications',certs.length&&`<ul>${certs.map(s=>`<li>${esc(s)}</li>`).join('')}</ul>`)}
+   </main>`;
+  document.title=(val('name')||'Resume')+' - Resume';
+}
+
+/* ---------- sample data for quick demo ---------- */
+$('#sample').onclick=()=>{
+  const S={name:'Aarav Kumar',title:'B.Tech Computer Science Student',email:'aarav@email.com',phone:'+91 98765 43210',loc:'Darbhanga, Bihar',link:'github.com/aarav',
+   sum:'Motivated engineering student who enjoys building clean, responsive interfaces and solving problems with code. Seeking an internship to apply and grow my skills.',
+   skills:'HTML5, CSS3, Python, C, Git, Problem Solving',langs:'English, Hindi, Maithili',certs:'Responsive Web Design - freeCodeCamp\nPython for Everybody - Coursera'};
+  Object.entries(S).forEach(([k,v])=>$('#form').elements[k].value=v);
+  ['edu','exp','proj'].forEach(g=>$('#g-'+g).innerHTML='');
+  addRow('edu',{a:'B.Tech in Computer Science',b:'Your College Name',c:'2023 - 2027',e:'CGPA 8.2'});
+  addRow('edu',{a:'Class XII (Science)',b:'Your School',c:'2022',e:'88%'});
+  addRow('exp',{a:'Web Development Intern',b:'Company Name',c:'Jun - Aug 2025',d:'Built 5 responsive pages, improving mobile usability by 30%\nWorked in a team of 4 using Git workflows'});
+  addRow('proj',{a:'CVForge Resume Builder',b:'HTML, CSS, JS',c:'2025',d:'3-step resume wizard with 4 templates and print-ready A4 output'});
+};
+</script>
+</body>
+</html>
