@@ -3,30 +3,156 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>CVForge - Build Your Resume in 3 Steps</title>
-  
-  <!-- Typography (Google Fonts with robust system fallbacks) -->
+  <title>CVForge - Print-Ready Resume Builder &amp; ATS Scorer</title>
+
+  <!-- Typography: Satoshi (via Fontshare CDN) + Google Fonts Fallbacks -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
-  
-  <!-- Stylesheets -->
-  <link rel="stylesheet" href="css/base.css">
-  <link rel="stylesheet" href="css/layout.css">
-  <link rel="stylesheet" href="css/themes.css">
-  <link rel="stylesheet" href="css/print.css">
-</head>
-<body>
+  <link href="https://api.fontshare.com/v2/css?f[]=satoshi@900,700,500&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@700;800;900&family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
 
-<div class="wrap">
-  <!-- Brand Header -->
-  <header class="brand">
-    <h1>📄 CVForge</h1>
-    <p>Build a clean, professional, print-ready resume in 3 simple steps</p>
-  </header>
+  <!-- Master Stylesheet with Dark Luxury Design & Print Isolation -->
+  <link rel="stylesheet" href="style.css">
+</head>
+<body id="home">
+
+<!-- ==============================================
+     FIXED TOP NAVIGATION BAR
+     Logo on Left | Links (Home, Templates, Build) on Right
+     CSS-Only Staggered Text Reveal on Hover
+     ============================================== -->
+<header class="top-nav noprint">
+  <div class="nav-container">
+    <!-- Logo -->
+    <a href="#home" class="logo" aria-label="CVForge Home">
+      <span class="logo-badge" aria-hidden="true">📄</span>
+      <span class="satoshi-black">CVForge</span>
+    </a>
+
+    <!-- Navigation Links with CSS-Only Staggered Text Reveal -->
+    <nav aria-label="Primary Navigation">
+      <ul class="nav-links">
+        <!-- Home Link (4 Letters) -->
+        <li>
+          <a href="#home" class="nav-roll-link">
+            <span class="roll-box">
+              <span class="roll-primary" aria-hidden="true">
+                <span style="--i:0;">H</span><span style="--i:1;">o</span><span style="--i:2;">m</span><span style="--i:3;">e</span>
+              </span>
+              <span class="roll-secondary">
+                <span style="--i:0;">H</span><span style="--i:1;">o</span><span style="--i:2;">m</span><span style="--i:3;">e</span>
+              </span>
+            </span>
+          </a>
+        </li>
+
+        <!-- Templates Link (9 Letters) -->
+        <li>
+          <a href="#templates" class="nav-roll-link">
+            <span class="roll-box">
+              <span class="roll-primary" aria-hidden="true">
+                <span style="--i:0;">T</span><span style="--i:1;">e</span><span style="--i:2;">m</span><span style="--i:3;">p</span><span style="--i:4;">l</span><span style="--i:5;">a</span><span style="--i:6;">t</span><span style="--i:7;">e</span><span style="--i:8;">s</span>
+              </span>
+              <span class="roll-secondary">
+                <span style="--i:0;">T</span><span style="--i:1;">e</span><span style="--i:2;">m</span><span style="--i:3;">p</span><span style="--i:4;">l</span><span style="--i:5;">a</span><span style="--i:6;">t</span><span style="--i:7;">e</span><span style="--i:8;">s</span>
+              </span>
+            </span>
+          </a>
+        </li>
+
+        <!-- Build Link (5 Letters, Accent CTA) -->
+        <li>
+          <a href="#builder" class="nav-roll-link nav-roll-cta">
+            <span class="roll-box">
+              <span class="roll-primary" aria-hidden="true">
+                <span style="--i:0;">B</span><span style="--i:1;">u</span><span style="--i:2;">i</span><span style="--i:3;">l</span><span style="--i:4;">d</span>
+              </span>
+              <span class="roll-secondary">
+                <span style="--i:0;">B</span><span style="--i:1;">u</span><span style="--i:2;">i</span><span style="--i:3;">l</span><span style="--i:4;">d</span>
+              </span>
+            </span>
+          </a>
+        </li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<!-- ==============================================
+     HERO LANDING SECTION
+     ============================================== -->
+<section class="landing-hero noprint">
+  <div class="hero-pill">⚡ ATS Scored • 7 Print-Ready Templates • 100% Client-Side</div>
+  <h1 class="hero-title satoshi-black tracking-tighter">
+    Craft Resumes That <span class="gold-gradient">Win Interviews</span>
+  </h1>
+  <p class="hero-sub">
+    The competition-winning resume builder engineered for students and professionals. Real-time ATS scoring, keyword matching against job postings, and flawless A4 export.
+  </p>
+
+  <div class="hero-actions">
+    <a href="#builder" class="btn-hero-primary" id="hero-build-cta">🚀 Launch Resume Builder</a>
+    <button type="button" class="btn-hero-secondary" id="hero-sample-cta">✨ Try with Sample Data</button>
+    <a href="#templates" class="btn-hero-secondary">🎨 Browse Templates</a>
+  </div>
+
+  <div class="hero-badges-row">
+    <div class="hero-badge-item">🎯 <strong>100-Point ATS Engine</strong> with keyword suggestions</div>
+    <div class="hero-badge-item">🖨️ <strong>Strict A4 Alignment</strong> (@page 210×297mm)</div>
+    <div class="hero-badge-item">🔒 <strong>Zero Server / Private</strong> (all client-side)</div>
+  </div>
+</section>
+
+<!-- ==============================================
+     HOW IT WORKS (3-STEP OVERVIEW)
+     ============================================== -->
+<section class="landing-section noprint">
+  <div class="section-head">
+    <h2 class="satoshi-black tracking-tighter">How CVForge Works</h2>
+    <p>From blank canvas to an interview-ready A4 resume in under three minutes</p>
+  </div>
+
+  <div class="steps-grid">
+    <div class="step-box">
+      <span class="step-num">01</span>
+      <h3>Input Details &amp; Audit</h3>
+      <p>Enter personal details, skills, and experience with live action-verb auditor and automatic ATS score feedback.</p>
+    </div>
+    <div class="step-box">
+      <span class="step-num">02</span>
+      <h3>Pick From 7 Live Templates</h3>
+      <p>Explore Classic, Modern, Minimal, Bold, Creative, Executive, and Compact with real-data thumbnail scaling.</p>
+    </div>
+    <div class="step-box">
+      <span class="step-num">03</span>
+      <h3>Export &amp; Print Anywhere</h3>
+      <p>Download as print-ready PDF, standalone HTML Blob, plain text for job portals, or backup JSON.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ==============================================
+     TEMPLATES SHOWCASE SECTION
+     ============================================== -->
+<section class="landing-section noprint" id="templates">
+  <div class="section-head">
+    <h2 class="satoshi-black tracking-tighter">7 Handcrafted Templates</h2>
+    <p>Engineered for readability, ATS parsers, and pixel-perfect A4 printing</p>
+  </div>
+</section>
+
+<!-- ==============================================
+     MAIN RESUME BUILDER WIZARD
+     ============================================== -->
+<main class="wrap" id="builder">
+  <!-- Brand Heading for Builder -->
+  <div class="brand noprint">
+    <h1 class="satoshi-black tracking-tighter">📄 CVForge Wizard</h1>
+    <p>Complete the 3 steps below to generate your high-scoring CV</p>
+  </div>
 
   <!-- Step Wizard Indicator -->
-  <nav aria-label="Progress steps">
+  <nav aria-label="Progress steps" class="noprint">
     <ol class="steps">
       <li>
         <button type="button" class="dot on" id="d1" aria-current="step">
@@ -48,373 +174,382 @@
     </ol>
   </nav>
 
-  <main>
-    <!-- ==============================================
-         STEP 1: DETAILS & CONTENT
-         ============================================== -->
-    <section class="step active" id="s1" aria-labelledby="step1-heading">
-      <form id="form" onsubmit="return false;" novalidate>
-        <!-- Personal Info Card -->
-        <fieldset class="card">
-          <legend class="sr-only">Personal Information</legend>
-          <h2 id="step1-heading">👤 Personal Info</h2>
-          <div class="grid">
-            <div class="field-group">
-              <label class="f" for="inp-name">
-                Full name <span class="req" aria-hidden="true">*</span>
-              </label>
-              <input id="inp-name" name="name" type="text" placeholder="Aarav Kumar" required aria-describedby="err-name" autocomplete="name">
-              <span class="field-error" id="err-name" aria-live="polite"></span>
-            </div>
-
-            <div class="field-group">
-              <label class="f" for="inp-title">
-                Job Title / Course
-              </label>
-              <input id="inp-title" name="title" type="text" placeholder="B.Tech CSE Student" autocomplete="organization-title">
-            </div>
-
-            <div class="field-group">
-              <label class="f" for="inp-email">
-                Email Address
-              </label>
-              <input id="inp-email" name="email" type="email" placeholder="aarav@email.com" aria-describedby="err-email" autocomplete="email">
-              <span class="field-error" id="err-email" aria-live="polite"></span>
-            </div>
-
-            <div class="field-group">
-              <label class="f" for="inp-phone">
-                Phone Number
-              </label>
-              <input id="inp-phone" name="phone" type="tel" placeholder="+91 98765 43210" aria-describedby="err-phone" autocomplete="tel">
-              <span class="field-error" id="err-phone" aria-live="polite"></span>
-            </div>
-
-            <div class="field-group">
-              <label class="f" for="inp-loc">
-                Location
-              </label>
-              <input id="inp-loc" name="loc" type="text" placeholder="Darbhanga, Bihar" autocomplete="address-level2">
-            </div>
-
-            <div class="field-group">
-              <label class="f" for="inp-link">
-                Profile Link (GitHub / LinkedIn)
-              </label>
-              <input id="inp-link" name="link" type="text" placeholder="github.com/aarav">
-            </div>
-
-            <div class="field-group full">
-              <label class="f" for="inp-sum">
-                Professional Summary
-              </label>
-              <textarea id="inp-sum" name="sum" placeholder="2-3 impactful lines about your background, strengths, and career ambitions..."></textarea>
-              <span class="hint-text">Keep it concise: 25 to 60 words works best for single-page formats.</span>
-            </div>
-
-            <!-- Optional Photo Upload -->
-            <div class="field-group full">
-              <label class="f">Profile Photo (Optional)</label>
-              <div class="photo-upload-container">
-                <div class="photo-preview-box" id="photo-preview-box">
-                  <span class="photo-placeholder" id="photo-placeholder">👤</span>
-                  <img id="photo-img" src="" alt="Profile Preview" style="display:none;">
-                </div>
-                <div class="photo-controls">
-                  <div class="photo-actions">
-                    <input type="file" id="photo-input" accept="image/*" class="file-input-hidden">
-                    <button type="button" class="btn sec" id="photo-choose-btn">📷 Choose Photo</button>
-                    <button type="button" class="btn btn-danger" id="photo-remove-btn" style="display:none;">Remove</button>
-                  </div>
-                  <div class="photo-shape-toggles">
-                    <span>Crop:</span>
-                    <label><input type="radio" name="photoShape" value="circle" checked> Circle</label>
-                    <label><input type="radio" name="photoShape" value="rounded"> Rounded</label>
-                  </div>
-                  <span class="hint-text">Max 2 MB (PNG, JPG, WebP). Automatic print crop.</span>
-                  <span class="field-error" id="err-photo" aria-live="polite"></span>
-                </div>
-              </div>
-            </div>
-          </div>
-        </fieldset>
-
-        <!-- Skills & Languages Card -->
-        <fieldset class="card">
-          <legend class="sr-only">Skills and Languages</legend>
-          <h2>🛠 Skills &amp; Languages</h2>
+  <!-- ==============================================
+       STEP 1: DETAILS & CONTENT
+       ============================================== -->
+  <section class="step active" id="s1" aria-labelledby="step1-heading">
+    <form id="form" onsubmit="return false;" novalidate>
+      <!-- Personal Info Card -->
+      <fieldset class="card">
+        <legend class="sr-only">Personal Information</legend>
+        <h2 id="step1-heading">👤 Personal Info</h2>
+        <div class="grid">
           <div class="field-group">
-            <label class="f" for="inp-skills">Skills (comma separated)</label>
-            <input id="inp-skills" name="skills" type="text" placeholder="HTML5, CSS3, JavaScript, Python, Git, Problem Solving">
+            <label class="f" for="inp-name">
+              Full name <span class="req" aria-hidden="true">*</span>
+            </label>
+            <input id="inp-name" name="name" type="text" placeholder="Aarav Kumar" required aria-describedby="err-name" autocomplete="name">
+            <span class="field-error" id="err-name" aria-live="polite"></span>
           </div>
-          <div class="field-group" style="margin-top: 12px;">
-            <label class="f" for="inp-langs">Languages (comma separated)</label>
-            <input id="inp-langs" name="langs" type="text" placeholder="English, Hindi, Maithili">
-          </div>
-        </fieldset>
 
-        <!-- Education Card (Reorderable) -->
-        <fieldset class="card" data-section-card="edu" id="card-edu">
-          <legend class="sr-only">Education Background</legend>
-          <div class="card-header-actions">
-            <h2>🎓 Education</h2>
-            <div class="reorder-btns">
-              <button type="button" class="btn-icon" data-reorder="up" data-section="edu" title="Move Education Up" aria-label="Move Education Up">↑</button>
-              <button type="button" class="btn-icon" data-reorder="down" data-section="edu" title="Move Education Down" aria-label="Move Education Down">↓</button>
-            </div>
-          </div>
-          <div id="g-edu" role="region" aria-label="Education entries list"></div>
-          <button type="button" class="btn add" data-g="edu">+ Add Education</button>
-        </fieldset>
-
-        <!-- Experience Card (Reorderable) -->
-        <fieldset class="card" data-section-card="exp" id="card-exp">
-          <legend class="sr-only">Work Experience & Internships</legend>
-          <div class="card-header-actions">
-            <h2>💼 Experience &amp; Internships</h2>
-            <div class="reorder-btns">
-              <button type="button" class="btn-icon" data-reorder="up" data-section="exp" title="Move Experience Up" aria-label="Move Experience Up">↑</button>
-              <button type="button" class="btn-icon" data-reorder="down" data-section="exp" title="Move Experience Down" aria-label="Move Experience Down">↓</button>
-            </div>
-          </div>
-          <div id="g-exp" role="region" aria-label="Work experience list"></div>
-          <button type="button" class="btn add" data-g="exp">+ Add Experience</button>
-        </fieldset>
-
-        <!-- Projects Card (Reorderable) -->
-        <fieldset class="card" data-section-card="proj" id="card-proj">
-          <legend class="sr-only">Projects Portfolio</legend>
-          <div class="card-header-actions">
-            <h2>🚀 Projects</h2>
-            <div class="reorder-btns">
-              <button type="button" class="btn-icon" data-reorder="up" data-section="proj" title="Move Projects Up" aria-label="Move Projects Up">↑</button>
-              <button type="button" class="btn-icon" data-reorder="down" data-section="proj" title="Move Projects Down" aria-label="Move Projects Down">↓</button>
-            </div>
-          </div>
-          <div id="g-proj" role="region" aria-label="Projects list"></div>
-          <button type="button" class="btn add" data-g="proj">+ Add Project</button>
-        </fieldset>
-
-        <!-- Certifications Card -->
-        <fieldset class="card">
-          <legend class="sr-only">Certifications & Achievements</legend>
-          <h2>🏅 Certifications &amp; Achievements</h2>
           <div class="field-group">
-            <label class="f" for="inp-certs">Certifications (one per line)</label>
-            <textarea id="inp-certs" name="certs" placeholder="Responsive Web Design - freeCodeCamp&#10;Python for Everybody - Coursera"></textarea>
-          </div>
-        </fieldset>
-
-        <!-- ATS Score, Job Matcher & Smart Auditor Card (Phase 4) -->
-        <section class="card ats-card" id="ats-section">
-          <div class="ats-header-flex">
-            <h2>🎯 ATS Score &amp; Job Matcher</h2>
-            <div class="ats-score-badge" id="ats-badge-pill">
-              Score: <span id="ats-badge-score">0</span>/100
-            </div>
+            <label class="f" for="inp-title">
+              Job Title / Course
+            </label>
+            <input id="inp-title" name="title" type="text" placeholder="B.Tech CSE Student" autocomplete="organization-title">
           </div>
 
-          <!-- ATS Score Overview (Ring + Criteria Breakdown) -->
-          <div class="ats-overview-grid">
-            <div class="score-ring-container">
-              <svg class="score-svg" viewBox="0 0 120 120" aria-hidden="true">
-                <circle class="score-bg-circle" cx="60" cy="60" r="48"></circle>
-                <circle class="score-progress-circle" id="score-ring-progress" cx="60" cy="60" r="48" stroke-dasharray="301.6" stroke-dashoffset="301.6"></circle>
-              </svg>
-              <div class="score-center-text">
-                <span class="score-num" id="ats-score-num">0</span>
-                <span class="score-sub">out of 100</span>
+          <div class="field-group">
+            <label class="f" for="inp-email">
+              Email Address
+            </label>
+            <input id="inp-email" name="email" type="email" placeholder="aarav@email.com" aria-describedby="err-email" autocomplete="email">
+            <span class="field-error" id="err-email" aria-live="polite"></span>
+          </div>
+
+          <div class="field-group">
+            <label class="f" for="inp-phone">
+              Phone Number
+            </label>
+            <input id="inp-phone" name="phone" type="tel" placeholder="+91 98765 43210" aria-describedby="err-phone" autocomplete="tel">
+            <span class="field-error" id="err-phone" aria-live="polite"></span>
+          </div>
+
+          <div class="field-group">
+            <label class="f" for="inp-loc">
+              Location
+            </label>
+            <input id="inp-loc" name="loc" type="text" placeholder="Darbhanga, Bihar" autocomplete="address-level2">
+          </div>
+
+          <div class="field-group">
+            <label class="f" for="inp-link">
+              Profile Link (GitHub / LinkedIn)
+            </label>
+            <input id="inp-link" name="link" type="text" placeholder="github.com/aarav">
+          </div>
+
+          <div class="field-group full">
+            <label class="f" for="inp-sum">
+              Professional Summary
+            </label>
+            <textarea id="inp-sum" name="sum" placeholder="2-3 impactful lines about your background, strengths, and career ambitions..."></textarea>
+            <span class="hint-text">Keep it concise: 25 to 60 words works best for single-page formats.</span>
+          </div>
+
+          <!-- Optional Photo Upload -->
+          <div class="field-group full">
+            <label class="f">Profile Photo (Optional)</label>
+            <div class="photo-upload-container">
+              <div class="photo-preview-box" id="photo-preview-box">
+                <span class="photo-placeholder" id="photo-placeholder">👤</span>
+                <img id="photo-img" src="" alt="Profile Preview" style="display:none;">
               </div>
-            </div>
-
-            <!-- 8 Criteria Breakdown list -->
-            <ul class="ats-breakdown-list" id="ats-breakdown">
-              <!-- dynamically populated -->
-            </ul>
-          </div>
-
-          <!-- Actionable Tips Box -->
-          <div class="ats-tips-box" id="ats-tips-container" style="display:none;">
-            <h3>💡 ATS Recommendations &amp; Fixes</h3>
-            <ul class="ats-tips-list" id="ats-tips-list"></ul>
-          </div>
-
-          <!-- Job Description Keyword Matcher -->
-          <div class="jd-matcher-box">
-            <h3>🔍 Job Description Keyword Matcher</h3>
-            <label class="f" for="jd-input-text">Paste Target Job Description (Optional)</label>
-            <textarea id="jd-input-text" class="jd-input" placeholder="Paste the job description from LinkedIn, Indeed, or company careers page to analyze keyword match..."></textarea>
-            <button type="button" class="btn sec" id="jd-analyze-btn">⚡ Analyze Keyword Match</button>
-            <div class="jd-result" id="jd-result-box">
-              <div class="jd-meter-wrap">
-                <strong style="font-size: 0.85rem;" id="jd-pct-text">Match: 0%</strong>
-                <div class="jd-meter-bar">
-                  <div class="jd-meter-fill" id="jd-meter-fill" style="width: 0%;"></div>
+              <div class="photo-controls">
+                <div class="photo-actions">
+                  <input type="file" id="photo-input" accept="image/*" class="file-input-hidden">
+                  <button type="button" class="btn sec" id="photo-choose-btn">📷 Choose Photo</button>
+                  <button type="button" class="btn btn-danger" id="photo-remove-btn" style="display:none;">Remove</button>
                 </div>
-              </div>
-              <div class="jd-chips-container">
-                <div class="jd-chips-group">
-                  <strong>Matched Keywords:</strong>
-                  <div id="jd-matched-chips">None</div>
+                <div class="photo-shape-toggles">
+                  <span>Crop:</span>
+                  <label><input type="radio" name="photoShape" value="circle" checked> Circle</label>
+                  <label><input type="radio" name="photoShape" value="rounded"> Rounded</label>
                 </div>
-                <div class="jd-chips-group">
-                  <strong>Missing Keywords:</strong>
-                  <div id="jd-missing-chips">None</div>
-                </div>
+                <span class="hint-text">Max 2 MB (PNG, JPG, WebP). Automatic print crop.</span>
+                <span class="field-error" id="err-photo" aria-live="polite"></span>
               </div>
             </div>
           </div>
-
-          <!-- Weak Action Verbs Audit Panel -->
-          <div class="weak-verbs-panel" id="weak-verbs-panel" style="display:none;">
-            <h3>⚠️ Action Verb Auditor (Weak Phrases Detected)</h3>
-            <p style="font-size: 0.8rem; color: var(--muted); margin-bottom: 8px;">Click any suggested power verb to enhance your bullet point:</p>
-            <div id="weak-verbs-list"></div>
-          </div>
-        </section>
-      </form>
-
-      <!-- Step 1 Navigation & Actions -->
-      <div class="nav">
-        <div class="nav-group">
-          <button type="button" class="btn sec" id="sample">✨ Fill sample data</button>
-          <button type="button" class="btn btn-danger" id="clear-data">🗑️ Clear all data</button>
         </div>
-        <button type="button" class="btn pri" id="to2">Next: Choose Theme →</button>
+      </fieldset>
+
+      <!-- Skills & Languages Card -->
+      <fieldset class="card">
+        <legend class="sr-only">Skills and Languages</legend>
+        <h2>🛠 Skills &amp; Languages</h2>
+        <div class="field-group">
+          <label class="f" for="inp-skills">Skills (comma separated)</label>
+          <input id="inp-skills" name="skills" type="text" placeholder="HTML5, CSS3, JavaScript, Python, Git, Problem Solving">
+        </div>
+        <div class="field-group" style="margin-top: 12px;">
+          <label class="f" for="inp-langs">Languages (comma separated)</label>
+          <input id="inp-langs" name="langs" type="text" placeholder="English, Hindi, Maithili">
+        </div>
+      </fieldset>
+
+      <!-- Education Card (Reorderable) -->
+      <fieldset class="card" data-section-card="edu" id="card-edu">
+        <legend class="sr-only">Education Background</legend>
+        <div class="card-header-actions">
+          <h2>🎓 Education</h2>
+          <div class="reorder-btns">
+            <button type="button" class="btn-icon" data-reorder="up" data-section="edu" title="Move Education Up" aria-label="Move Education Up">↑</button>
+            <button type="button" class="btn-icon" data-reorder="down" data-section="edu" title="Move Education Down" aria-label="Move Education Down">↓</button>
+          </div>
+        </div>
+        <div id="g-edu" role="region" aria-label="Education entries list"></div>
+        <button type="button" class="btn add" data-g="edu">+ Add Education</button>
+      </fieldset>
+
+      <!-- Experience Card (Reorderable) -->
+      <fieldset class="card" data-section-card="exp" id="card-exp">
+        <legend class="sr-only">Work Experience & Internships</legend>
+        <div class="card-header-actions">
+          <h2>💼 Experience &amp; Internships</h2>
+          <div class="reorder-btns">
+            <button type="button" class="btn-icon" data-reorder="up" data-section="exp" title="Move Experience Up" aria-label="Move Experience Up">↑</button>
+            <button type="button" class="btn-icon" data-reorder="down" data-section="exp" title="Move Experience Down" aria-label="Move Experience Down">↓</button>
+          </div>
+        </div>
+        <div id="g-exp" role="region" aria-label="Work experience list"></div>
+        <button type="button" class="btn add" data-g="exp">+ Add Experience</button>
+      </fieldset>
+
+      <!-- Projects Card (Reorderable) -->
+      <fieldset class="card" data-section-card="proj" id="card-proj">
+        <legend class="sr-only">Projects Portfolio</legend>
+        <div class="card-header-actions">
+          <h2>🚀 Projects</h2>
+          <div class="reorder-btns">
+            <button type="button" class="btn-icon" data-reorder="up" data-section="proj" title="Move Projects Up" aria-label="Move Projects Up">↑</button>
+            <button type="button" class="btn-icon" data-reorder="down" data-section="proj" title="Move Projects Down" aria-label="Move Projects Down">↓</button>
+          </div>
+        </div>
+        <div id="g-proj" role="region" aria-label="Projects list"></div>
+        <button type="button" class="btn add" data-g="proj">+ Add Project</button>
+      </fieldset>
+
+      <!-- Certifications Card -->
+      <fieldset class="card">
+        <legend class="sr-only">Certifications & Achievements</legend>
+        <h2>🏅 Certifications &amp; Achievements</h2>
+        <div class="field-group">
+          <label class="f" for="inp-certs">Certifications (one per line)</label>
+          <textarea id="inp-certs" name="certs" placeholder="Responsive Web Design - freeCodeCamp&#10;Python for Everybody - Coursera"></textarea>
+        </div>
+      </fieldset>
+
+      <!-- ATS Score, Job Matcher & Smart Auditor Card (Phase 4) -->
+      <section class="card ats-card" id="ats-section">
+        <div class="ats-header-flex">
+          <h2>🎯 ATS Score &amp; Job Matcher</h2>
+          <div class="ats-score-badge" id="ats-badge-pill">
+            Score: <span id="ats-badge-score">0</span>/100
+          </div>
+        </div>
+
+        <!-- ATS Score Overview (Ring + Criteria Breakdown) -->
+        <div class="ats-overview-grid">
+          <div class="score-ring-container">
+            <svg class="score-svg" viewBox="0 0 120 120" aria-hidden="true">
+              <circle class="score-bg-circle" cx="60" cy="60" r="48"></circle>
+              <circle class="score-progress-circle" id="score-ring-progress" cx="60" cy="60" r="48" stroke-dasharray="301.6" stroke-dashoffset="301.6"></circle>
+            </svg>
+            <div class="score-center-text">
+              <span class="score-num" id="ats-score-num">0</span>
+              <span class="score-sub">out of 100</span>
+            </div>
+          </div>
+
+          <!-- 8 Criteria Breakdown list -->
+          <ul class="ats-breakdown-list" id="ats-breakdown">
+            <!-- dynamically populated -->
+          </ul>
+        </div>
+
+        <!-- Actionable Tips Box -->
+        <div class="ats-tips-box" id="ats-tips-container" style="display:none;">
+          <h3>💡 ATS Recommendations &amp; Fixes</h3>
+          <ul class="ats-tips-list" id="ats-tips-list"></ul>
+        </div>
+
+        <!-- Job Description Keyword Matcher -->
+        <div class="jd-matcher-box">
+          <h3>🔍 Job Description Keyword Matcher</h3>
+          <label class="f" for="jd-input-text">Paste Target Job Description (Optional)</label>
+          <textarea id="jd-input-text" class="jd-input" placeholder="Paste the job description from LinkedIn, Indeed, or company careers page to analyze keyword match..."></textarea>
+          <button type="button" class="btn sec" id="jd-analyze-btn">⚡ Analyze Keyword Match</button>
+          <div class="jd-result" id="jd-result-box">
+            <div class="jd-meter-wrap">
+              <strong style="font-size: 0.85rem;" id="jd-pct-text">Match: 0%</strong>
+              <div class="jd-meter-bar">
+                <div class="jd-meter-fill" id="jd-meter-fill" style="width: 0%;"></div>
+              </div>
+            </div>
+            <div class="jd-chips-container">
+              <div class="jd-chips-group">
+                <strong>Matched Keywords:</strong>
+                <div id="jd-matched-chips">None</div>
+              </div>
+              <div class="jd-chips-group">
+                <strong>Missing Keywords:</strong>
+                <div id="jd-missing-chips">None</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Weak Action Verbs Audit Panel -->
+        <div class="weak-verbs-panel" id="weak-verbs-panel" style="display:none;">
+          <h3>⚠️ Action Verb Auditor (Weak Phrases Detected)</h3>
+          <p style="font-size: 0.8rem; color: var(--muted); margin-bottom: 8px;">Click any suggested power verb to enhance your bullet point:</p>
+          <div id="weak-verbs-list"></div>
+        </div>
+      </section>
+    </form>
+
+    <!-- Step 1 Navigation & Actions -->
+    <div class="nav noprint">
+      <div class="nav-group">
+        <button type="button" class="btn sec" id="sample">✨ Fill sample data</button>
+        <button type="button" class="btn btn-danger" id="clear-data">🗑️ Clear all data</button>
       </div>
-    </section>
+      <button type="button" class="btn pri" id="to2">Next: Choose Theme →</button>
+    </div>
+  </section>
 
-    <!-- ==============================================
-         STEP 2: THEME & COLOR PICKER
-         ============================================== -->
-    <section class="step" id="s2" aria-labelledby="step2-heading">
-      <div class="card">
-        <h2 id="step2-heading">🎨 Pick a Resume Template</h2>
-        <div class="themes" id="themes" role="radiogroup" aria-label="Resume Templates">
-          <div class="th sel" data-t="classic" tabindex="0" role="radio" aria-checked="true">
-            <div class="th-preview-wrap" aria-hidden="true">
-              <div class="th-preview-scale">
-                <div class="sheet t-classic" data-thumb="classic"></div>
-              </div>
+  <!-- ==============================================
+       STEP 2: THEME & COLOR PICKER
+       ============================================== -->
+  <section class="step" id="s2" aria-labelledby="step2-heading">
+    <div class="card">
+      <h2 id="step2-heading">🎨 Pick a Resume Template</h2>
+      <div class="themes" id="themes" role="radiogroup" aria-label="Resume Templates">
+        <div class="th sel" data-t="classic" tabindex="0" role="radio" aria-checked="true">
+          <div class="th-preview-wrap" aria-hidden="true">
+            <div class="th-preview-scale">
+              <div class="sheet t-classic" data-thumb="classic"></div>
             </div>
-            <b>Classic</b>
-            <small>Elegant serif, centered header</small>
           </div>
-          <div class="th" data-t="modern" tabindex="0" role="radio" aria-checked="false">
-            <div class="th-preview-wrap" aria-hidden="true">
-              <div class="th-preview-scale">
-                <div class="sheet t-modern" data-thumb="modern"></div>
-              </div>
-            </div>
-            <b>Modern</b>
-            <small>Two columns, solid accent header</small>
-          </div>
-          <div class="th" data-t="minimal" tabindex="0" role="radio" aria-checked="false">
-            <div class="th-preview-wrap" aria-hidden="true">
-              <div class="th-preview-scale">
-                <div class="sheet t-minimal" data-thumb="minimal"></div>
-              </div>
-            </div>
-            <b>Minimal</b>
-            <small>Clean, airy single-column with line accents</small>
-          </div>
-          <div class="th" data-t="bold" tabindex="0" role="radio" aria-checked="false">
-            <div class="th-preview-wrap" aria-hidden="true">
-              <div class="th-preview-scale">
-                <div class="sheet t-bold" data-thumb="bold"></div>
-              </div>
-            </div>
-            <b>Bold</b>
-            <small>High impact gradient header &amp; badges</small>
-          </div>
-          <div class="th" data-t="creative" tabindex="0" role="radio" aria-checked="false">
-            <div class="th-preview-wrap" aria-hidden="true">
-              <div class="th-preview-scale">
-                <div class="sheet t-creative" data-thumb="creative"></div>
-              </div>
-            </div>
-            <b>Creative</b>
-            <small>Vibrant accent sidebar &amp; circular photo</small>
-          </div>
-          <div class="th" data-t="executive" tabindex="0" role="radio" aria-checked="false">
-            <div class="th-preview-wrap" aria-hidden="true">
-              <div class="th-preview-scale">
-                <div class="sheet t-executive" data-thumb="executive"></div>
-              </div>
-            </div>
-            <b>Executive</b>
-            <small>Dark sidebar with distinguished gold accents</small>
-          </div>
-          <div class="th" data-t="compact" tabindex="0" role="radio" aria-checked="false">
-            <div class="th-preview-wrap" aria-hidden="true">
-              <div class="th-preview-scale">
-                <div class="sheet t-compact" data-thumb="compact"></div>
-              </div>
-            </div>
-            <b>Compact</b>
-            <small>Dense format fitted onto a single page</small>
-          </div>
+          <b>Classic</b>
+          <small>Elegant serif, centered header</small>
         </div>
-
-        <div class="colors-control">
-          <h2 style="margin-top: 24px;">Accent Colour</h2>
-          <div class="colors" id="colors" role="radiogroup" aria-label="Accent Colors"></div>
+        <div class="th" data-t="modern" tabindex="0" role="radio" aria-checked="false">
+          <div class="th-preview-wrap" aria-hidden="true">
+            <div class="th-preview-scale">
+              <div class="sheet t-modern" data-thumb="modern"></div>
+            </div>
+          </div>
+          <b>Modern</b>
+          <small>Two columns, solid accent header</small>
+        </div>
+        <div class="th" data-t="minimal" tabindex="0" role="radio" aria-checked="false">
+          <div class="th-preview-wrap" aria-hidden="true">
+            <div class="th-preview-scale">
+              <div class="sheet t-minimal" data-thumb="minimal"></div>
+            </div>
+          </div>
+          <b>Minimal</b>
+          <small>Clean, airy single-column with line accents</small>
+        </div>
+        <div class="th" data-t="bold" tabindex="0" role="radio" aria-checked="false">
+          <div class="th-preview-wrap" aria-hidden="true">
+            <div class="th-preview-scale">
+              <div class="sheet t-bold" data-thumb="bold"></div>
+            </div>
+          </div>
+          <b>Bold</b>
+          <small>High impact gradient header &amp; badges</small>
+        </div>
+        <div class="th" data-t="creative" tabindex="0" role="radio" aria-checked="false">
+          <div class="th-preview-wrap" aria-hidden="true">
+            <div class="th-preview-scale">
+              <div class="sheet t-creative" data-thumb="creative"></div>
+            </div>
+          </div>
+          <b>Creative</b>
+          <small>Vibrant accent sidebar &amp; circular photo</small>
+        </div>
+        <div class="th" data-t="executive" tabindex="0" role="radio" aria-checked="false">
+          <div class="th-preview-wrap" aria-hidden="true">
+            <div class="th-preview-scale">
+              <div class="sheet t-executive" data-thumb="executive"></div>
+            </div>
+          </div>
+          <b>Executive</b>
+          <small>Dark sidebar with distinguished gold accents</small>
+        </div>
+        <div class="th" data-t="compact" tabindex="0" role="radio" aria-checked="false">
+          <div class="th-preview-wrap" aria-hidden="true">
+            <div class="th-preview-scale">
+              <div class="sheet t-compact" data-thumb="compact"></div>
+            </div>
+          </div>
+          <b>Compact</b>
+          <small>Dense format fitted onto a single page</small>
         </div>
       </div>
 
-      <!-- Step 2 Navigation -->
-      <div class="nav">
-        <button type="button" class="btn sec" data-go="1">← Back to Details</button>
-        <button type="button" class="btn pri" id="to3">Generate my CV →</button>
+      <div class="colors-control">
+        <h2 style="margin-top: 24px;">Accent Colour</h2>
+        <div class="colors" id="colors" role="radiogroup" aria-label="Accent Colors"></div>
       </div>
-    </section>
+    </div>
 
-    <!-- ==============================================
-         STEP 3: PREVIEW & DOWNLOAD
-         ============================================== -->
-    <section class="step" id="s3" aria-labelledby="step3-heading">
-      <div class="nav noprint" style="margin-bottom: 16px;">
-        <div class="nav-group">
-          <button type="button" class="btn sec" data-go="1">✏️ Edit Details</button>
-          <button type="button" class="btn sec" data-go="2">🎨 Change Theme</button>
-        </div>
+    <!-- Step 2 Navigation -->
+    <div class="nav noprint">
+      <button type="button" class="btn sec" data-go="1">← Back to Details</button>
+      <button type="button" class="btn pri" id="to3">Generate my CV →</button>
+    </div>
+  </section>
+
+  <!-- ==============================================
+       STEP 3: PREVIEW & DOWNLOAD
+       ============================================== -->
+  <section class="step" id="s3" aria-labelledby="step3-heading">
+    <!-- Top Action Nav & Export Toolbar (Phase 5) -->
+    <div class="nav noprint" style="margin-bottom: 16px;">
+      <div class="nav-group">
+        <button type="button" class="btn sec" data-go="1">✏️ Edit Details</button>
+        <button type="button" class="btn sec" data-go="2">🎨 Change Theme</button>
+      </div>
+      <div class="export-nav">
         <button type="button" class="btn pri" id="print-btn">🖨️ Print / Save as PDF</button>
+        <button type="button" class="btn btn-export" id="download-html-btn">💾 Download as HTML</button>
+        <button type="button" class="btn btn-export" id="copy-text-btn">📋 Copy Plain Text</button>
+        <button type="button" class="btn btn-export" id="export-json-btn">📤 Export JSON</button>
+        <button type="button" class="btn btn-export" id="import-json-btn">📥 Import JSON</button>
+        <input type="file" id="import-json-input" accept=".json" class="file-input-hidden">
       </div>
+    </div>
 
-      <div class="noprint" style="background: var(--panel); border: 1px solid var(--line); border-radius: var(--radius-md); padding: 12px 16px; margin-bottom: 16px; font-size: 0.85rem; color: var(--muted);">
-        💡 <strong>Print Tip:</strong> In the browser print dialog, choose <strong>Save as PDF</strong>, set Margins to <strong>None</strong>, and turn on <strong>Background graphics</strong> to ensure flawless A4 alignment.
-      </div>
+    <div class="noprint" style="background: var(--panel); border: 1px solid var(--line); border-radius: var(--radius-md); padding: 12px 16px; margin-bottom: 16px; font-size: 0.85rem; color: var(--muted);">
+      💡 <strong>Print Tip:</strong> In the browser print dialog, choose <strong>Save as PDF</strong>, set Margins to <strong>None</strong>, and turn on <strong>Background graphics</strong> to ensure flawless A4 alignment.
+    </div>
 
-      <!-- Formatting Controls Toolbar -->
-      <div class="formatting-controls noprint">
-        <div class="format-group">
-          <div class="slider-group">
-            <label for="font-size-slider">Font Size:</label>
-            <input type="range" id="font-size-slider" min="9" max="12" step="0.5" value="10" aria-label="Resume font size slider">
-            <span class="slider-val" id="font-size-val">10 pt</span>
-          </div>
+    <!-- Formatting Controls Toolbar (Phase 3) -->
+    <div class="formatting-controls noprint">
+      <div class="format-group">
+        <div class="slider-group">
+          <label for="font-size-slider">Font Size:</label>
+          <input type="range" id="font-size-slider" min="9" max="12" step="0.5" value="10" aria-label="Resume font size slider">
+          <span class="slider-val" id="font-size-val">10 pt</span>
         </div>
-        <div class="format-group">
-          <label class="toggle-group" for="fit-one-page-toggle">
-            <input type="checkbox" id="fit-one-page-toggle">
-            <span>📄 Fit to one page</span>
-          </label>
-        </div>
       </div>
-
-      <!-- CV Stage -->
-      <div class="stage">
-        <article class="sheet" id="cv" aria-label="Printable Resume"></article>
+      <div class="format-group">
+        <label class="toggle-group" for="fit-one-page-toggle">
+          <input type="checkbox" id="fit-one-page-toggle">
+          <span>📄 Fit to one page</span>
+        </label>
       </div>
-    </section>
-  </main>
+    </div>
 
-  <!-- App Footer -->
-  <footer class="app-footer">
-    <div><strong>CVForge</strong> — College Competition Resume Builder &bull; Mode: <strong>STANDARD (Vanilla JS)</strong></div>
-    <div>Zero dependencies &bull; 100% Client-Side &bull; Print-Ready A4</div>
-  </footer>
-</div>
+    <!-- CV Stage (Pristine White A4 Sheet) -->
+    <div class="stage">
+      <article class="sheet" id="cv" aria-label="Printable Resume"></article>
+    </div>
+  </section>
+</main>
+
+<!-- App Footer -->
+<footer class="app-footer noprint">
+  <div><strong>CVForge</strong> — College Competition Resume Builder &bull; Mode: <strong>STANDARD (Vanilla JS)</strong></div>
+  <div>Zero dependencies &bull; 100% Client-Side &bull; Print-Ready A4</div>
+</footer>
+
+<!-- Toast Message Container -->
+<div class="toast-msg" id="toast-msg" role="status" aria-live="polite"></div>
 
 <!-- Scripts -->
 <script src="js/storage.js"></script>

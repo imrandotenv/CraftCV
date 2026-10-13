@@ -757,6 +757,301 @@ window.CVForgeApp = (() => {
 
     // Initial ATS analysis calculation
     updateATSAnalysis();
+
+    // Phase 5: Setup Export features (HTML Blob, Plain Text, JSON Import/Export)
+    setupExportFeatures();
+
+    // Hook Hero Section CTAs
+    $('#hero-build-cta')?.addEventListener('click', e => {
+      e.preventDefault();
+      go(1);
+      const builder = $('#builder');
+      if (builder) builder.scrollIntoView({ behavior: 'smooth' });
+    });
+
+    $('#hero-sample-cta')?.addEventListener('click', () => {
+      loadSampleData();
+      go(1);
+      const builder = $('#builder');
+      if (builder) builder.scrollIntoView({ behavior: 'smooth' });
+    });
+  }
+
+  /**
+   * Display toast notification
+   * @param {string} msg 
+   */
+  function showToast(msg) {
+    const toast = $('#toast-msg');
+    if (!toast) return;
+    toast.textContent = msg;
+    toast.classList.add('visible');
+    clearTimeout(toast.timeoutId);
+    toast.timeoutId = setTimeout(() => {
+      toast.classList.remove('visible');
+    }, 3200);
+  }
+
+  /**
+   * Phase 5: Export features (Download HTML Blob, Copy Text, Export JSON, Import JSON)
+   */
+  function setupExportFeatures() {
+    // 1. Download as HTML (Blob + URL.createObjectURL with inlined CSS)
+    $('#download-html-btn')?.addEventListener('click', () => {
+      const data = CVForgeForm.getFormData();
+      data.theme = activeTheme;
+      data.accent = activeAccent;
+      data.fontSize = activeFontSize;
+      data.fitOnePage = activeFitOnePage;
+
+      const standaloneHtml = `<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>${CVForgeRender.esc(data.name || 'Resume')} - CVForge</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --accent: ${activeAccent};
+  --sheet-font-size: ${activeFontSize}pt;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { background: #eef1f6; font-family: 'Inter', sans-serif; display: flex; justify-content: center; padding: 20px 0; }
+.stage { display: flex; justify-content: center; width: 100%; }
+.sheet { width: 210mm; min-height: 297mm; background: #fff !important; color: #1f2937 !important; box-shadow: 0 4px 25px rgba(0,0,0,0.15); font-size: var(--sheet-font-size, 10.2pt); line-height: 1.5; padding: 16mm; box-sizing: border-box; word-break: break-word; }
+.sheet h1 { font-size: 24pt; line-height: 1.15; margin-bottom: 3px; color: #111827; }
+.sheet .role { color: var(--accent); font-weight: 600; font-size: 11.5pt; margin-bottom: 4px; }
+.sheet h3 { font-size: 9.8pt; text-transform: uppercase; letter-spacing: 0.12em; color: var(--accent); border-bottom: 2px solid var(--accent); padding-bottom: 3px; margin: 14px 0 8px; }
+.sheet ul { margin: 3px 0 0 16px; }
+.sheet ul.p { list-style: none; margin: 0; }
+.sheet ul.p li { margin-bottom: 4px; display: flex; align-items: center; gap: 6px; font-size: 9.3pt; }
+.sheet .it { margin-bottom: 11px; page-break-inside: avoid; break-inside: avoid; }
+.sheet .it b { display: block; font-size: 10.2pt; color: #111827; }
+.sheet .it span { color: #4b5563; font-size: 9.1pt; display: block; margin-bottom: 2px; }
+.sheet .tags { display: flex; flex-wrap: wrap; gap: 5px; list-style: none; margin: 0; }
+.sheet .tags li { background: #f3f4f6; border: 1px solid var(--accent); color: #1f2937; padding: 2px 9px; border-radius: 999px; font-size: 8.8pt; }
+.sheet .avatar-slot { display: none; justify-content: center; margin-bottom: 12px; }
+.sheet.has-photo .avatar-slot { display: flex !important; }
+.sheet .avatar-circle { width: 78px; height: 78px; border-radius: 50%; overflow: hidden; display: flex; align-items: center; justify-content: center; border: 2px solid var(--accent); background: #f1f5f9; color: var(--accent); font-weight: 700; font-size: 1.5rem; }
+.sheet .avatar-circle.is-rounded { border-radius: 14px !important; }
+.sheet .avatar-img { width: 100%; height: 100%; object-fit: cover; }
+/* Classic */
+.t-classic { font-family: "Playfair Display", Georgia, serif; padding: 16mm; }
+.t-classic header { text-align: center; border-bottom: 3px double var(--accent); padding-bottom: 12px; margin-bottom: 14px; }
+.t-classic aside ul.p { display: flex; flex-wrap: wrap; justify-content: center; gap: 12px; }
+/* Modern */
+.t-modern { display: grid; grid-template-columns: 34% 66%; grid-template-areas: "h h" "s m"; }
+.t-modern header { grid-area: h; background: var(--accent); color: #fff !important; padding: 14mm 12mm 10mm; }
+.t-modern header h1, .t-modern header .role { color: #fff !important; }
+.t-modern aside { grid-area: s; background: #f8fafc; padding: 8mm 7mm; border-right: 1px solid #e2e8f0; }
+.t-modern main { grid-area: m; padding: 8mm 10mm; }
+/* Minimal */
+.t-minimal { padding: 16mm; }
+.t-minimal h3 { border: 0; border-left: 4px solid var(--accent); padding-left: 8px; }
+.t-minimal header { border-bottom: 1px solid #e5e7eb; padding-bottom: 12px; margin-bottom: 14px; }
+/* Bold */
+.t-bold { display: grid; grid-template-columns: 34% 66%; grid-template-areas: "h h" "s m"; }
+.t-bold header { grid-area: h; background: linear-gradient(125deg, var(--accent) 0%, #111827 100%); color: #fff !important; padding: 16mm 12mm; }
+.t-bold header h1, .t-bold header .role { color: #fff !important; }
+.t-bold aside { grid-area: s; background: #f3f4f6; padding: 8mm 7mm; }
+.t-bold main { grid-area: m; padding: 8mm 10mm; }
+.t-bold h3 { border: 0; background: var(--accent); color: #fff !important; padding: 3px 8px; border-radius: 3px; display: inline-block; }
+/* Creative */
+.t-creative { display: grid; grid-template-columns: 33% 67%; grid-template-areas: "s m"; }
+.t-creative aside { grid-area: s; background: var(--accent); color: #fff !important; padding: 12mm 8mm; }
+.t-creative aside h3 { color: #fff !important; border-bottom: 2px solid rgba(255,255,255,0.4); }
+.t-creative aside .tags li { background: rgba(255,255,255,0.2); border: 1px solid rgba(255,255,255,0.45); color: #fff !important; }
+.t-creative main { grid-area: m; padding: 12mm 10mm; }
+.t-creative header { border-bottom: 2px solid var(--accent); padding-bottom: 12px; margin-bottom: 14px; }
+/* Executive */
+.t-executive { display: grid; grid-template-columns: 33% 67%; grid-template-areas: "h h" "s m"; }
+.t-executive header { grid-area: h; background: #0f172a; color: #fff !important; padding: 14mm 12mm; border-bottom: 4px solid #d4af37; }
+.t-executive header h1 { font-family: "Playfair Display", Georgia, serif; color: #fff !important; }
+.t-executive header .role { color: #d4af37 !important; }
+.t-executive aside { grid-area: s; background: #1e293b; color: #e2e8f0 !important; padding: 10mm 8mm; }
+.t-executive aside h3 { color: #d4af37 !important; border-bottom: 1.5px solid #475569; }
+.t-executive main { grid-area: m; padding: 10mm 12mm; }
+.t-executive main h3 { font-family: "Playfair Display", Georgia, serif; border-bottom: 2px solid #d4af37; }
+/* Compact */
+.t-compact { padding: 9mm 12mm; font-size: 9pt; line-height: 1.35; }
+.t-compact header { display: flex; justify-content: space-between; border-bottom: 2px solid var(--accent); padding-bottom: 4px; margin-bottom: 8px; }
+.t-compact aside { margin-bottom: 8px; display: flex; flex-wrap: wrap; gap: 12px; background: #f8fafc; padding: 6px 10px; border-radius: 6px; }
+.t-compact aside section { display: flex; gap: 6px; }
+.t-compact aside h3 { display: inline; border: 0; margin: 0; }
+.t-compact aside ul.p { display: flex; flex-wrap: wrap; gap: 10px; }
+.t-compact main h3 { font-size: 9pt; margin: 8px 0 4px; }
+/* Fit to One Page */
+.sheet.fit-one-page { --sheet-font-size: 8.8pt !important; line-height: 1.28 !important; }
+.sheet.fit-one-page h1 { font-size: 20pt !important; }
+.sheet.fit-one-page h3 { margin: 7px 0 3px !important; font-size: 8.6pt !important; }
+.sheet.fit-one-page .it { margin-bottom: 5px !important; }
+/* Print rules */
+@page { size: A4 portrait; margin: 0; }
+@media print {
+  body { background: #fff !important; padding: 0 !important; }
+  *, *::before, *::after { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+  .sheet { box-shadow: none !important; width: 210mm !important; min-height: 297mm !important; }
+  .sheet section, .sheet .it { break-inside: avoid !important; }
+}
+</style>
+</head>
+<body>
+<div class="stage">
+  <article class="sheet t-${data.theme}${data.photo ? ' has-photo' : ''}${data.fitOnePage ? ' fit-one-page' : ''}">
+    ${CVForgeRender.buildResumeHtml(data)}
+  </article>
+</div>
+</body>
+</html>`;
+
+      const blob = new Blob([standaloneHtml], { type: 'text/html;charset=utf-8' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      const filename = `${(data.name || 'Resume').replace(/[^a-zA-Z0-9_-]/g, '_')}_CV.html`;
+      a.href = url;
+      a.download = filename;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+      showToast('✓ Downloaded standalone HTML resume!');
+    });
+
+    // 2. Copy Plain Text
+    $('#copy-text-btn')?.addEventListener('click', () => {
+      const data = CVForgeForm.getFormData();
+      const lines = [];
+      lines.push(data.name || 'Your Name');
+      if (data.title) lines.push(data.title);
+      lines.push('----------------------------------------');
+      const contact = [data.email, data.phone, data.loc, data.link].filter(Boolean).join(' | ');
+      if (contact) lines.push(contact);
+      lines.push('');
+
+      if (data.sum) {
+        lines.push('PROFESSIONAL SUMMARY');
+        lines.push(data.sum);
+        lines.push('');
+      }
+
+      if (data.skills && data.skills.length) {
+        lines.push('TECHNICAL & CORE SKILLS');
+        lines.push(data.skills.join(', '));
+        lines.push('');
+      }
+
+      const order = data.sectionOrder || ['edu', 'exp', 'proj'];
+      order.forEach(secKey => {
+        if (secKey === 'exp' && data.exp && data.exp.length) {
+          lines.push('WORK EXPERIENCE');
+          data.exp.forEach(e => {
+            lines.push(`• ${e.a} - ${e.b} (${e.c})`);
+            if (e.d) e.d.split('\n').forEach(b => lines.push(`  - ${b.trim()}`));
+          });
+          lines.push('');
+        }
+        if (secKey === 'proj' && data.proj && data.proj.length) {
+          lines.push('PROJECTS');
+          data.proj.forEach(p => {
+            lines.push(`• ${p.a} | ${p.b} (${p.c})`);
+            if (p.d) p.d.split('\n').forEach(b => lines.push(`  - ${b.trim()}`));
+          });
+          lines.push('');
+        }
+        if (secKey === 'edu' && data.edu && data.edu.length) {
+          lines.push('EDUCATION');
+          data.edu.forEach(ed => {
+            lines.push(`• ${ed.a} - ${ed.b} (${ed.c}) ${ed.e ? `[${ed.e}]` : ''}`);
+          });
+          lines.push('');
+        }
+      });
+
+      if (data.certs && data.certs.length) {
+        lines.push('CERTIFICATIONS & ACHIEVEMENTS');
+        data.certs.forEach(c => lines.push(`• ${c}`));
+        lines.push('');
+      }
+
+      const text = lines.join('\n');
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(text).then(() => {
+          showToast('✓ Resume plain text copied to clipboard!');
+        }).catch(() => {
+          showToast('Failed to copy. Please check browser permissions.');
+        });
+      } else {
+        const ta = document.createElement('textarea');
+        ta.value = text;
+        document.body.appendChild(ta);
+        ta.select();
+        document.execCommand('copy');
+        document.body.removeChild(ta);
+        showToast('✓ Resume plain text copied to clipboard!');
+      }
+    });
+
+    // 3. Export JSON
+    $('#export-json-btn')?.addEventListener('click', () => {
+      const data = CVForgeForm.getFormData();
+      data.theme = activeTheme;
+      data.accent = activeAccent;
+      data.fontSize = activeFontSize;
+      data.fitOnePage = activeFitOnePage;
+
+      const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `${(data.name || 'Resume').replace(/[^a-zA-Z0-9_-]/g, '_')}_data.json`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+      showToast('✓ Exported resume JSON file!');
+    });
+
+    // 4. Import JSON
+    $('#import-json-btn')?.addEventListener('click', () => {
+      $('#import-json-input')?.click();
+    });
+
+    $('#import-json-input')?.addEventListener('change', e => {
+      const file = e.target.files[0];
+      if (!file) return;
+
+      const reader = new FileReader();
+      reader.onload = ev => {
+        try {
+          const json = JSON.parse(ev.target.result);
+          CVForgeForm.populateForm(json);
+          if (json.theme) setTheme(json.theme);
+          if (json.accent) setAccent(json.accent);
+          if (json.fontSize) {
+            activeFontSize = json.fontSize;
+            const slider = $('#font-size-slider');
+            if (slider) slider.value = String(activeFontSize);
+            const sliderVal = $('#font-size-val');
+            if (sliderVal) sliderVal.textContent = `${activeFontSize} pt`;
+          }
+          if (json.fitOnePage !== undefined) {
+            activeFitOnePage = json.fitOnePage;
+            const fitToggle = $('#fit-one-page-toggle');
+            if (fitToggle) fitToggle.checked = activeFitOnePage;
+          }
+          saveCurrentState();
+          updateATSAnalysis();
+          if (currentStep === 2) renderThemePreviews();
+          if (currentStep === 3) renderCV();
+          showToast('✓ Imported resume JSON successfully!');
+        } catch (err) {
+          showToast('Error parsing JSON file. Please verify file format.');
+        }
+        e.target.value = '';
+      };
+      reader.readAsText(file);
+    });
   }
 
   // Export public interface
