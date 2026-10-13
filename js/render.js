@@ -111,12 +111,30 @@ window.CVForgeRender = (() => {
 
     const sumHtml = data.sum ? `<p>${esc(data.sum)}</p>` : '';
 
+    // Avatar / Photo slot
+    const initials = (data.name || 'CV')
+      .split(' ')
+      .map(w => w[0])
+      .filter(Boolean)
+      .slice(0, 2)
+      .join('')
+      .toUpperCase();
+
+    const avatarHtml = `
+      <div class="avatar-slot">
+        <div class="avatar-circle">
+          ${data.photo ? `<img src="${esc(data.photo)}" alt="${name}" class="avatar-img">` : `<span class="avatar-initials">${esc(initials)}</span>`}
+        </div>
+      </div>
+    `;
+
     return `
       <header>
         <h1>${name}</h1>
         ${title ? `<p class="role">${title}</p>` : ''}
       </header>
       <aside>
+        ${avatarHtml}
         ${renderSection('Contact', contactHtml)}
         ${renderSection('Skills', skillsHtml)}
         ${renderSection('Languages', langsHtml)}

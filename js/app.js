@@ -55,6 +55,11 @@ window.CVForgeApp = (() => {
       }
     });
 
+    // If step 2, render real-data thumbnails
+    if (stepNumber === 2) {
+      renderThemePreviews();
+    }
+
     // If step 3, render CV
     if (stepNumber === 3) {
       renderCV();
@@ -71,6 +76,46 @@ window.CVForgeApp = (() => {
     }
 
     saveCurrentState();
+  }
+
+  /**
+   * Render real user data in scaled thumbnails in Step 2
+   */
+  function renderThemePreviews() {
+    const data = CVForgeForm.getFormData();
+    // Provide clean fallback text for empty fields so miniature previews look realistic
+    const previewData = {
+      name: data.name || 'Aarav Kumar',
+      title: data.title || 'Software Engineering Student',
+      email: data.email || 'aarav@email.com',
+      phone: data.phone || '+91 98765 43210',
+      loc: data.loc || 'Darbhanga, Bihar',
+      link: data.link || 'github.com/aarav',
+      sum: data.sum || 'Motivated engineering student who enjoys building clean, responsive interfaces and solving problems with code.',
+      skills: (data.skills && data.skills.length) ? data.skills : ['HTML5', 'CSS3', 'JavaScript', 'Python', 'Git'],
+      langs: (data.langs && data.langs.length) ? data.langs : ['English', 'Hindi'],
+      certs: data.certs || [],
+      edu: (data.edu && data.edu.length) ? data.edu : [
+        { a: 'B.Tech in Computer Science', b: 'Government Engineering College', c: '2023 - 2027', e: 'CGPA 8.4' }
+      ],
+      exp: (data.exp && data.exp.length) ? data.exp : [
+        { a: 'Web Development Intern', b: 'Apex Tech Solutions', c: '2025', d: 'Built responsive components\nCollaborated using Git' }
+      ],
+      proj: (data.proj && data.proj.length) ? data.proj : [
+        { a: 'CVForge Resume Wizard', b: 'HTML, CSS, JS', c: '2025', d: 'Print-ready A4 resume generator' }
+      ],
+      photo: data.photo || null,
+      accent: activeAccent
+    };
+
+    $$('[data-thumb]').forEach(thumbEl => {
+      const template = thumbEl.dataset.thumb;
+      thumbEl.className = `sheet t-${template}`;
+      thumbEl.innerHTML = CVForgeRender.buildResumeHtml({
+        ...previewData,
+        theme: template
+      });
+    });
   }
 
   /**
@@ -114,8 +159,10 @@ window.CVForgeApp = (() => {
       el.setAttribute('aria-checked', isSelected);
     });
     saveCurrentState();
+    if (currentStep === 2) renderThemePreviews();
     if (currentStep === 3) renderCV();
   }
+
 
   /**
    * Debounced Auto-Save

@@ -1,13 +1,16 @@
 /**
  * CVForge - Themes CSS
- * Resume templates (Classic, Modern, Minimal, Bold), color picker, and sheet styling
+ * 7 Production Resume Templates (Classic, Modern, Minimal, Bold, Creative, Executive, Compact)
+ * Live scaled preview system, color picker, and print-ready sheet styling
  */
 
-/* Theme Picker Grid */
+/* ==============================================
+   THEME PICKER GRID & CARDS
+   ============================================== */
 .themes {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
-  gap: var(--sp-3);
+  grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+  gap: var(--sp-4);
 }
 
 .th {
@@ -19,6 +22,8 @@
   background: var(--panel);
   text-align: left;
   user-select: none;
+  display: flex;
+  flex-direction: column;
 }
 
 .th:hover {
@@ -39,20 +44,56 @@
 
 .th b {
   display: block;
-  font-size: 0.9rem;
+  font-size: 0.92rem;
   margin-top: var(--sp-2);
   color: var(--ink);
 }
 
 .th small {
   color: var(--muted);
-  font-size: 0.78rem;
-  line-height: 1.3;
+  font-size: 0.76rem;
+  line-height: 1.35;
   display: block;
   margin-top: 2px;
 }
 
-/* Thumbnail Visuals */
+/* ==============================================
+   LIVE SCALED PREVIEWS (Real Data Thumbnails)
+   Uses CSS transform: scale() to show actual resume content
+   ============================================== */
+.th-preview-wrap {
+  width: 100%;
+  height: 140px;
+  background: #f8fafc;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--line);
+  position: relative;
+  overflow: hidden;
+  box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.04);
+}
+
+.th-preview-scale {
+  width: 794px; /* 210mm at 96 DPI */
+  height: 1123px; /* 297mm at 96 DPI */
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%) scale(0.2);
+  transform-origin: top center;
+  pointer-events: none;
+  user-select: none;
+}
+
+.th-preview-scale .sheet {
+  box-shadow: none !important;
+  margin: 0 !important;
+  width: 794px !important;
+  min-height: 1123px !important;
+  border-radius: 0 !important;
+  overflow: hidden;
+}
+
+/* Fallback static mini icons if previews are loading */
 .mini {
   height: 100px;
   border-radius: var(--radius-sm);
@@ -60,84 +101,15 @@
   border: 1px solid #e5e7eb;
   position: relative;
   overflow: hidden;
-  box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.05);
 }
 
-.mini::before,
-.mini::after {
-  content: "";
-  position: absolute;
-  border-radius: 2px;
-}
-
-/* Classic Mini */
-.m-classic::before {
-  left: 20%;
-  right: 20%;
-  top: 12px;
-  height: 8px;
-  background: var(--accent);
-}
-.m-classic::after {
-  left: 10px;
-  right: 10px;
-  top: 34px;
-  height: 44px;
-  background: repeating-linear-gradient(#d1d5db 0 4px, #ffffff 4px 10px);
-}
-
-/* Modern Mini */
-.m-modern::before {
-  left: 0;
-  top: 0;
-  bottom: 0;
-  width: 34%;
-  background: var(--accent);
-}
-.m-modern::after {
-  left: 42%;
-  right: 10px;
-  top: 12px;
-  height: 72px;
-  background: repeating-linear-gradient(#d1d5db 0 4px, #ffffff 4px 10px);
-}
-
-/* Minimal Mini */
-.m-minimal::before {
-  left: 12px;
-  top: 12px;
-  width: 50%;
-  height: 6px;
-  background: #374151;
-}
-.m-minimal::after {
-  left: 12px;
-  right: 12px;
-  top: 32px;
-  height: 52px;
-  border-left: 3px solid var(--accent);
-  background: repeating-linear-gradient(#d1d5db 0 4px, #ffffff 4px 10px);
-}
-
-/* Bold Mini */
-.m-bold::before {
-  left: 0;
-  right: 0;
-  top: 0;
-  height: 34px;
-  background: linear-gradient(120deg, var(--accent), #111827);
-}
-.m-bold::after {
-  left: 10px;
-  right: 10px;
-  top: 46px;
-  height: 42px;
-  background: repeating-linear-gradient(#d1d5db 0 4px, #ffffff 4px 10px);
-}
-
-/* Accent Color Swatches */
+/* ==============================================
+   ACCENT COLOR CONTROLS
+   ============================================== */
 .colors-control {
-  margin-top: var(--sp-4);
+  margin-top: var(--sp-5);
+  padding-top: var(--sp-4);
+  border-top: 1px solid var(--line);
 }
 
 .colors {
@@ -149,13 +121,14 @@
 }
 
 .cd {
-  width: 32px;
-  height: 32px;
+  width: 34px;
+  height: 34px;
   border-radius: var(--radius-full);
   cursor: pointer;
   border: 3px solid transparent;
   transition: transform var(--tr-fast), border-color var(--tr-fast);
   padding: 0;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
 }
 
 .cd:hover {
@@ -169,15 +142,17 @@
 
 .cd.sel {
   border-color: var(--ink);
-  transform: scale(1.1);
+  transform: scale(1.12);
 }
 
-/* ===== CV SHEET (A4 SPECIFICATION) ===== */
+/* ==============================================
+   CV SHEET CORE STYLES (A4 SPECIFICATION)
+   ============================================== */
 .stage {
   display: flex;
   justify-content: center;
   overflow-x: auto;
-  padding: var(--sp-3) var(--sp-1);
+  padding: var(--sp-4) var(--sp-1);
 }
 
 .sheet {
@@ -186,18 +161,20 @@
   background: #ffffff !important;
   color: #1f2937 !important;
   box-shadow: var(--shadow-lg);
-  font-size: 10.5pt;
+  font-size: 10.2pt;
   line-height: 1.5;
   flex-shrink: 0;
   position: relative;
   box-sizing: border-box;
+  word-break: break-word;
+  overflow-wrap: break-word;
 }
 
-/* Common Sheet Typography & Layout */
+/* Common Sheet Typography & Section Elements */
 .sheet h1 {
   font-size: 24pt;
   line-height: 1.15;
-  margin-bottom: 2px;
+  margin-bottom: 3px;
   color: #111827;
   word-break: break-word;
 }
@@ -234,7 +211,7 @@
   display: flex;
   align-items: center;
   gap: 6px;
-  font-size: 9.5pt;
+  font-size: 9.3pt;
   word-break: break-word;
 }
 
@@ -246,13 +223,13 @@
 
 .sheet .it b {
   display: block;
-  font-size: 10.5pt;
+  font-size: 10.2pt;
   color: #111827;
 }
 
 .sheet .it span {
   color: #4b5563;
-  font-size: 9.2pt;
+  font-size: 9.1pt;
   display: block;
   margin-bottom: 2px;
 }
@@ -287,9 +264,40 @@
   margin-top: 0;
 }
 
+/* Avatar slot styling */
+.sheet .avatar-slot {
+  display: none;
+}
+
+.sheet .avatar-circle {
+  width: 76px;
+  height: 76px;
+  border-radius: 50%;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.sheet .avatar-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Page Break Helper */
+.page-break {
+  break-before: page;
+  page-break-before: always;
+  height: 0;
+  margin: 0;
+  padding: 0;
+  border: none;
+}
+
 /* ==============================================
    TEMPLATE 1: CLASSIC
-   Single column serif, centered header, elegant
+   Serif, centered header, elegant lines
    ============================================== */
 .t-classic {
   font-family: "Playfair Display", Georgia, "Times New Roman", serif;
@@ -366,7 +374,7 @@
 
 /* ==============================================
    TEMPLATE 3: MINIMAL
-   Clean, airy single column with left accent borders
+   Airy, clean single column with left accent bar
    ============================================== */
 .t-minimal {
   font-family: 'Inter', system-ui, sans-serif;
@@ -399,7 +407,7 @@
 
 /* ==============================================
    TEMPLATE 4: BOLD
-   High-impact gradient header & badge-like titles
+   High impact gradient header & badge-like titles
    ============================================== */
 .t-bold {
   display: grid;
@@ -450,4 +458,251 @@
   border-radius: 3px;
   display: inline-block;
   margin-bottom: 8px;
+}
+
+/* ==============================================
+   TEMPLATE 5: CREATIVE (NEW)
+   Coloured full-height sidebar with circular photo
+   ============================================== */
+.t-creative {
+  display: grid;
+  grid-template-columns: 33% 67%;
+  grid-template-areas: "s m";
+  font-family: 'Inter', system-ui, sans-serif;
+}
+
+.t-creative aside {
+  grid-area: s;
+  background: var(--accent);
+  color: #ffffff !important;
+  padding: 12mm 8mm;
+  display: flex;
+  flex-direction: column;
+}
+
+.t-creative aside .avatar-slot {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 14px;
+}
+
+.t-creative aside .avatar-circle {
+  border: 3px solid rgba(255, 255, 255, 0.85);
+  background: rgba(255, 255, 255, 0.2);
+  color: #ffffff;
+}
+
+.t-creative aside h3 {
+  color: #ffffff !important;
+  border-bottom: 2px solid rgba(255, 255, 255, 0.4);
+  margin-top: 14px;
+}
+
+.t-creative aside ul.p li {
+  color: rgba(255, 255, 255, 0.95);
+  font-size: 9pt;
+}
+
+.t-creative aside .tags li {
+  background: rgba(255, 255, 255, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.45);
+  color: #ffffff !important;
+  font-size: 8.5pt;
+}
+
+.t-creative main {
+  grid-area: m;
+  padding: 12mm 10mm;
+}
+
+.t-creative header {
+  border-bottom: 2px solid var(--accent);
+  padding-bottom: 12px;
+  margin-bottom: 14px;
+}
+
+.t-creative header h1 {
+  color: var(--accent);
+  font-size: 26pt;
+}
+
+/* ==============================================
+   TEMPLATE 6: EXECUTIVE (NEW)
+   Dark charcoal sidebar with distinguished gold accents
+   ============================================== */
+.t-executive {
+  display: grid;
+  grid-template-columns: 33% 67%;
+  grid-template-areas:
+    "h h"
+    "s m";
+  font-family: 'Inter', system-ui, sans-serif;
+}
+
+.t-executive header {
+  grid-area: h;
+  background: #0f172a;
+  color: #ffffff !important;
+  padding: 14mm 12mm 10mm;
+  border-bottom: 4px solid #d4af37; /* Executive Gold */
+}
+
+.t-executive header h1 {
+  font-family: "Playfair Display", Georgia, serif;
+  color: #ffffff !important;
+  font-size: 26pt;
+  letter-spacing: 0.03em;
+}
+
+.t-executive header .role {
+  color: #d4af37 !important; /* Gold accent */
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  font-size: 10.5pt;
+}
+
+.t-executive aside {
+  grid-area: s;
+  background: #1e293b;
+  color: #e2e8f0 !important;
+  padding: 10mm 8mm;
+  border-right: 1px solid #334155;
+}
+
+.t-executive aside h3 {
+  color: #d4af37 !important; /* Gold */
+  border-bottom: 1.5px solid #475569;
+  letter-spacing: 0.15em;
+  font-size: 9.2pt;
+}
+
+.t-executive aside ul.p li {
+  color: #cbd5e1;
+}
+
+.t-executive aside .tags li {
+  background: #0f172a;
+  border: 1px solid #d4af37;
+  color: #f1f5f9;
+}
+
+.t-executive main {
+  grid-area: m;
+  padding: 10mm 12mm;
+}
+
+.t-executive main h3 {
+  font-family: "Playfair Display", Georgia, serif;
+  color: #0f172a;
+  border-bottom: 2px solid #d4af37;
+  font-size: 11pt;
+  text-transform: none;
+  letter-spacing: 0.02em;
+}
+
+/* ==============================================
+   TEMPLATE 7: COMPACT (NEW)
+   Engineered to fit dense content on a single page
+   ============================================== */
+.t-compact {
+  font-family: 'Inter', system-ui, sans-serif;
+  padding: 9mm 12mm;
+  font-size: 9pt;
+  line-height: 1.35;
+}
+
+.t-compact header {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  border-bottom: 2px solid var(--accent);
+  padding-bottom: 4px;
+  margin-bottom: 8px;
+  flex-wrap: wrap;
+}
+
+.t-compact header h1 {
+  font-size: 20pt;
+  margin: 0;
+}
+
+.t-compact header .role {
+  font-size: 10pt;
+  margin: 0;
+}
+
+.t-compact aside {
+  margin-bottom: 8px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  font-size: 8.5pt;
+  background: #f8fafc;
+  padding: 6px 10px;
+  border-radius: var(--radius-sm);
+  border: 1px solid #e2e8f0;
+}
+
+.t-compact aside section {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin: 0;
+}
+
+.t-compact aside h3 {
+  display: inline;
+  border: 0;
+  margin: 0;
+  padding: 0;
+  font-size: 8.5pt;
+  color: var(--accent);
+  letter-spacing: 0.05em;
+}
+
+.t-compact aside ul.p {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.t-compact aside ul.p li {
+  margin: 0;
+  font-size: 8.5pt;
+}
+
+.t-compact aside .tags {
+  gap: 4px;
+}
+
+.t-compact aside .tags li {
+  padding: 1px 7px;
+  font-size: 8pt;
+}
+
+.t-compact main h3 {
+  font-size: 9pt;
+  margin: 8px 0 4px;
+  padding-bottom: 2px;
+}
+
+.t-compact .it {
+  margin-bottom: 6px;
+}
+
+.t-compact .it b {
+  font-size: 9.2pt;
+}
+
+.t-compact .it span {
+  font-size: 8.4pt;
+}
+
+.t-compact ul {
+  margin: 2px 0 0 14px;
+}
+
+.t-compact li {
+  margin-bottom: 2px;
 }
