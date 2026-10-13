@@ -21,7 +21,9 @@
 ### 🎨 Visual & UI Design
 - **Luxury Dark Landing Screen:** Deep obsidian background (`#161310`) and creamy warm off-white text (`#ecdfcc`).
 - **Fixed Top Navigation with CSS-Only Staggered Character Reveal:** Split into individual `<span>` characters driven by ascending `--i` CSS custom properties for a seamless roll effect on hover.
-- **Display Typography:** Heavy wide geometric sans-serif headings styled with `.satoshi-black` and `.tracking-tighter` (`-0.05em`).
+- **Full-Screen Hero & Display Typography:** Massive `CRAFT YOUR / CAREER` uppercase display headings styled with `.satoshi-black` and `.tracking-tighter` (`-0.05em`).
+- **Interactive 3D Parallax Template Gallery:** 3D perspective scene with window mousemove parallax tilt (`rotateX`, `rotateY`) and tiered depth staggering across layered template preview cards.
+- **Smooth Transition CTA ('Generate my CV'):** Bold primary button with spring scale-up on hover; on click, animates hero opacity to 0 and `translateY(-20px)` over 500ms, then sets `display: none` and reveals the 3-step builder with a subtle fade-in animation.
 - **Responsive & Accessible:** Strict semantic HTML5 (`header`, `nav`, `main`, `section`, `fieldset`, `legend`), full keyboard navigation (Tab/Shift+Tab, Enter/Space), and WCAG 4.5:1 contrast ratios.
 
 ### 📄 7 Handcrafted Resume Templates
