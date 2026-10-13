@@ -79,27 +79,184 @@
 </header>
 
 <!-- ==============================================
-     HERO LANDING SECTION
+     HERO LANDING SECTION (FULL-SCREEN 2-COLUMN)
      ============================================== -->
-<section class="landing-hero noprint">
-  <div class="hero-pill">⚡ ATS Scored • 7 Print-Ready Templates • 100% Client-Side</div>
-  <h1 class="hero-title satoshi-black tracking-tighter">
-    Craft Resumes That <span class="gold-gradient">Win Interviews</span>
-  </h1>
-  <p class="hero-sub">
-    The competition-winning resume builder engineered for students and professionals. Real-time ATS scoring, keyword matching against job postings, and flawless A4 export.
-  </p>
+<section class="landing-hero-fullscreen noprint" id="hero">
+  <div class="hero-container">
+    <div class="hero-grid">
+      <!-- Left Column: Display Typography & Actions -->
+      <div class="hero-left-col">
+        <div class="hero-pill">
+          <span class="pill-dot" aria-hidden="true"></span>
+          <span>⚡ ATS Scored • 7 Print-Ready Templates • 100% Client-Side</span>
+        </div>
 
-  <div class="hero-actions">
-    <a href="#builder" class="btn-hero-primary" id="hero-build-cta">🚀 Launch Resume Builder</a>
-    <button type="button" class="btn-hero-secondary" id="hero-sample-cta">✨ Try with Sample Data</button>
-    <a href="#templates" class="btn-hero-secondary">🎨 Browse Templates</a>
-  </div>
+        <h1 class="hero-display-title satoshi-black tracking-tighter">
+          CRAFT YOUR<br>
+          <span class="gold-gradient">CAREER</span>
+        </h1>
 
-  <div class="hero-badges-row">
-    <div class="hero-badge-item">🎯 <strong>100-Point ATS Engine</strong> with keyword suggestions</div>
-    <div class="hero-badge-item">🖨️ <strong>Strict A4 Alignment</strong> (@page 210×297mm)</div>
-    <div class="hero-badge-item">🔒 <strong>Zero Server / Private</strong> (all client-side)</div>
+        <p class="hero-sub">
+          The competition-grade resume builder engineered for students and professionals. Real-time ATS scoring, keyword matching against job postings, and flawless A4 export.
+        </p>
+
+        <div class="hero-actions">
+          <a href="#builder" class="btn-hero-primary" id="hero-build-cta">🚀 Launch Builder</a>
+          <button type="button" class="btn-hero-secondary" id="hero-sample-cta">✨ Try Sample Data</button>
+          <a href="#templates" class="btn-hero-secondary">🎨 Templates</a>
+        </div>
+
+        <div class="hero-badges-row">
+          <div class="hero-badge-item">🎯 <strong>100-Point ATS Engine</strong> with keyword suggestions</div>
+          <div class="hero-badge-item">🖨️ <strong>Strict A4 Alignment</strong> (@page 210×297mm)</div>
+          <div class="hero-badge-item">🔒 <strong>Zero Server / Private</strong> (all client-side)</div>
+        </div>
+      </div>
+
+      <!-- Right Column: Interactive 3D Parallax Gallery Container -->
+      <div class="hero-right-col">
+        <div class="hero-gallery-wrap">
+          <div class="hero-3d-scene" id="hero-3d-scene" aria-label="Interactive 3D Template Showcase">
+            <!-- Ambient Backdrop Halo -->
+            <div class="scene-glow-disc" aria-hidden="true"></div>
+
+            <!-- Card 1: Executive (Back Layer, Stagger Factor 0.70) -->
+            <div class="gallery-card card-executive" data-factor="0.70" data-base-x="-60" data-base-y="-30" data-base-z="-45" data-base-rz="-7" tabindex="0" role="button" aria-label="Select Executive Template">
+              <div class="card-glass-frame">
+                <div class="card-floating-badge">
+                  <span class="badge-dot gold"></span> Executive <span class="badge-stat">98 ATS</span>
+                </div>
+                <div class="mini-sheet t-executive-preview">
+                  <div class="mini-sidebar dark-sidebar">
+                    <div class="mini-avatar-ph"></div>
+                    <div class="mini-bar gold w-70"></div>
+                    <div class="mini-bar muted w-50"></div>
+                    <div class="mini-divider"></div>
+                    <div class="mini-heading-label gold-text">EXPERTISE</div>
+                    <div class="mini-tags-cloud">
+                      <span>Python</span><span>React</span><span>AWS</span><span>Docker</span>
+                    </div>
+                    <div class="mini-heading-label gold-text" style="margin-top: 8px;">CONTACT</div>
+                    <div class="mini-bar muted w-85"></div>
+                    <div class="mini-bar muted w-65"></div>
+                  </div>
+                  <div class="mini-content-col">
+                    <div class="mini-name-title">
+                      <div class="mini-bar dark w-80 h-lg"></div>
+                      <div class="mini-bar gold w-45"></div>
+                    </div>
+                    <div class="mini-section-block">
+                      <div class="mini-sec-heading dark">EXECUTIVE SUMMARY</div>
+                      <div class="mini-bar text w-100"></div>
+                      <div class="mini-bar text w-90"></div>
+                    </div>
+                    <div class="mini-section-block">
+                      <div class="mini-sec-heading dark">LEADERSHIP &amp; EXPERIENCE</div>
+                      <div class="mini-exp-row">
+                        <div class="mini-bar dark w-70"></div>
+                        <div class="mini-bar text w-95"></div>
+                        <div class="mini-bar text w-80"></div>
+                      </div>
+                      <div class="mini-exp-row">
+                        <div class="mini-bar dark w-60"></div>
+                        <div class="mini-bar text w-90"></div>
+                      </div>
+                    </div>
+                    <div class="mini-section-block">
+                      <div class="mini-sec-heading dark">EDUCATION</div>
+                      <div class="mini-bar dark w-65"></div>
+                      <div class="mini-bar text w-50"></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Card 2: Modern (Front Highlight Layer, Stagger Factor 1.35) -->
+            <div class="gallery-card card-modern" data-factor="1.35" data-base-x="0" data-base-y="10" data-base-z="45" data-base-rz="0" tabindex="0" role="button" aria-label="Select Modern Template">
+              <div class="card-glass-frame">
+                <div class="card-floating-badge featured">
+                  <span class="badge-dot accent"></span> Modern <span class="badge-stat">96 ATS</span>
+                </div>
+                <div class="mini-sheet t-modern-preview">
+                  <div class="mini-banner-head">
+                    <div class="mini-bar white w-65 h-lg"></div>
+                    <div class="mini-bar white-alpha w-40"></div>
+                    <div class="mini-contact-dots">
+                      <span></span><span></span><span></span>
+                    </div>
+                  </div>
+                  <div class="mini-split-body">
+                    <div class="mini-side-pane">
+                      <div class="mini-sec-heading accent">SKILLS</div>
+                      <div class="mini-tags-cloud">
+                        <span>HTML5</span><span>CSS3</span><span>JS</span><span>Node</span>
+                      </div>
+                      <div class="mini-sec-heading accent" style="margin-top: 8px;">LANGUAGES</div>
+                      <div class="mini-bar muted w-70"></div>
+                      <div class="mini-bar muted w-50"></div>
+                    </div>
+                    <div class="mini-main-pane">
+                      <div class="mini-sec-heading accent">EXPERIENCE</div>
+                      <div class="mini-exp-row">
+                        <div class="mini-bar dark w-75"></div>
+                        <div class="mini-bar text w-100"></div>
+                        <div class="mini-bar text w-85"></div>
+                      </div>
+                      <div class="mini-sec-heading accent">PROJECTS</div>
+                      <div class="mini-exp-row">
+                        <div class="mini-bar dark w-60"></div>
+                        <div class="mini-bar text w-90"></div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Card 3: Creative (Right Layer, Stagger Factor 0.95) -->
+            <div class="gallery-card card-creative" data-factor="0.95" data-base-x="65" data-base-y="45" data-base-z="-15" data-base-rz="6" tabindex="0" role="button" aria-label="Select Creative Template">
+              <div class="card-glass-frame">
+                <div class="card-floating-badge">
+                  <span class="badge-dot purple"></span> Creative <span class="badge-stat">94 ATS</span>
+                </div>
+                <div class="mini-sheet t-creative-preview">
+                  <div class="mini-sidebar creative-sidebar">
+                    <div class="mini-avatar-ph circle"></div>
+                    <div class="mini-bar white w-70"></div>
+                    <div class="mini-bar white-alpha w-45"></div>
+                    <div class="mini-divider light"></div>
+                    <div class="mini-heading-label white-text">DESIGN</div>
+                    <div class="mini-tags-cloud light">
+                      <span>UI/UX</span><span>Figma</span><span>Design</span>
+                    </div>
+                  </div>
+                  <div class="mini-content-col">
+                    <div class="mini-name-title">
+                      <div class="mini-bar dark w-75 h-lg"></div>
+                      <div class="mini-bar purple-text w-40"></div>
+                    </div>
+                    <div class="mini-section-block">
+                      <div class="mini-sec-heading purple-text">PORTFOLIO</div>
+                      <div class="mini-exp-row">
+                        <div class="mini-bar dark w-80"></div>
+                        <div class="mini-bar text w-95"></div>
+                      </div>
+                    </div>
+                    <div class="mini-section-block">
+                      <div class="mini-sec-heading purple-text">EDUCATION</div>
+                      <div class="mini-bar dark w-65"></div>
+                      <div class="mini-bar text w-50"></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </section>
 
@@ -138,6 +295,57 @@
   <div class="section-head">
     <h2 class="satoshi-black tracking-tighter">7 Handcrafted Templates</h2>
     <p>Engineered for readability, ATS parsers, and pixel-perfect A4 printing</p>
+  </div>
+
+  <div class="templates-showcase-grid">
+    <div class="showcase-card">
+      <div class="showcase-tag">Serif • Centered</div>
+      <h3>Classic</h3>
+      <p>Timeless serif typography with a centered header, double-line accents, and balanced margins.</p>
+      <button type="button" class="btn-use-tpl" data-select-theme="classic">Select &amp; Build →</button>
+    </div>
+
+    <div class="showcase-card highlight-card">
+      <div class="showcase-tag featured">2-Column • Accent Banner</div>
+      <h3>Modern</h3>
+      <p>Clean two-column layout with a bold accent header, dedicated skills sidebar, and prominent project showcase.</p>
+      <button type="button" class="btn-use-tpl" data-select-theme="modern">Select &amp; Build →</button>
+    </div>
+
+    <div class="showcase-card">
+      <div class="showcase-tag">Airy • Tech</div>
+      <h3>Minimal</h3>
+      <p>Clean, airy single-column design with subtle divider lines and high typography focus for modern engineering roles.</p>
+      <button type="button" class="btn-use-tpl" data-select-theme="minimal">Select &amp; Build →</button>
+    </div>
+
+    <div class="showcase-card">
+      <div class="showcase-tag">High Impact • Badges</div>
+      <h3>Bold</h3>
+      <p>Gradient header bar, uppercase section markers, and pill badge tags for technical competencies.</p>
+      <button type="button" class="btn-use-tpl" data-select-theme="bold">Select &amp; Build →</button>
+    </div>
+
+    <div class="showcase-card">
+      <div class="showcase-tag">Creative • Circular Photo</div>
+      <h3>Creative</h3>
+      <p>Vibrant colored sidebar, circular avatar crop, and modern tag clouds ideal for designers and developers.</p>
+      <button type="button" class="btn-use-tpl" data-select-theme="creative">Select &amp; Build →</button>
+    </div>
+
+    <div class="showcase-card highlight-card">
+      <div class="showcase-tag featured">Dark Sidebar • Gold</div>
+      <h3>Executive</h3>
+      <p>Distinguished dark sidebar, gold accent lines, and authoritative hierarchy tailored for senior leadership.</p>
+      <button type="button" class="btn-use-tpl" data-select-theme="executive">Select &amp; Build →</button>
+    </div>
+
+    <div class="showcase-card">
+      <div class="showcase-tag">Single Page • Dense</div>
+      <h3>Compact</h3>
+      <p>Tight margins, inline metadata, and two-column skills array engineered to fit heavy content into a single A4 sheet.</p>
+      <button type="button" class="btn-use-tpl" data-select-theme="compact">Select &amp; Build →</button>
+    </div>
   </div>
 </section>
 

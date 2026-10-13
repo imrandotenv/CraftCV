@@ -761,6 +761,9 @@ window.CVForgeApp = (() => {
     // Phase 5: Setup Export features (HTML Blob, Plain Text, JSON Import/Export)
     setupExportFeatures();
 
+    // Interactive 3D Hero Parallax Gallery
+    setup3DHeroParallax();
+
     // Hook Hero Section CTAs
     $('#hero-build-cta')?.addEventListener('click', e => {
       e.preventDefault();
@@ -774,6 +777,143 @@ window.CVForgeApp = (() => {
       go(1);
       const builder = $('#builder');
       if (builder) builder.scrollIntoView({ behavior: 'smooth' });
+    });
+
+    // Hook Templates Showcase "Select & Build" buttons
+    $$('[data-select-theme]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const theme = btn.dataset.selectTheme;
+        if (theme) {
+          setTheme(theme);
+          go(2);
+          const builder = $('#builder');
+          if (builder) builder.scrollIntoView({ behavior: 'smooth' });
+          showToast(`✓ Selected ${theme.toUpperCase()} template!`);
+        }
+      });
+    });
+  }
+
+  /**
+   * Interactive 3D Parallax Gallery for CV Template Previews
+   * Attaches to mousemove on window, calculates cursor X/Y relative to screen center,
+   * and applies rotateX(), rotateY(), and staggered parallax depth transforms across cards.
+   */
+  function setup3DHeroParallax() {
+    const scene = $('#hero-3d-scene');
+    if (!scene) return;
+
+    const cardEls = $$('#hero-3d-scene .gallery-card');
+    if (!cardEls.length) return;
+
+    // Check prefers-reduced-motion
+    const prefersReduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (prefersReduced) return;
+
+    // Maximum tilt angles and parallax pixel displacement
+    const MAX_TILT_X = 14; // Degrees on X axis
+    const MAX_TILT_Y = 18; // Degrees on Y axis
+    const MAX_SHIFT_X = 22; // Pixels
+    const MAX_SHIFT_Y = 16; // Pixels
+
+    let targetNormX = 0;
+    let targetNormY = 0;
+    let currentNormX = 0;
+    let currentNormY = 0;
+    let isMouseOver = false;
+    let rafId = null;
+
+    // Cache card configuration objects
+    const cards = cardEls.map(card => ({
+      el: card,
+      factor: parseFloat(card.dataset.factor || '1.0'),
+      baseX: parseFloat(card.dataset.baseX || '0'),
+      baseY: parseFloat(card.dataset.baseY || '0'),
+      baseZ: parseFloat(card.dataset.baseZ || '0'),
+      baseRz: parseFloat(card.dataset.baseRz || '0')
+    }));
+
+    function applyTransforms() {
+      // Lerp towards target normalized coordinates
+      const ease = 0.085;
+      currentNormX += (targetNormX - currentNormX) * ease;
+      currentNormY += (targetNormY - currentNormY) * ease;
+
+      // Invert Y for natural perspective: cursor moving UP tilts top edge backward (rotateX > 0)
+      const baseRotX = -currentNormY * MAX_TILT_X;
+      // Cursor moving RIGHT tilts right edge backward (rotateY > 0)
+      const baseRotY = currentNormX * MAX_TILT_Y;
+
+      cards.forEach(c => {
+        // Staggered calculation: each card scales tilt and translation by its depth factor
+        const cardRotX = (baseRotX * c.factor).toFixed(2);
+        const cardRotY = (baseRotY * c.factor).toFixed(2);
+        const shiftX = (currentNormX * MAX_SHIFT_X * c.factor).toFixed(2);
+        const shiftY = (currentNormY * MAX_SHIFT_Y * c.factor).toFixed(2);
+
+        c.el.style.transform = `translate3d(calc(${c.baseX}px + ${shiftX}px), calc(${c.baseY}px + ${shiftY}px), ${c.baseZ}px) rotateZ(${c.baseRz}deg) rotateX(${cardRotX}deg) rotateY(${cardRotY}deg)`;
+      });
+
+      const dist = Math.abs(targetNormX - currentNormX) + Math.abs(targetNormY - currentNormY);
+      if (dist > 0.0005 || isMouseOver) {
+        rafId = requestAnimationFrame(applyTransforms);
+      } else {
+        rafId = null;
+      }
+    }
+
+    function scheduleFrame() {
+      if (!rafId) {
+        rafId = requestAnimationFrame(applyTransforms);
+      }
+    }
+
+    // Window mousemove event listener
+    window.addEventListener('mousemove', e => {
+      isMouseOver = true;
+      const centerX = window.innerWidth / 2;
+      const centerY = window.innerHeight / 2;
+
+      // Coordinates relative to screen center, normalized between -1.0 and 1.0
+      targetNormX = Math.max(-1, Math.min(1, (e.clientX - centerX) / centerX));
+      targetNormY = Math.max(-1, Math.min(1, (e.clientY - centerY) / centerY));
+
+      scheduleFrame();
+    });
+
+    // Window mouseleave - gracefully return to resting position
+    document.addEventListener('mouseleave', () => {
+      isMouseOver = false;
+      targetNormX = 0;
+      targetNormY = 0;
+      scheduleFrame();
+    });
+
+    // Initial render
+    applyTransforms();
+
+    // Interactive card selection
+    cards.forEach(c => {
+      const handleSelect = () => {
+        let templateKey = 'classic';
+        if (c.el.classList.contains('card-executive')) templateKey = 'executive';
+        else if (c.el.classList.contains('card-modern')) templateKey = 'modern';
+        else if (c.el.classList.contains('card-creative')) templateKey = 'creative';
+
+        setTheme(templateKey);
+        go(2);
+        const builder = $('#builder');
+        if (builder) builder.scrollIntoView({ behavior: 'smooth' });
+        showToast(`✓ Switched to ${templateKey.toUpperCase()} template!`);
+      };
+
+      c.el.addEventListener('click', handleSelect);
+      c.el.addEventListener('keydown', e => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          handleSelect();
+        }
+      });
     });
   }
 
