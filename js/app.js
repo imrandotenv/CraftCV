@@ -184,13 +184,115 @@ window.CVForgeApp = (() => {
   }
 
   /**
-   * Debounced Auto-Save
+   * Debounced Auto-Save & ATS Live Update
    */
   function onFormChanged() {
     clearTimeout(autoSaveTimeout);
     autoSaveTimeout = setTimeout(() => {
       saveCurrentState();
+      updateATSAnalysis();
     }, 400);
+  }
+
+  /**
+   * Update ATS Score Ring, Checklist, Tips, and Weak Verbs Audit
+   */
+  function updateATSAnalysis() {
+    if (!window.CVForgeATS) return;
+
+    const data = CVForgeForm.getFormData();
+    const jdText = $('#jd-input-text')?.value || '';
+    const analysis = CVForgeATS.scoreResume(data, jdText);
+
+    // Update Circular Ring Score
+    const scoreProgress = $('#score-ring-progress');
+    const scoreNum = $('#ats-score-num');
+    const badgeScore = $('#ats-badge-score');
+    const badgePill = $('#ats-badge-pill');
+
+    const total = analysis.total;
+    const circumference = 301.6;
+    const offset = circumference - (total / 100) * circumference;
+
+    if (scoreProgress) {
+      scoreProgress.style.strokeDashoffset = String(offset);
+      // Color-code score ring stroke
+      let strokeColor = '#ef4444'; // Red for < 50
+      if (total >= 80) {
+        strokeColor = '#10b981'; // Green for 80+
+      } else if (total >= 50) {
+        strokeColor = '#f59e0b'; // Amber for 50-79
+      }
+      scoreProgress.style.stroke = strokeColor;
+    }
+
+    if (scoreNum) scoreNum.textContent = String(total);
+    if (badgeScore) badgeScore.textContent = String(total);
+    if (badgePill) {
+      if (total >= 80) {
+        badgePill.style.background = '#d1fae5';
+        badgePill.style.color = '#065f46';
+      } else if (total >= 50) {
+        badgePill.style.background = '#fef3c7';
+        badgePill.style.color = '#92400e';
+      } else {
+        badgePill.style.background = '#fee2e2';
+        badgePill.style.color = '#991b1b';
+      }
+    }
+
+    // Render 8 Criteria Breakdown list
+    const breakdownEl = $('#ats-breakdown');
+    if (breakdownEl) {
+      breakdownEl.innerHTML = analysis.breakdown.map(item => `
+        <li class="ats-item ${item.passed ? 'pass' : 'fail'}">
+          <div class="ats-item-info">
+            <span class="ats-icon">${item.passed ? '✓' : '✗'}</span>
+            <span>${item.name}</span>
+          </div>
+          <span class="ats-pts">${item.passed ? `+${item.points} pts` : `0/${item.max} pts`}</span>
+        </li>
+      `).join('');
+    }
+
+    // Render Actionable Tips Box
+    const tipsBox = $('#ats-tips-container');
+    const tipsList = $('#ats-tips-list');
+    if (tipsBox && tipsList) {
+      if (analysis.tips && analysis.tips.length > 0) {
+        tipsBox.style.display = 'block';
+        tipsList.innerHTML = analysis.tips.map(tip => `<li>${tip}</li>`).join('');
+      } else {
+        tipsBox.style.display = 'none';
+        tipsList.innerHTML = '';
+      }
+    }
+
+    // Render Weak Action Verbs Panel
+    const weakPanel = $('#weak-verbs-panel');
+    const weakList = $('#weak-verbs-list');
+    if (weakPanel && weakList) {
+      if (analysis.weakVerbs && analysis.weakVerbs.length > 0) {
+        weakPanel.style.display = 'block';
+        weakList.innerHTML = analysis.weakVerbs.map(item => `
+          <div class="weak-verb-item">
+            <div>
+              <strong style="color:var(--danger);">${item.weakPhrase}</strong> in:
+              <em style="color:var(--muted); font-size:0.78rem;">"${item.originalBullet.length > 45 ? item.originalBullet.slice(0, 45) + '...' : item.originalBullet}"</em>
+            </div>
+            <div class="suggestion-chips">
+              <span>Replace with:</span>
+              ${item.suggestions.map(s => `<button type="button" class="btn-suggest" data-replace-from="${item.weakPhrase}" data-replace-to="${s}">${s}</button>`).join('')}
+            </div>
+          </div>
+        `).join('');
+      } else {
+        weakPanel.style.display = 'none';
+        weakList.innerHTML = '';
+      }
+    }
+
+    return analysis;
   }
 
   /**
@@ -249,6 +351,7 @@ window.CVForgeApp = (() => {
 
     CVForgeForm.populateForm(sample);
     saveCurrentState();
+    updateATSAnalysis();
     
     // Clear validation warnings if any
     const nameErrorEl = document.getElementById('err-name');
@@ -275,6 +378,7 @@ window.CVForgeApp = (() => {
       if (sliderVal) sliderVal.textContent = '10 pt';
       const fitToggle = $('#fit-one-page-toggle');
       if (fitToggle) fitToggle.checked = false;
+      updateATSAnalysis();
       go(1);
     }
   }
@@ -486,6 +590,88 @@ window.CVForgeApp = (() => {
   }
 
   /**
+   * Setup Job Description Matcher and Verb Replacer
+   */
+  function setupATSFeatures() {
+    const jdBtn = $('#jd-analyze-btn');
+    const jdInput = $('#jd-input-text');
+    const jdResultBox = $('#jd-result-box');
+    const jdPctText = $('#jd-pct-text');
+    const jdMeterFill = $('#jd-meter-fill');
+    const matchedChips = $('#jd-matched-chips');
+    const missingChips = $('#jd-missing-chips');
+
+    const runJDMatch = () => {
+      const data = CVForgeForm.getFormData();
+      const jdText = jdInput?.value || '';
+      if (!jdText.trim()) {
+        if (jdResultBox) jdResultBox.classList.remove('visible');
+        updateATSAnalysis();
+        return;
+      }
+
+      const match = CVForgeATS.matchJobDescription(CVForgeATS.extractFullText(data), jdText);
+      if (jdResultBox) jdResultBox.classList.add('visible');
+      if (jdPctText) jdPctText.textContent = `Match: ${match.percentage}% (${match.matched.length}/${match.totalKeywords} keywords)`;
+      if (jdMeterFill) {
+        jdMeterFill.style.width = `${match.percentage}%`;
+        if (match.percentage >= 70) {
+          jdMeterFill.style.background = '#10b981';
+        } else if (match.percentage >= 40) {
+          jdMeterFill.style.background = '#f59e0b';
+        } else {
+          jdMeterFill.style.background = '#ef4444';
+        }
+      }
+
+      if (matchedChips) {
+        matchedChips.innerHTML = match.matched.length
+          ? match.matched.map(kw => `<span class="kw-chip matched">✓ ${kw}</span>`).join('')
+          : '<span style="font-size:0.75rem; color:var(--muted);">No matching keywords found</span>';
+      }
+
+      if (missingChips) {
+        missingChips.innerHTML = match.missing.length
+          ? match.missing.map(kw => `<span class="kw-chip missing">✗ ${kw}</span>`).join('')
+          : '<span style="font-size:0.75rem; color:var(--success);">All target keywords present!</span>';
+      }
+
+      updateATSAnalysis();
+    };
+
+    jdBtn?.addEventListener('click', runJDMatch);
+    jdInput?.addEventListener('input', () => {
+      clearTimeout(autoSaveTimeout);
+      autoSaveTimeout = setTimeout(runJDMatch, 500);
+    });
+
+    // 1-Click Replace Weak Verbs in form textareas
+    $('#weak-verbs-panel')?.addEventListener('click', e => {
+      const btn = e.target.closest('.btn-suggest');
+      if (!btn) return;
+      const fromPhrase = btn.dataset.replaceFrom;
+      const toWord = btn.dataset.replaceTo;
+      if (!fromPhrase || !toWord) return;
+
+      // Search and replace across experience and project textareas
+      const textareas = document.querySelectorAll('#g-exp textarea, #g-proj textarea');
+      let replaced = false;
+      textareas.forEach(ta => {
+        const regex = new RegExp(fromPhrase, 'i');
+        if (regex.test(ta.value)) {
+          ta.value = ta.value.replace(regex, toWord);
+          replaced = true;
+        }
+      });
+
+      if (replaced) {
+        onFormChanged();
+        updateATSAnalysis();
+      }
+    });
+  }
+
+  /**
    * Bind all event handlers and initialize app
    */
   function init() {
@@ -497,6 +683,9 @@ window.CVForgeApp = (() => {
     setupPhotoUpload();
     setupSectionReordering();
     setupFormattingControls();
+
+    // Setup Phase 4 ATS Features
+    setupATSFeatures();
 
     // Hook repeatable row add buttons
     $$('.btn-add, .add').forEach(btn => {
@@ -565,6 +754,9 @@ window.CVForgeApp = (() => {
       setAccent(PRESET_COLORS[0]);
       go(1);
     }
+
+    // Initial ATS analysis calculation
+    updateATSAnalysis();
   }
 
   // Export public interface
@@ -574,7 +766,8 @@ window.CVForgeApp = (() => {
     setTheme,
     setAccent,
     onFormChanged,
-    loadSampleData
+    loadSampleData,
+    updateATSAnalysis
   };
 })();
 

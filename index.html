@@ -204,6 +204,74 @@
             <textarea id="inp-certs" name="certs" placeholder="Responsive Web Design - freeCodeCamp&#10;Python for Everybody - Coursera"></textarea>
           </div>
         </fieldset>
+
+        <!-- ATS Score, Job Matcher & Smart Auditor Card (Phase 4) -->
+        <section class="card ats-card" id="ats-section">
+          <div class="ats-header-flex">
+            <h2>🎯 ATS Score &amp; Job Matcher</h2>
+            <div class="ats-score-badge" id="ats-badge-pill">
+              Score: <span id="ats-badge-score">0</span>/100
+            </div>
+          </div>
+
+          <!-- ATS Score Overview (Ring + Criteria Breakdown) -->
+          <div class="ats-overview-grid">
+            <div class="score-ring-container">
+              <svg class="score-svg" viewBox="0 0 120 120" aria-hidden="true">
+                <circle class="score-bg-circle" cx="60" cy="60" r="48"></circle>
+                <circle class="score-progress-circle" id="score-ring-progress" cx="60" cy="60" r="48" stroke-dasharray="301.6" stroke-dashoffset="301.6"></circle>
+              </svg>
+              <div class="score-center-text">
+                <span class="score-num" id="ats-score-num">0</span>
+                <span class="score-sub">out of 100</span>
+              </div>
+            </div>
+
+            <!-- 8 Criteria Breakdown list -->
+            <ul class="ats-breakdown-list" id="ats-breakdown">
+              <!-- dynamically populated -->
+            </ul>
+          </div>
+
+          <!-- Actionable Tips Box -->
+          <div class="ats-tips-box" id="ats-tips-container" style="display:none;">
+            <h3>💡 ATS Recommendations &amp; Fixes</h3>
+            <ul class="ats-tips-list" id="ats-tips-list"></ul>
+          </div>
+
+          <!-- Job Description Keyword Matcher -->
+          <div class="jd-matcher-box">
+            <h3>🔍 Job Description Keyword Matcher</h3>
+            <label class="f" for="jd-input-text">Paste Target Job Description (Optional)</label>
+            <textarea id="jd-input-text" class="jd-input" placeholder="Paste the job description from LinkedIn, Indeed, or company careers page to analyze keyword match..."></textarea>
+            <button type="button" class="btn sec" id="jd-analyze-btn">⚡ Analyze Keyword Match</button>
+            <div class="jd-result" id="jd-result-box">
+              <div class="jd-meter-wrap">
+                <strong style="font-size: 0.85rem;" id="jd-pct-text">Match: 0%</strong>
+                <div class="jd-meter-bar">
+                  <div class="jd-meter-fill" id="jd-meter-fill" style="width: 0%;"></div>
+                </div>
+              </div>
+              <div class="jd-chips-container">
+                <div class="jd-chips-group">
+                  <strong>Matched Keywords:</strong>
+                  <div id="jd-matched-chips">None</div>
+                </div>
+                <div class="jd-chips-group">
+                  <strong>Missing Keywords:</strong>
+                  <div id="jd-missing-chips">None</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Weak Action Verbs Audit Panel -->
+          <div class="weak-verbs-panel" id="weak-verbs-panel" style="display:none;">
+            <h3>⚠️ Action Verb Auditor (Weak Phrases Detected)</h3>
+            <p style="font-size: 0.8rem; color: var(--muted); margin-bottom: 8px;">Click any suggested power verb to enhance your bullet point:</p>
+            <div id="weak-verbs-list"></div>
+          </div>
+        </section>
       </form>
 
       <!-- Step 1 Navigation & Actions -->
@@ -352,6 +420,7 @@
 <script src="js/storage.js"></script>
 <script src="js/render.js"></script>
 <script src="js/form.js"></script>
+<script src="js/ats.js"></script>
 <script src="js/app.js"></script>
 </body>
 </html>
