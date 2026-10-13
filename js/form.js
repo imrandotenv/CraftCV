@@ -10,10 +10,123 @@ window.CVForgeForm = (() => {
     proj: ['Project Name', 'Tech Stack / Tools', 'Live Link / Year', 'Description & Highlights (one per line)']
   };
 
+  // Profile Photo State
+  let currentPhoto = null;
+  let currentPhotoShape = 'circle';
+
   /**
    * Helper: Escape HTML
    */
   const esc = CVForgeRender.esc;
+
+  /**
+   * Update visual photo preview and remove button visibility
+   */
+  function updatePhotoUI() {
+    const previewBox = document.getElementById('photo-preview-box');
+    const placeholder = document.getElementById('photo-placeholder');
+    const img = document.getElementById('photo-img');
+    const removeBtn = document.getElementById('photo-remove-btn');
+
+    if (previewBox) {
+      previewBox.classList.toggle('is-rounded', currentPhotoShape === 'rounded');
+    }
+
+    if (currentPhoto) {
+      if (placeholder) placeholder.style.display = 'none';
+      if (img) {
+        img.src = currentPhoto;
+        img.style.display = 'block';
+      }
+      if (removeBtn) removeBtn.style.display = 'inline-flex';
+    } else {
+      if (placeholder) placeholder.style.display = 'block';
+      if (img) {
+        img.src = '';
+        img.style.display = 'none';
+      }
+      if (removeBtn) removeBtn.style.display = 'none';
+    }
+  }
+
+  function setPhoto(dataUrl) {
+    currentPhoto = dataUrl;
+    updatePhotoUI();
+  }
+
+  function getPhoto() {
+    return currentPhoto;
+  }
+
+  function setPhotoShape(shape) {
+    currentPhotoShape = (shape === 'rounded' ? 'rounded' : 'circle');
+    const radios = document.querySelectorAll('input[name="photoShape"]');
+    radios.forEach(r => {
+      r.checked = (r.value === currentPhotoShape);
+    });
+    updatePhotoUI();
+  }
+
+  function getPhotoShape() {
+    return currentPhotoShape;
+  }
+
+  /**
+   * Section Reordering Helpers
+   */
+  function getSectionOrder() {
+    const cards = Array.from(document.querySelectorAll('#form [data-section-card]'));
+    return cards.map(c => c.dataset.sectionCard);
+  }
+
+  function updateReorderButtonsState() {
+    const cards = Array.from(document.querySelectorAll('#form [data-section-card]'));
+    cards.forEach((card, index) => {
+      const upBtn = card.querySelector('[data-reorder="up"]');
+      const downBtn = card.querySelector('[data-reorder="down"]');
+      if (upBtn) upBtn.disabled = (index === 0);
+      if (downBtn) downBtn.disabled = (index === cards.length - 1);
+    });
+  }
+
+  function reorderSection(sectionId, direction) {
+    const card = document.getElementById(`card-${sectionId}`);
+    if (!card) return;
+
+    if (direction === 'up') {
+      const prev = card.previousElementSibling;
+      if (prev && prev.hasAttribute('data-section-card')) {
+        card.parentNode.insertBefore(card, prev);
+      }
+    } else if (direction === 'down') {
+      const next = card.nextElementSibling;
+      if (next && next.hasAttribute('data-section-card')) {
+        card.parentNode.insertBefore(next, card);
+      }
+    }
+
+    updateReorderButtonsState();
+    if (window.CVForgeApp) {
+      window.CVForgeApp.onFormChanged();
+    }
+  }
+
+  function applySectionOrder(orderArray) {
+    if (!Array.isArray(orderArray) || !orderArray.length) return;
+    const form = document.getElementById('form');
+    if (!form) return;
+
+    // Rearrange existing cards in the specified sequence
+    const certCard = document.querySelector('#form fieldset:last-of-type');
+    orderArray.forEach(id => {
+      const card = document.getElementById(`card-${id}`);
+      if (card && certCard) {
+        form.insertBefore(card, certCard);
+      }
+    });
+
+    updateReorderButtonsState();
+  }
 
   /**
    * Add a dynamic row to a section group
@@ -137,7 +250,10 @@ window.CVForgeForm = (() => {
       certs: parseLines(val('certs')),
       edu: getRowsData('edu'),
       exp: getRowsData('exp'),
-      proj: getRowsData('proj')
+      proj: getRowsData('proj'),
+      photo: currentPhoto,
+      photoShape: currentPhotoShape,
+      sectionOrder: getSectionOrder()
     };
   }
 
@@ -181,6 +297,26 @@ window.CVForgeForm = (() => {
       setVal('certs', data.certs);
     }
 
+    // Restore Photo & Shape
+    if (data.photo !== undefined) {
+      setPhoto(data.photo);
+    } else {
+      setPhoto(null);
+    }
+
+    if (data.photoShape) {
+      setPhotoShape(data.photoShape);
+    } else {
+      setPhotoShape('circle');
+    }
+
+    // Restore Section Order
+    if (Array.isArray(data.sectionOrder) && data.sectionOrder.length) {
+      applySectionOrder(data.sectionOrder);
+    } else {
+      applySectionOrder(['edu', 'exp', 'proj']);
+    }
+
     // Clear dynamic rows
     ['edu', 'exp', 'proj'].forEach(group => {
       const container = document.getElementById(`g-${group}`);
@@ -201,6 +337,9 @@ window.CVForgeForm = (() => {
   function resetForm() {
     const form = document.getElementById('form');
     if (form) form.reset();
+    setPhoto(null);
+    setPhotoShape('circle');
+    applySectionOrder(['edu', 'exp', 'proj']);
     ['edu', 'exp', 'proj'].forEach(group => {
       const container = document.getElementById(`g-${group}`);
       if (container) container.innerHTML = '';
@@ -306,6 +445,14 @@ window.CVForgeForm = (() => {
     getFormData,
     populateForm,
     resetForm,
-    validate
+    validate,
+    setPhoto,
+    getPhoto,
+    setPhotoShape,
+    getPhotoShape,
+    reorderSection,
+    getSectionOrder,
+    applySectionOrder,
+    updateReorderButtonsState
   };
 })();

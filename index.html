@@ -111,6 +111,31 @@
               <textarea id="inp-sum" name="sum" placeholder="2-3 impactful lines about your background, strengths, and career ambitions..."></textarea>
               <span class="hint-text">Keep it concise: 25 to 60 words works best for single-page formats.</span>
             </div>
+
+            <!-- Optional Photo Upload -->
+            <div class="field-group full">
+              <label class="f">Profile Photo (Optional)</label>
+              <div class="photo-upload-container">
+                <div class="photo-preview-box" id="photo-preview-box">
+                  <span class="photo-placeholder" id="photo-placeholder">👤</span>
+                  <img id="photo-img" src="" alt="Profile Preview" style="display:none;">
+                </div>
+                <div class="photo-controls">
+                  <div class="photo-actions">
+                    <input type="file" id="photo-input" accept="image/*" class="file-input-hidden">
+                    <button type="button" class="btn sec" id="photo-choose-btn">📷 Choose Photo</button>
+                    <button type="button" class="btn btn-danger" id="photo-remove-btn" style="display:none;">Remove</button>
+                  </div>
+                  <div class="photo-shape-toggles">
+                    <span>Crop:</span>
+                    <label><input type="radio" name="photoShape" value="circle" checked> Circle</label>
+                    <label><input type="radio" name="photoShape" value="rounded"> Rounded</label>
+                  </div>
+                  <span class="hint-text">Max 2 MB (PNG, JPG, WebP). Automatic print crop.</span>
+                  <span class="field-error" id="err-photo" aria-live="polite"></span>
+                </div>
+              </div>
+            </div>
           </div>
         </fieldset>
 
@@ -128,26 +153,44 @@
           </div>
         </fieldset>
 
-        <!-- Education Card -->
-        <fieldset class="card">
+        <!-- Education Card (Reorderable) -->
+        <fieldset class="card" data-section-card="edu" id="card-edu">
           <legend class="sr-only">Education Background</legend>
-          <h2>🎓 Education</h2>
+          <div class="card-header-actions">
+            <h2>🎓 Education</h2>
+            <div class="reorder-btns">
+              <button type="button" class="btn-icon" data-reorder="up" data-section="edu" title="Move Education Up" aria-label="Move Education Up">↑</button>
+              <button type="button" class="btn-icon" data-reorder="down" data-section="edu" title="Move Education Down" aria-label="Move Education Down">↓</button>
+            </div>
+          </div>
           <div id="g-edu" role="region" aria-label="Education entries list"></div>
           <button type="button" class="btn add" data-g="edu">+ Add Education</button>
         </fieldset>
 
-        <!-- Experience Card -->
-        <fieldset class="card">
+        <!-- Experience Card (Reorderable) -->
+        <fieldset class="card" data-section-card="exp" id="card-exp">
           <legend class="sr-only">Work Experience & Internships</legend>
-          <h2>💼 Experience &amp; Internships</h2>
+          <div class="card-header-actions">
+            <h2>💼 Experience &amp; Internships</h2>
+            <div class="reorder-btns">
+              <button type="button" class="btn-icon" data-reorder="up" data-section="exp" title="Move Experience Up" aria-label="Move Experience Up">↑</button>
+              <button type="button" class="btn-icon" data-reorder="down" data-section="exp" title="Move Experience Down" aria-label="Move Experience Down">↓</button>
+            </div>
+          </div>
           <div id="g-exp" role="region" aria-label="Work experience list"></div>
           <button type="button" class="btn add" data-g="exp">+ Add Experience</button>
         </fieldset>
 
-        <!-- Projects Card -->
-        <fieldset class="card">
+        <!-- Projects Card (Reorderable) -->
+        <fieldset class="card" data-section-card="proj" id="card-proj">
           <legend class="sr-only">Projects Portfolio</legend>
-          <h2>🚀 Projects</h2>
+          <div class="card-header-actions">
+            <h2>🚀 Projects</h2>
+            <div class="reorder-btns">
+              <button type="button" class="btn-icon" data-reorder="up" data-section="proj" title="Move Projects Up" aria-label="Move Projects Up">↑</button>
+              <button type="button" class="btn-icon" data-reorder="down" data-section="proj" title="Move Projects Down" aria-label="Move Projects Down">↓</button>
+            </div>
+          </div>
           <div id="g-proj" role="region" aria-label="Projects list"></div>
           <button type="button" class="btn add" data-g="proj">+ Add Project</button>
         </fieldset>
@@ -272,6 +315,23 @@
 
       <div class="noprint" style="background: var(--panel); border: 1px solid var(--line); border-radius: var(--radius-md); padding: 12px 16px; margin-bottom: 16px; font-size: 0.85rem; color: var(--muted);">
         💡 <strong>Print Tip:</strong> In the browser print dialog, choose <strong>Save as PDF</strong>, set Margins to <strong>None</strong>, and turn on <strong>Background graphics</strong> to ensure flawless A4 alignment.
+      </div>
+
+      <!-- Formatting Controls Toolbar -->
+      <div class="formatting-controls noprint">
+        <div class="format-group">
+          <div class="slider-group">
+            <label for="font-size-slider">Font Size:</label>
+            <input type="range" id="font-size-slider" min="9" max="12" step="0.5" value="10" aria-label="Resume font size slider">
+            <span class="slider-val" id="font-size-val">10 pt</span>
+          </div>
+        </div>
+        <div class="format-group">
+          <label class="toggle-group" for="fit-one-page-toggle">
+            <input type="checkbox" id="fit-one-page-toggle">
+            <span>📄 Fit to one page</span>
+          </label>
+        </div>
       </div>
 
       <!-- CV Stage -->

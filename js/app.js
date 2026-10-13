@@ -1,6 +1,6 @@
 /**
  * CVForge - Application Wiring & Controller
- * Manages step navigation, user interactions, auto-save, and themes
+ * Manages step navigation, user interactions, auto-save, themes, photo upload, and formatting
  */
 
 window.CVForgeApp = (() => {
@@ -10,6 +10,8 @@ window.CVForgeApp = (() => {
   let currentStep = 1;
   let activeTheme = 'classic';
   let activeAccent = PRESET_COLORS[0];
+  let activeFontSize = 10;
+  let activeFitOnePage = false;
   let autoSaveTimeout = null;
 
   /**
@@ -105,13 +107,16 @@ window.CVForgeApp = (() => {
         { a: 'CVForge Resume Wizard', b: 'HTML, CSS, JS', c: '2025', d: 'Print-ready A4 resume generator' }
       ],
       photo: data.photo || null,
-      accent: activeAccent
+      photoShape: data.photoShape || 'circle',
+      sectionOrder: data.sectionOrder || ['edu', 'exp', 'proj'],
+      accent: activeAccent,
+      fontSize: activeFontSize,
+      fitOnePage: activeFitOnePage
     };
 
     $$('[data-thumb]').forEach(thumbEl => {
       const template = thumbEl.dataset.thumb;
-      thumbEl.className = `sheet t-${template}`;
-      thumbEl.innerHTML = CVForgeRender.buildResumeHtml({
+      CVForgeRender.renderToElement(thumbEl, {
         ...previewData,
         theme: template
       });
@@ -125,6 +130,9 @@ window.CVForgeApp = (() => {
     const data = CVForgeForm.getFormData();
     data.theme = activeTheme;
     data.accent = activeAccent;
+    data.fontSize = activeFontSize;
+    data.fitOnePage = activeFitOnePage;
+    
     const cvContainer = $('#cv');
     CVForgeRender.renderToElement(cvContainer, data);
     document.title = (data.name ? `${data.name} - Resume` : 'CVForge Resume');
@@ -153,16 +161,27 @@ window.CVForgeApp = (() => {
     activeAccent = colorHex;
     document.documentElement.style.setProperty('--accent', colorHex);
     document.documentElement.style.setProperty('--focus-ring', `${colorHex}33`);
+
+    const isPreset = PRESET_COLORS.includes(colorHex);
     $$('.cd').forEach(el => {
       const isSelected = el.dataset.color === colorHex;
       el.classList.toggle('sel', isSelected);
       el.setAttribute('aria-checked', isSelected);
     });
+
+    const customWrap = $('#custom-color-wrap');
+    if (customWrap) {
+      customWrap.classList.toggle('sel', !isPreset);
+      const customInput = $('#custom-color');
+      if (customInput && !isPreset) {
+        customInput.value = colorHex;
+      }
+    }
+
     saveCurrentState();
     if (currentStep === 2) renderThemePreviews();
     if (currentStep === 3) renderCV();
   }
-
 
   /**
    * Debounced Auto-Save
@@ -182,6 +201,8 @@ window.CVForgeApp = (() => {
     data.theme = activeTheme;
     data.accent = activeAccent;
     data.step = currentStep;
+    data.fontSize = activeFontSize;
+    data.fitOnePage = activeFitOnePage;
     CVForgeStorage.saveState(data);
   }
 
@@ -220,9 +241,10 @@ window.CVForgeApp = (() => {
           a: 'CVForge Resume Builder',
           b: 'HTML5, CSS3, Vanilla JS',
           c: '2025',
-          d: 'Created a 3-step responsive resume wizard supporting 4 templates and A4 print export\nImplemented accessible validation and client-side data persistence'
+          d: 'Created a 3-step responsive resume wizard supporting 7 templates and A4 print export\nImplemented accessible validation, photo upload, and section reordering'
         }
-      ]
+      ],
+      sectionOrder: ['edu', 'exp', 'proj']
     };
 
     CVForgeForm.populateForm(sample);
@@ -245,18 +267,29 @@ window.CVForgeApp = (() => {
       CVForgeForm.resetForm();
       setTheme('classic');
       setAccent(PRESET_COLORS[0]);
+      activeFontSize = 10;
+      activeFitOnePage = false;
+      const slider = $('#font-size-slider');
+      if (slider) slider.value = '10';
+      const sliderVal = $('#font-size-val');
+      if (sliderVal) sliderVal.textContent = '10 pt';
+      const fitToggle = $('#fit-one-page-toggle');
+      if (fitToggle) fitToggle.checked = false;
       go(1);
     }
   }
 
   /**
-   * Initialize color swatches in Theme Step
+   * Initialize color swatches & custom color picker in Theme Step
    */
   function setupColorSwatches() {
     const container = $('#colors');
     if (!container) return;
     container.innerHTML = '';
 
+    const isPreset = PRESET_COLORS.includes(activeAccent);
+
+    // Preset color buttons
     PRESET_COLORS.forEach(color => {
       const swatch = document.createElement('button');
       swatch.type = 'button';
@@ -269,6 +302,19 @@ window.CVForgeApp = (() => {
       swatch.addEventListener('click', () => setAccent(color));
       container.appendChild(swatch);
     });
+
+    // Custom color picker wrapper
+    const customWrap = document.createElement('div');
+    customWrap.className = `custom-color-wrap ${!isPreset ? 'sel' : ''}`;
+    customWrap.id = 'custom-color-wrap';
+    customWrap.title = 'Custom accent color picker';
+    customWrap.innerHTML = `<input type="color" id="custom-color" class="custom-color-input" value="${activeAccent}" aria-label="Custom accent color">`;
+    
+    const customInput = customWrap.querySelector('#custom-color');
+    customInput.addEventListener('input', e => {
+      setAccent(e.target.value);
+    });
+    container.appendChild(customWrap);
   }
 
   /**
@@ -293,12 +339,164 @@ window.CVForgeApp = (() => {
   }
 
   /**
+   * Setup Photo Upload with FileReader and 2MB Limit
+   */
+  function setupPhotoUpload() {
+    const chooseBtn = $('#photo-choose-btn');
+    const input = $('#photo-input');
+    const removeBtn = $('#photo-remove-btn');
+    const errPhoto = $('#err-photo');
+
+    chooseBtn?.addEventListener('click', () => input?.click());
+
+    input?.addEventListener('change', e => {
+      const file = e.target.files[0];
+      if (!file) return;
+
+      // 2 MB Size Validation
+      if (file.size > 2 * 1024 * 1024) {
+        if (errPhoto) {
+          errPhoto.textContent = 'Photo exceeds 2 MB limit. Please choose a smaller image.';
+          errPhoto.classList.add('visible');
+        }
+        input.value = '';
+        return;
+      }
+
+      if (errPhoto) {
+        errPhoto.textContent = '';
+        errPhoto.classList.remove('visible');
+      }
+
+      const reader = new FileReader();
+      reader.onload = ev => {
+        const rawDataUrl = ev.target.result;
+        // Optimize image to 400x400 to prevent localStorage quota exhaustion
+        const img = new Image();
+        img.onload = () => {
+          try {
+            const canvas = document.createElement('canvas');
+            const maxDim = 400;
+            let w = img.width, h = img.height;
+            if (w > maxDim || h > maxDim) {
+              if (w > h) {
+                h = Math.round((h * maxDim) / w);
+                w = maxDim;
+              } else {
+                w = Math.round((w * maxDim) / h);
+                h = maxDim;
+              }
+            }
+            canvas.width = w;
+            canvas.height = h;
+            const ctx = canvas.getContext('2d');
+            ctx.drawImage(img, 0, 0, w, h);
+            const optimizedUrl = canvas.toDataURL('image/jpeg', 0.88);
+            CVForgeForm.setPhoto(optimizedUrl);
+          } catch (e) {
+            CVForgeForm.setPhoto(rawDataUrl);
+          }
+          onFormChanged();
+          if (currentStep === 2) renderThemePreviews();
+          if (currentStep === 3) renderCV();
+        };
+        img.onerror = () => {
+          CVForgeForm.setPhoto(rawDataUrl);
+          onFormChanged();
+          if (currentStep === 2) renderThemePreviews();
+          if (currentStep === 3) renderCV();
+        };
+        img.src = rawDataUrl;
+      };
+
+      reader.onerror = () => {
+        if (errPhoto) {
+          errPhoto.textContent = 'Failed to load photo. Please try another image.';
+          errPhoto.classList.add('visible');
+        }
+      };
+
+      reader.readAsDataURL(file);
+    });
+
+    removeBtn?.addEventListener('click', () => {
+      CVForgeForm.setPhoto(null);
+      if (input) input.value = '';
+      if (errPhoto) errPhoto.classList.remove('visible');
+      onFormChanged();
+      if (currentStep === 2) renderThemePreviews();
+      if (currentStep === 3) renderCV();
+    });
+
+    $$('input[name="photoShape"]').forEach(radio => {
+      radio.addEventListener('change', e => {
+        CVForgeForm.setPhotoShape(e.target.value);
+        onFormChanged();
+        if (currentStep === 2) renderThemePreviews();
+        if (currentStep === 3) renderCV();
+      });
+    });
+  }
+
+  /**
+   * Setup Section Reordering (Up/Down arrows)
+   */
+  function setupSectionReordering() {
+    document.getElementById('form')?.addEventListener('click', e => {
+      const btn = e.target.closest('[data-reorder]');
+      if (!btn) return;
+      const section = btn.dataset.section;
+      const dir = btn.dataset.reorder;
+      CVForgeForm.reorderSection(section, dir);
+      if (currentStep === 2) renderThemePreviews();
+      if (currentStep === 3) renderCV();
+    });
+    CVForgeForm.updateReorderButtonsState();
+  }
+
+  /**
+   * Setup Formatting Toolbar (Font Size Slider & Fit To One Page)
+   */
+  function setupFormattingControls() {
+    const slider = $('#font-size-slider');
+    const sliderVal = $('#font-size-val');
+    const fitToggle = $('#fit-one-page-toggle');
+
+    if (slider) {
+      slider.value = String(activeFontSize);
+      if (sliderVal) sliderVal.textContent = `${activeFontSize} pt`;
+      slider.addEventListener('input', e => {
+        activeFontSize = parseFloat(e.target.value);
+        if (sliderVal) sliderVal.textContent = `${activeFontSize} pt`;
+        const cv = $('#cv');
+        if (cv) cv.style.setProperty('--sheet-font-size', `${activeFontSize}pt`);
+        saveCurrentState();
+      });
+    }
+
+    if (fitToggle) {
+      fitToggle.checked = activeFitOnePage;
+      fitToggle.addEventListener('change', e => {
+        activeFitOnePage = e.target.checked;
+        const cv = $('#cv');
+        if (cv) cv.classList.toggle('fit-one-page', activeFitOnePage);
+        saveCurrentState();
+      });
+    }
+  }
+
+  /**
    * Bind all event handlers and initialize app
    */
   function init() {
     // Setup themes and colors
     setupColorSwatches();
     setupThemeCards();
+
+    // Setup Phase 3 controls
+    setupPhotoUpload();
+    setupSectionReordering();
+    setupFormattingControls();
 
     // Hook repeatable row add buttons
     $$('.btn-add, .add').forEach(btn => {
@@ -343,6 +541,18 @@ window.CVForgeApp = (() => {
       CVForgeForm.populateForm(saved);
       if (saved.theme) setTheme(saved.theme);
       if (saved.accent) setAccent(saved.accent);
+      if (saved.fontSize) {
+        activeFontSize = saved.fontSize;
+        const slider = $('#font-size-slider');
+        if (slider) slider.value = String(activeFontSize);
+        const sliderVal = $('#font-size-val');
+        if (sliderVal) sliderVal.textContent = `${activeFontSize} pt`;
+      }
+      if (saved.fitOnePage !== undefined) {
+        activeFitOnePage = saved.fitOnePage;
+        const fitToggle = $('#fit-one-page-toggle');
+        if (fitToggle) fitToggle.checked = activeFitOnePage;
+      }
       if (saved.step && saved.step > 1 && saved.name) {
         go(saved.step);
       } else {

@@ -161,13 +161,89 @@
   background: #ffffff !important;
   color: #1f2937 !important;
   box-shadow: var(--shadow-lg);
-  font-size: 10.2pt;
+  font-size: var(--sheet-font-size, 10.2pt);
   line-height: 1.5;
   flex-shrink: 0;
   position: relative;
   box-sizing: border-box;
   word-break: break-word;
   overflow-wrap: break-word;
+}
+
+/* Fit to One Page Mode */
+.sheet.fit-one-page {
+  --sheet-font-size: 8.8pt !important;
+  line-height: 1.28 !important;
+}
+
+.sheet.fit-one-page h1 {
+  font-size: 20pt !important;
+}
+
+.sheet.fit-one-page .role {
+  font-size: 9.8pt !important;
+}
+
+.sheet.fit-one-page h3 {
+  margin: 7px 0 3px !important;
+  font-size: 8.6pt !important;
+  padding-bottom: 2px !important;
+}
+
+.sheet.fit-one-page .it {
+  margin-bottom: 5px !important;
+}
+
+.sheet.fit-one-page .it b {
+  font-size: 9.1pt !important;
+}
+
+.sheet.fit-one-page ul {
+  margin: 1px 0 0 13px !important;
+}
+
+.sheet.fit-one-page li {
+  margin-bottom: 1px !important;
+}
+
+.sheet.fit-one-page section {
+  margin-bottom: 5px !important;
+}
+
+/* Avatar slot styling */
+.sheet .avatar-slot {
+  display: none;
+  justify-content: center;
+  margin-bottom: 12px;
+}
+
+.sheet.has-photo .avatar-slot {
+  display: flex !important;
+}
+
+.sheet .avatar-circle {
+  width: 78px;
+  height: 78px;
+  border-radius: 50%;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid var(--accent);
+  background: #f1f5f9;
+  color: var(--accent);
+  font-weight: 700;
+  font-size: 1.5rem;
+}
+
+.sheet .avatar-circle.is-rounded {
+  border-radius: 14px !important;
+}
+
+.sheet .avatar-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 
 /* Common Sheet Typography & Section Elements */

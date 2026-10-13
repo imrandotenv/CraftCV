@@ -120,13 +120,23 @@ window.CVForgeRender = (() => {
       .join('')
       .toUpperCase();
 
+    const shapeClass = (data.photoShape === 'rounded') ? ' is-rounded' : '';
     const avatarHtml = `
       <div class="avatar-slot">
-        <div class="avatar-circle">
+        <div class="avatar-circle${shapeClass}">
           ${data.photo ? `<img src="${esc(data.photo)}" alt="${name}" class="avatar-img">` : `<span class="avatar-initials">${esc(initials)}</span>`}
         </div>
       </div>
     `;
+
+    // Dynamic Section Ordering (Education, Experience, Projects)
+    const sectionsMap = {
+      edu: renderSection('Education', eduHtml),
+      exp: renderSection('Experience', expHtml),
+      proj: renderSection('Projects', projHtml)
+    };
+    const order = Array.isArray(data.sectionOrder) && data.sectionOrder.length ? data.sectionOrder : ['edu', 'exp', 'proj'];
+    const dynamicSectionsHtml = order.map(k => sectionsMap[k] || '').join('');
 
     return `
       <header>
@@ -141,9 +151,7 @@ window.CVForgeRender = (() => {
       </aside>
       <main>
         ${renderSection('Summary', sumHtml)}
-        ${renderSection('Experience', expHtml)}
-        ${renderSection('Projects', projHtml)}
-        ${renderSection('Education', eduHtml)}
+        ${dynamicSectionsHtml}
         ${renderSection('Certifications', certsHtml)}
       </main>
     `;
@@ -157,7 +165,17 @@ window.CVForgeRender = (() => {
   function renderToElement(container, data) {
     if (!container) return;
     const theme = data.theme || 'classic';
-    container.className = `sheet t-${theme}`;
+    const hasPhoto = Boolean(data.photo);
+    const fitOnePage = Boolean(data.fitOnePage);
+
+    container.className = `sheet t-${theme}${hasPhoto ? ' has-photo' : ''}${fitOnePage ? ' fit-one-page' : ''}`;
+    
+    if (data.fontSize) {
+      container.style.setProperty('--sheet-font-size', `${data.fontSize}pt`);
+    } else {
+      container.style.removeProperty('--sheet-font-size');
+    }
+
     container.innerHTML = buildResumeHtml(data);
   }
 

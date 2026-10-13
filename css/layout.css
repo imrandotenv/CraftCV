@@ -381,6 +381,228 @@ textarea {
   display: block;
 }
 
+/* Card Header with Section Reordering */
+.card-header-actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--sp-3);
+}
+
+.card-header-actions h2 {
+  margin-bottom: 0;
+}
+
+.reorder-btns {
+  display: flex;
+  gap: 4px;
+}
+
+.btn-icon {
+  width: 28px;
+  height: 28px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--line);
+  background: var(--panel);
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.85rem;
+  color: var(--ink);
+  transition: background-color var(--tr-fast), border-color var(--tr-fast);
+  padding: 0;
+}
+
+.btn-icon:hover {
+  background: var(--line);
+  border-color: var(--muted);
+}
+
+.btn-icon:focus-visible {
+  outline: 2px solid var(--accent);
+}
+
+.btn-icon:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+
+/* Photo Upload Styles */
+.photo-upload-container {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-4);
+  margin-top: var(--sp-2);
+  flex-wrap: wrap;
+}
+
+.photo-preview-box {
+  width: 82px;
+  height: 82px;
+  border-radius: var(--radius-full);
+  border: 2px dashed var(--line);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  position: relative;
+  background: var(--bg);
+  flex-shrink: 0;
+  transition: border-radius var(--tr-fast);
+}
+
+.photo-preview-box.is-rounded {
+  border-radius: var(--radius-md);
+}
+
+.photo-preview-box img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.photo-placeholder {
+  color: var(--muted);
+  font-size: 1.8rem;
+  user-select: none;
+}
+
+.photo-controls {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-2);
+  flex: 1;
+  min-width: 200px;
+}
+
+.photo-actions {
+  display: flex;
+  gap: var(--sp-2);
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.file-input-hidden {
+  display: none;
+}
+
+.photo-shape-toggles {
+  display: flex;
+  gap: var(--sp-3);
+  align-items: center;
+  font-size: 0.82rem;
+  color: var(--ink);
+}
+
+.photo-shape-toggles label {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  cursor: pointer;
+}
+
+/* Custom Accent Color Picker */
+.custom-color-wrap {
+  width: 34px;
+  height: 34px;
+  border-radius: var(--radius-full);
+  border: 2.5px solid var(--line);
+  position: relative;
+  overflow: hidden;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: conic-gradient(red, yellow, lime, aqua, blue, magenta, red);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  transition: transform var(--tr-fast), border-color var(--tr-fast);
+}
+
+.custom-color-wrap:hover {
+  transform: scale(1.15);
+  border-color: var(--accent);
+}
+
+.custom-color-wrap.sel {
+  border-color: var(--ink);
+  transform: scale(1.12);
+}
+
+.custom-color-input {
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  opacity: 0;
+  cursor: pointer;
+  border: none;
+  padding: 0;
+}
+
+/* Formatting Controls Toolbar (Font Size & Fit to One Page) */
+.formatting-controls {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--sp-4);
+  flex-wrap: wrap;
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-md);
+  padding: 12px 18px;
+  margin-bottom: 16px;
+  box-shadow: var(--shadow-sm);
+}
+
+.format-group {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-3);
+  flex-wrap: wrap;
+}
+
+.slider-group {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: var(--ink);
+}
+
+.slider-group input[type="range"] {
+  width: 120px;
+  accent-color: var(--accent);
+  cursor: pointer;
+}
+
+.slider-val {
+  min-width: 44px;
+  font-weight: 600;
+  color: var(--accent);
+  font-size: 0.85rem;
+}
+
+.toggle-group {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.85rem;
+  font-weight: 500;
+  cursor: pointer;
+  color: var(--ink);
+  user-select: none;
+}
+
+.toggle-group input[type="checkbox"] {
+  width: 17px;
+  height: 17px;
+  accent-color: var(--accent);
+  cursor: pointer;
+}
+
 /* Mobile Responsiveness */
 @media (max-width: 640px) {
   .grid {
@@ -406,4 +628,9 @@ textarea {
     flex-direction: column;
     text-align: center;
   }
+  .formatting-controls {
+    flex-direction: column;
+    align-items: stretch;
+  }
 }
+
