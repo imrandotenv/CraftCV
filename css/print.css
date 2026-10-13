@@ -1,0 +1,89 @@
+/**
+ * CVForge - Print CSS
+ * Strict A4 print rules, background preservation, and page break controls
+ */
+
+@page {
+  size: A4 portrait;
+  margin: 0;
+}
+
+@media print {
+  /* Reset document flow and body background */
+  html, body {
+    background: #ffffff !important;
+    color: #000000 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    width: 210mm !important;
+    height: auto !important;
+  }
+
+  /* Force browsers to print exact background colors and graphics */
+  *, *::before, *::after {
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+    color-adjust: exact !important;
+  }
+
+  /* Hide entire wizard UI, navigation, progress bar, tips, and footers */
+  .brand,
+  .steps,
+  .nav,
+  .noprint,
+  .app-footer,
+  #s1,
+  #s2 {
+    display: none !important;
+  }
+
+  /* Show only Step 3 CV container */
+  .step {
+    display: none !important;
+  }
+
+  #s3 {
+    display: block !important;
+    padding: 0 !important;
+    margin: 0 !important;
+  }
+
+  .wrap {
+    max-width: none !important;
+    padding: 0 !important;
+    margin: 0 !important;
+  }
+
+  .stage {
+    padding: 0 !important;
+    margin: 0 !important;
+    overflow: visible !important;
+    display: block !important;
+  }
+
+  /* A4 CV Sheet exact dimensions */
+  .sheet {
+    box-shadow: none !important;
+    width: 210mm !important;
+    min-height: 297mm !important;
+    margin: 0 !important;
+    border-radius: 0 !important;
+  }
+
+  /* Prevent awkward page splits */
+  .sheet section,
+  .sheet .it,
+  .sheet ul.p li,
+  .sheet .tags li {
+    break-inside: avoid !important;
+    page-break-inside: avoid !important;
+  }
+
+  .page-break {
+    break-before: page !important;
+    page-break-before: always !important;
+    height: 0;
+    margin: 0;
+    padding: 0;
+  }
+}

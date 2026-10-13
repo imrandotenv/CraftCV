@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CVForge - Build Your Resume in 3 Steps</title>
+  
+  <!-- Typography (Google Fonts with robust system fallbacks) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+  
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/layout.css">
+  <link rel="stylesheet" href="css/themes.css">
+  <link rel="stylesheet" href="css/print.css">
+</head>
+<body>
+
+<div class="wrap">
+  <!-- Brand Header -->
+  <header class="brand">
+    <h1>📄 CVForge</h1>
+    <p>Build a clean, professional, print-ready resume in 3 simple steps</p>
+  </header>
+
+  <!-- Step Wizard Indicator -->
+  <nav aria-label="Progress steps">
+    <ol class="steps">
+      <li>
+        <button type="button" class="dot on" id="d1" aria-current="step">
+          <i>1</i><span>Details</span>
+        </button>
+      </li>
+      <li class="dot-connector" id="conn1" aria-hidden="true"></li>
+      <li>
+        <button type="button" class="dot" id="d2">
+          <i>2</i><span>Theme</span>
+        </button>
+      </li>
+      <li class="dot-connector" id="conn2" aria-hidden="true"></li>
+      <li>
+        <button type="button" class="dot" id="d3">
+          <i>3</i><span>Download</span>
+        </button>
+      </li>
+    </ol>
+  </nav>
+
+  <main>
+    <!-- ==============================================
+         STEP 1: DETAILS & CONTENT
+         ============================================== -->
+    <section class="step active" id="s1" aria-labelledby="step1-heading">
+      <form id="form" onsubmit="return false;" novalidate>
+        <!-- Personal Info Card -->
+        <fieldset class="card">
+          <legend class="sr-only">Personal Information</legend>
+          <h2 id="step1-heading">👤 Personal Info</h2>
+          <div class="grid">
+            <div class="field-group">
+              <label class="f" for="inp-name">
+                Full name <span class="req" aria-hidden="true">*</span>
+              </label>
+              <input id="inp-name" name="name" type="text" placeholder="Aarav Kumar" required aria-describedby="err-name" autocomplete="name">
+              <span class="field-error" id="err-name" aria-live="polite"></span>
+            </div>
+
+            <div class="field-group">
+              <label class="f" for="inp-title">
+                Job Title / Course
+              </label>
+              <input id="inp-title" name="title" type="text" placeholder="B.Tech CSE Student" autocomplete="organization-title">
+            </div>
+
+            <div class="field-group">
+              <label class="f" for="inp-email">
+                Email Address
+              </label>
+              <input id="inp-email" name="email" type="email" placeholder="aarav@email.com" aria-describedby="err-email" autocomplete="email">
+              <span class="field-error" id="err-email" aria-live="polite"></span>
+            </div>
+
+            <div class="field-group">
+              <label class="f" for="inp-phone">
+                Phone Number
+              </label>
+              <input id="inp-phone" name="phone" type="tel" placeholder="+91 98765 43210" aria-describedby="err-phone" autocomplete="tel">
+              <span class="field-error" id="err-phone" aria-live="polite"></span>
+            </div>
+
+            <div class="field-group">
+              <label class="f" for="inp-loc">
+                Location
+              </label>
+              <input id="inp-loc" name="loc" type="text" placeholder="Darbhanga, Bihar" autocomplete="address-level2">
+            </div>
+
+            <div class="field-group">
+              <label class="f" for="inp-link">
+                Profile Link (GitHub / LinkedIn)
+              </label>
+              <input id="inp-link" name="link" type="text" placeholder="github.com/aarav">
+            </div>
+
+            <div class="field-group full">
+              <label class="f" for="inp-sum">
+                Professional Summary
+              </label>
+              <textarea id="inp-sum" name="sum" placeholder="2-3 impactful lines about your background, strengths, and career ambitions..."></textarea>
+              <span class="hint-text">Keep it concise: 25 to 60 words works best for single-page formats.</span>
+            </div>
+          </div>
+        </fieldset>
+
+        <!-- Skills & Languages Card -->
+        <fieldset class="card">
+          <legend class="sr-only">Skills and Languages</legend>
+          <h2>🛠 Skills &amp; Languages</h2>
+          <div class="field-group">
+            <label class="f" for="inp-skills">Skills (comma separated)</label>
+            <input id="inp-skills" name="skills" type="text" placeholder="HTML5, CSS3, JavaScript, Python, Git, Problem Solving">
+          </div>
+          <div class="field-group" style="margin-top: 12px;">
+            <label class="f" for="inp-langs">Languages (comma separated)</label>
+            <input id="inp-langs" name="langs" type="text" placeholder="English, Hindi, Maithili">
+          </div>
+        </fieldset>
+
+        <!-- Education Card -->
+        <fieldset class="card">
+          <legend class="sr-only">Education Background</legend>
+          <h2>🎓 Education</h2>
+          <div id="g-edu" role="region" aria-label="Education entries list"></div>
+          <button type="button" class="btn add" data-g="edu">+ Add Education</button>
+        </fieldset>
+
+        <!-- Experience Card -->
+        <fieldset class="card">
+          <legend class="sr-only">Work Experience & Internships</legend>
+          <h2>💼 Experience &amp; Internships</h2>
+          <div id="g-exp" role="region" aria-label="Work experience list"></div>
+          <button type="button" class="btn add" data-g="exp">+ Add Experience</button>
+        </fieldset>
+
+        <!-- Projects Card -->
+        <fieldset class="card">
+          <legend class="sr-only">Projects Portfolio</legend>
+          <h2>🚀 Projects</h2>
+          <div id="g-proj" role="region" aria-label="Projects list"></div>
+          <button type="button" class="btn add" data-g="proj">+ Add Project</button>
+        </fieldset>
+
+        <!-- Certifications Card -->
+        <fieldset class="card">
+          <legend class="sr-only">Certifications & Achievements</legend>
+          <h2>🏅 Certifications &amp; Achievements</h2>
+          <div class="field-group">
+            <label class="f" for="inp-certs">Certifications (one per line)</label>
+            <textarea id="inp-certs" name="certs" placeholder="Responsive Web Design - freeCodeCamp&#10;Python for Everybody - Coursera"></textarea>
+          </div>
+        </fieldset>
+      </form>
+
+      <!-- Step 1 Navigation & Actions -->
+      <div class="nav">
+        <div class="nav-group">
+          <button type="button" class="btn sec" id="sample">✨ Fill sample data</button>
+          <button type="button" class="btn btn-danger" id="clear-data">🗑️ Clear all data</button>
+        </div>
+        <button type="button" class="btn pri" id="to2">Next: Choose Theme →</button>
+      </div>
+    </section>
+
+    <!-- ==============================================
+         STEP 2: THEME & COLOR PICKER
+         ============================================== -->
+    <section class="step" id="s2" aria-labelledby="step2-heading">
+      <div class="card">
+        <h2 id="step2-heading">🎨 Pick a Resume Template</h2>
+        <div class="themes" id="themes" role="radiogroup" aria-label="Resume Templates">
+          <div class="th sel" data-t="classic" tabindex="0" role="radio" aria-checked="true">
+            <div class="mini m-classic" aria-hidden="true"></div>
+            <b>Classic</b>
+            <small>Elegant serif, centered header &amp; timeless layout</small>
+          </div>
+          <div class="th" data-t="modern" tabindex="0" role="radio" aria-checked="false">
+            <div class="mini m-modern" aria-hidden="true"></div>
+            <b>Modern</b>
+            <small>Two columns, solid accent header &amp; tinted sidebar</small>
+          </div>
+          <div class="th" data-t="minimal" tabindex="0" role="radio" aria-checked="false">
+            <div class="mini m-minimal" aria-hidden="true"></div>
+            <b>Minimal</b>
+            <small>Clean, airy single-column with left accent bars</small>
+          </div>
+          <div class="th" data-t="bold" tabindex="0" role="radio" aria-checked="false">
+            <div class="mini m-bold" aria-hidden="true"></div>
+            <b>Bold</b>
+            <small>High impact gradient header with dark tones</small>
+          </div>
+        </div>
+
+        <div class="colors-control">
+          <h2 style="margin-top: 24px;">Accent Colour</h2>
+          <div class="colors" id="colors" role="radiogroup" aria-label="Accent Colors"></div>
+        </div>
+      </div>
+
+      <!-- Step 2 Navigation -->
+      <div class="nav">
+        <button type="button" class="btn sec" data-go="1">← Back to Details</button>
+        <button type="button" class="btn pri" id="to3">Generate my CV →</button>
+      </div>
+    </section>
+
+    <!-- ==============================================
+         STEP 3: PREVIEW & DOWNLOAD
+         ============================================== -->
+    <section class="step" id="s3" aria-labelledby="step3-heading">
+      <div class="nav noprint" style="margin-bottom: 16px;">
+        <div class="nav-group">
+          <button type="button" class="btn sec" data-go="1">✏️ Edit Details</button>
+          <button type="button" class="btn sec" data-go="2">🎨 Change Theme</button>
+        </div>
+        <button type="button" class="btn pri" id="print-btn">🖨️ Print / Save as PDF</button>
+      </div>
+
+      <div class="noprint" style="background: var(--panel); border: 1px solid var(--line); border-radius: var(--radius-md); padding: 12px 16px; margin-bottom: 16px; font-size: 0.85rem; color: var(--muted);">
+        💡 <strong>Print Tip:</strong> In the browser print dialog, choose <strong>Save as PDF</strong>, set Margins to <strong>None</strong>, and turn on <strong>Background graphics</strong> to ensure flawless A4 alignment.
+      </div>
+
+      <!-- CV Stage -->
+      <div class="stage">
+        <article class="sheet" id="cv" aria-label="Printable Resume"></article>
+      </div>
+    </section>
+  </main>
+
+  <!-- App Footer -->
+  <footer class="app-footer">
+    <div><strong>CVForge</strong> — College Competition Resume Builder &bull; Mode: <strong>STANDARD (Vanilla JS)</strong></div>
+    <div>Zero dependencies &bull; 100% Client-Side &bull; Print-Ready A4</div>
+  </footer>
+</div>
+
+<!-- Scripts -->
+<script src="js/storage.js"></script>
+<script src="js/render.js"></script>
+<script src="js/form.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>
