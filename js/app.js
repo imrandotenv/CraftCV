@@ -764,19 +764,32 @@ window.CVForgeApp = (() => {
     // Interactive 3D Hero Parallax Gallery
     setup3DHeroParallax();
 
-    // Hook Hero Section CTAs
-    $('#hero-build-cta')?.addEventListener('click', e => {
-      e.preventDefault();
-      go(1);
-      const builder = $('#builder');
-      if (builder) builder.scrollIntoView({ behavior: 'smooth' });
+    // Check if initial load requested builder directly
+    if (window.location.hash === '#builder') {
+      revealBuilder(saved?.step || 1);
+    }
+
+    // Primary Hero CTA: 'Generate my CV'
+    $('#hero-generate-btn')?.addEventListener('click', () => {
+      revealBuilder(1);
     });
 
+    // Secondary Hero CTA: 'Try Sample Data'
     $('#hero-sample-cta')?.addEventListener('click', () => {
       loadSampleData();
-      go(1);
-      const builder = $('#builder');
-      if (builder) builder.scrollIntoView({ behavior: 'smooth' });
+      revealBuilder(1);
+    });
+
+    // Top Navigation: 'Build' Link
+    $('.nav-roll-cta')?.addEventListener('click', e => {
+      e.preventDefault();
+      revealBuilder(1);
+    });
+
+    // Top Navigation: 'Home' Link
+    $('a[href="#home"]')?.addEventListener('click', e => {
+      e.preventDefault();
+      showHeroLanding();
     });
 
     // Hook Templates Showcase "Select & Build" buttons
@@ -785,13 +798,86 @@ window.CVForgeApp = (() => {
         const theme = btn.dataset.selectTheme;
         if (theme) {
           setTheme(theme);
-          go(2);
-          const builder = $('#builder');
-          if (builder) builder.scrollIntoView({ behavior: 'smooth' });
+          revealBuilder(2);
           showToast(`✓ Selected ${theme.toUpperCase()} template!`);
         }
       });
     });
+  }
+
+  /**
+   * Smoothly transitions from the hero landing section to the multi-step form interface.
+   * Fades hero opacity to 0 and translates translateY(-20px) over 500ms, then sets
+   * display: none and reveals the Details, Theme, and Download steps with a subtle fade-in animation.
+   * @param {number} targetStep 
+   */
+  function revealBuilder(targetStep = 1) {
+    const hero = $('#hero');
+    const builder = $('#builder');
+    if (!hero || !builder) return;
+
+    // If hero is already hidden, immediately ensure builder is active
+    if (hero.style.display === 'none' || hero.classList.contains('hero-fade-out')) {
+      builder.classList.remove('builder-hidden');
+      builder.classList.add('builder-revealed');
+      $$('.landing-section').forEach(sec => sec.style.display = 'none');
+      go(targetStep);
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      return;
+    }
+
+    // Apply CSS class: fades opacity to 0 and translates translateY(-20px) over 500ms
+    hero.classList.add('hero-fade-out');
+
+    let transitionEnded = false;
+    const handleTransitionEnd = () => {
+      if (transitionEnded) return;
+      transitionEnded = true;
+      hero.removeEventListener('transitionend', handleTransitionEnd);
+
+      // Set hero section to display: none
+      hero.style.display = 'none';
+
+      // Hide extra landing sections to keep interface focused on builder
+      $$('.landing-section').forEach(sec => sec.style.display = 'none');
+
+      // Reveal the existing CVForge multi-step form interface
+      builder.classList.remove('builder-hidden');
+      builder.classList.remove('builder-revealed');
+      void builder.offsetWidth; // Reflow to cleanly restart subtle fade-in keyframe
+      builder.classList.add('builder-revealed');
+
+      go(targetStep);
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    };
+
+    // Listen for transitionend event
+    hero.addEventListener('transitionend', handleTransitionEnd);
+
+    // Fallback timer (520ms) in case transitionend event is skipped
+    setTimeout(handleTransitionEnd, 520);
+  }
+
+  /**
+   * Restores the hero landing presentation if user clicks Home in navigation
+   */
+  function showHeroLanding() {
+    const hero = $('#hero');
+    const builder = $('#builder');
+    if (!hero) return;
+
+    if (builder) {
+      builder.classList.add('builder-hidden');
+      builder.classList.remove('builder-revealed');
+    }
+
+    $$('.landing-section').forEach(sec => sec.style.display = '');
+
+    hero.style.display = 'flex';
+    void hero.offsetWidth;
+    hero.classList.remove('hero-fade-out');
+
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
   /**
@@ -901,9 +987,7 @@ window.CVForgeApp = (() => {
         else if (c.el.classList.contains('card-creative')) templateKey = 'creative';
 
         setTheme(templateKey);
-        go(2);
-        const builder = $('#builder');
-        if (builder) builder.scrollIntoView({ behavior: 'smooth' });
+        revealBuilder(2);
         showToast(`✓ Switched to ${templateKey.toUpperCase()} template!`);
       };
 
@@ -1202,7 +1286,9 @@ body { background: #eef1f6; font-family: 'Inter', sans-serif; display: flex; jus
     setAccent,
     onFormChanged,
     loadSampleData,
-    updateATSAnalysis
+    updateATSAnalysis,
+    revealBuilder,
+    showHeroLanding
   };
 })();
 
