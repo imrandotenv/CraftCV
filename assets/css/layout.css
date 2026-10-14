@@ -355,12 +355,12 @@ textarea {
   color: var(--muted);
 }
 
-.app-footer a {
+.app-footer a:not(.footer-logo):not(.footer-link) {
   color: var(--accent);
   text-decoration: none;
 }
 
-.app-footer a:hover {
+.app-footer a:not(.footer-logo):not(.footer-link):hover {
   text-decoration: underline;
 }
 

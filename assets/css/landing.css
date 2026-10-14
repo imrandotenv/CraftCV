@@ -2002,7 +2002,10 @@ footer,
   align-items: center;
 }
 
-.footer-logo {
+.app-footer .footer-logo,
+.footer-logo,
+.footer-logo:link,
+.footer-logo:visited {
   font-family: 'Satoshi', 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
   font-size: 1.15rem;
   font-weight: 900;
@@ -2012,11 +2015,22 @@ footer,
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  transition: opacity 0.2s ease;
+  transition: opacity 0.2s ease, color 0.2s ease;
 }
 
-.footer-logo:hover {
+.app-footer .footer-logo span,
+.footer-logo span {
+  color: #000000;
+  font-weight: 900;
+}
+
+.app-footer .footer-logo:hover,
+.app-footer .footer-logo:focus-visible,
+.footer-logo:hover,
+.footer-logo:focus-visible {
   opacity: 0.8;
+  color: #000000;
+  text-decoration: none;
 }
 
 .footer-logo-badge {
@@ -2039,11 +2053,14 @@ footer,
   flex-wrap: wrap;
 }
 
-.footer-link {
-  color: #9ca3af;
+.app-footer .footer-link,
+.footer-link,
+.footer-link:link,
+.footer-link:visited {
+  color: #6b7280;
   text-transform: uppercase;
-  letter-spacing: 0.12em; /* Wide tracking */
-  font-size: 0.75rem;     /* Small */
+  letter-spacing: 0.05em;
+  font-size: 0.75rem;
   font-weight: 700;
   font-family: 'Satoshi', 'Plus Jakarta Sans', sans-serif;
   text-decoration: none;
@@ -2052,9 +2069,13 @@ footer,
   padding: 4px 0;
 }
 
+.app-footer .footer-link:hover,
+.app-footer .footer-link:focus-visible,
 .footer-link:hover,
-.footer-link:focus-visible {
-  color: #000000;         /* Transitions to solid black on hover */
+.footer-link:focus-visible,
+.footer-link:visited:hover {
+  color: #000000;
+  text-decoration: none;
   outline: none;
 }
 
