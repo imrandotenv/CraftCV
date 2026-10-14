@@ -609,8 +609,44 @@ textarea {
   padding: 0;
 }
 
+/* Secondary Export Action Buttons Grid */
+.export-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--sp-2);
+  margin-bottom: var(--sp-3);
+}
+
+.grid-cols-2 {
+  display: grid;
+}
+
+.btn-export {
+  background: var(--panel);
+  border: 1.5px solid var(--line);
+  color: var(--ink);
+  padding: 8px 12px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  text-align: center;
+  transition: all var(--tr-fast);
+  white-space: nowrap;
+}
+
+.btn-export:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
 /* Formatting Controls Toolbar (Font Size & Fit to One Page) */
-.formatting-controls {
+.formatting-controls,
+.formatting-controls-card {
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -622,6 +658,7 @@ textarea {
   padding: 12px 18px;
   margin-bottom: 16px;
   box-shadow: var(--shadow-sm);
+  position: static;
 }
 
 .format-group {
@@ -1059,9 +1096,24 @@ textarea {
     flex-direction: column;
     text-align: center;
   }
-  .formatting-controls {
+  .formatting-controls,
+  .formatting-controls-card {
     flex-direction: column;
     align-items: stretch;
+  }
+  .export-grid,
+  .export-grid.grid-cols-2,
+  .grid-cols-2 {
+    display: grid !important;
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 8px !important;
+  }
+  .btn-export {
+    padding: 8px 6px !important;
+    font-size: 0.74rem !important;
+    white-space: normal !important;
+    text-align: center !important;
+    width: 100% !important;
   }
 }
 

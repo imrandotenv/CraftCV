@@ -47,6 +47,35 @@ textarea{resize:vertical;min-height:62px}
 .add{background:transparent;color:var(--accent);border:1.5px solid var(--accent);padding:6px 12px;font-size:.78rem}
 .nav{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap}
 
+/* Secondary Export Action Buttons Grid */
+.export-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:10px}
+.grid-cols-2{display:grid}
+.btn-export{background:var(--panel);border:1.5px solid var(--line);color:var(--ink);padding:8px 12px;font-size:.8rem;font-weight:600;border-radius:8px;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;gap:6px;transition:.2s;white-space:nowrap}
+.btn-export:hover{border-color:var(--accent);color:var(--accent);transform:translateY(-1px)}
+
+/* Structured Solid-Background Formatting Controls Container (Above CV Stage, Zero Overlap) */
+.formatting-controls-card.card{background:var(--panel)!important;border:1.5px solid var(--line)!important;border-radius:12px!important;padding:12px 18px!important;margin-bottom:16px!important;box-shadow:0 2px 10px rgba(0,0,0,.04)!important;position:static!important}
+.formatting-controls-inner{display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap}
+.format-group{display:flex;align-items:center;gap:8px}
+.slider-group{display:flex;align-items:center;gap:8px;font-size:.85rem;font-weight:600;color:var(--ink)}
+.slider-group input[type="range"]{width:120px;margin:0;accent-color:var(--accent);cursor:pointer}
+.slider-val{font-size:.85rem;font-weight:700;color:var(--ink);min-width:36px}
+.toggle-group{display:flex;align-items:center;gap:6px;font-size:.85rem;font-weight:600;color:var(--ink);cursor:pointer}
+.toggle-group input[type="checkbox"]{width:auto;margin:0;accent-color:var(--accent);cursor:pointer}
+.format-divider{width:1px;height:20px;background:var(--line)}
+.print-tip-pill{font-size:.76rem;color:var(--muted);margin-bottom:10px;text-align:center;background:var(--panel);border:1px solid var(--line);border-radius:9999px;padding:4px 14px}
+
+/* Mobile: Condense export buttons into 2-column grid (grid-cols-2) */
+@media(max-width:640px){
+  .export-grid,
+  .export-grid.grid-cols-2,
+  .grid-cols-2{grid-template-columns:repeat(2,1fr)!important;gap:8px!important}
+  .btn-export{padding:8px 6px!important;font-size:.74rem!important;white-space:normal!important;text-align:center!important;width:100%!important}
+  .formatting-controls-inner{flex-direction:column!important;align-items:flex-start!important;gap:10px!important}
+  .format-divider{display:none!important}
+  .slider-group input[type="range"]{width:110px!important}
+}
+
 /* theme picker */
 .themes{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px}
 .th{border:2.5px solid var(--line);border-radius:12px;padding:10px;cursor:pointer;transition:.25s;background:var(--panel)}
@@ -175,9 +204,42 @@ textarea{resize:vertical;min-height:62px}
         <button class="btn sec" data-go="1">✏️ Edit details</button>
         <button class="btn sec" id="change-theme-btn" data-go="2">🎨 Change Theme</button>
       </div>
-      <button class="btn pri" onclick="window.print()">🖨️ Print / Save as PDF</button>
+      <button class="btn pri" id="print-btn" onclick="window.print()">🖨️ Print / Save as PDF</button>
     </div>
-    <p class="noprint" style="font-size:.76rem;color:var(--muted);margin-bottom:8px;text-align:center">💡 <strong>Print Tip:</strong> In print dialog choose "Save as PDF", set margins to <b>None</b> and turn on <b>Background graphics</b>.</p>
+
+    <!-- Secondary Export Buttons (Condensed into 2-column grid on mobile) -->
+    <div class="export-grid grid-cols-2 noprint" id="export-controls">
+      <button type="button" class="btn btn-export" id="download-html-btn" title="Download standalone HTML file">💾 Download as HTML</button>
+      <button type="button" class="btn btn-export" id="copy-text-btn" title="Copy formatted text to clipboard">📋 Copy Plain Text</button>
+      <button type="button" class="btn btn-export" id="export-json-btn" title="Save resume JSON backup">📤 Export JSON</button>
+      <button type="button" class="btn btn-export" id="import-json-btn" title="Load resume JSON file">📥 Import JSON</button>
+      <input type="file" id="import-json-input" accept=".json" class="file-input-hidden" style="display:none">
+    </div>
+
+    <!-- Print Tip Pill -->
+    <div class="print-tip-pill noprint">💡 <strong>Print Tip:</strong> In print dialog choose "Save as PDF", set margins to <b>None</b> and turn on <b>Background graphics</b>.</div>
+
+    <!-- Structured Solid-Background Formatting Controls Container (Above CV Stage, Zero Overlap) -->
+    <div class="formatting-controls-card card noprint" id="formatting-controls-card">
+      <div class="formatting-controls-inner">
+        <div class="format-group">
+          <label class="slider-group" for="font-size-slider">
+            <span>Font Size:</span>
+            <input type="range" id="font-size-slider" min="9" max="12" step="0.5" value="10" aria-label="Resume font size slider">
+            <span class="slider-val" id="font-size-val">10 pt</span>
+          </label>
+        </div>
+        <div class="format-divider" aria-hidden="true"></div>
+        <div class="format-group">
+          <label class="toggle-group" for="fit-one-page-toggle">
+            <input type="checkbox" id="fit-one-page-toggle">
+            <span>📄 Fit to one page</span>
+          </label>
+        </div>
+      </div>
+    </div>
+
+    <!-- CV Preview Stage -->
     <div class="stage"><article class="sheet" id="cv"></article></div>
   </section>
 </div>
@@ -250,6 +312,13 @@ function hasWizardTheme() {
   return false;
 }
 
+function updateWizardNextBtn() {
+  const btn = $('#to2');
+  if (btn) {
+    btn.textContent = hasWizardTheme() ? 'Generate My CV ->' : 'Next: Choose Theme →';
+  }
+}
+
 function initWizardTheme() {
   try {
     const stored = localStorage.getItem('craftcv_theme') || 
@@ -296,6 +365,12 @@ COLORS.forEach((c,i)=>{const d=document.createElement('div');d.className='cd'+(i
 
 /* ---------- build the CV ---------- */
 function render(){
+  const cvEl = $('#cv');
+  const slider = $('#font-size-slider');
+  const fontSize = slider ? (parseFloat(slider.value) || 10) : 10;
+  const fitToggle = $('#fit-one-page-toggle');
+  const fitOnePage = fitToggle ? fitToggle.checked : false;
+
   if (window.CraftCVRender) {
     const data = (window.CraftCVForm && window.CraftCVForm.getFormData) ? CraftCVForm.getFormData() : {
       name: val('name'),
@@ -316,7 +391,9 @@ function render(){
     };
     data.theme = theme;
     data.accent = accent;
-    CraftCVRender.renderToElement($('#cv'), data);
+    data.fontSize = fontSize;
+    data.fitOnePage = fitOnePage;
+    CraftCVRender.renderToElement(cvEl, data);
     document.title = (val('name') || 'Resume') + ' - Resume';
     return;
   }
@@ -326,8 +403,9 @@ function render(){
   const skills=list(val('skills')), langs=list(val('langs')), certs=val('certs').split('\n').filter(x=>x.trim());
   const edu=rows('edu'), exp=rows('exp'), proj=rows('proj'), sum=val('sum');
   const sec=(t,h,c)=>h?`<section class="cv-section ${c||''}"><h3>${t}</h3>${h}</section>`:'';
-  $('#cv').className='sheet t-'+theme;
-  $('#cv').innerHTML=`
+  cvEl.className='sheet t-'+theme + (fitOnePage ? ' fit-one-page' : '');
+  cvEl.style.setProperty('--sheet-font-size', fontSize + 'pt');
+  cvEl.innerHTML=`
    <header><h1>${f('name')}</h1><p class="role">${f('title')}</p></header>
    <aside>
      ${sec('Contact',contact&&`<ul class="p">${contact}</ul>`,'cv-sec-contact')}
@@ -341,8 +419,76 @@ function render(){
      ${sec('Education',edu.map(o=>item(o,[o.b||o.school,o.c||o.year,o.e||o.grade].filter(Boolean).join(' · '))).join(''),'cv-sec-education')}
      ${sec('Certifications',certs.length&&`<ul>${certs.map(s=>`<li>${esc(s)}</li>`).join('')}</ul>`,'cv-sec-certifications')}
    </main>`;
+  if (fitOnePage && cvEl.scrollHeight > 1122) {
+    const scale = 1122 / cvEl.scrollHeight;
+    cvEl.style.transformOrigin = 'top left';
+    cvEl.style.transform = `scale(${scale})`;
+  } else {
+    cvEl.style.transform = '';
+    cvEl.style.transformOrigin = '';
+  }
   document.title=(val('name')||'Resume')+' - Resume';
 }
+
+/* ---------- formatting controls & export bindings ---------- */
+const fontSlider = $('#font-size-slider');
+const fontVal = $('#font-size-val');
+if (fontSlider) {
+  fontSlider.addEventListener('input', e => {
+    if (fontVal) fontVal.textContent = `${e.target.value} pt`;
+    render();
+  });
+}
+const pageToggle = $('#fit-one-page-toggle');
+if (pageToggle) {
+  pageToggle.addEventListener('change', () => {
+    render();
+  });
+}
+
+$('#download-html-btn')?.addEventListener('click', e => {
+  e.preventDefault();
+  if (window.CraftCVApp && window.CraftCVApp.downloadHtmlResume) {
+    CraftCVApp.downloadHtmlResume();
+  }
+});
+$('#copy-text-btn')?.addEventListener('click', e => {
+  e.preventDefault();
+  if (window.CraftCVApp && window.CraftCVApp.copyPlainTextResume) {
+    CraftCVApp.copyPlainTextResume($('#copy-text-btn'));
+  }
+});
+$('#export-json-btn')?.addEventListener('click', e => {
+  e.preventDefault();
+  if (window.CraftCVApp && window.CraftCVApp.exportJsonResume) {
+    CraftCVApp.exportJsonResume();
+  }
+});
+$('#import-json-btn')?.addEventListener('click', e => {
+  e.preventDefault();
+  $('#import-json-input')?.click();
+});
+$('#import-json-input')?.addEventListener('change', e => {
+  const file = e.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = ev => {
+    try {
+      const json = JSON.parse(ev.target.result);
+      if (window.CraftCVForm && window.CraftCVForm.populateForm) {
+        CraftCVForm.populateForm(json);
+      }
+      if (json.theme) {
+        theme = json.theme;
+        $$('#themes .th').forEach(x => x.classList.toggle('sel', x.dataset.t === theme));
+      }
+      render();
+    } catch(err) {
+      alert('Error parsing JSON file.');
+    }
+  };
+  reader.readAsText(file);
+});
 
 /* ---------- sample data for quick demo ---------- */
 $('#sample').onclick=()=>{

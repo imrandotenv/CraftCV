@@ -2676,6 +2676,23 @@ footer,
     grid-template-columns: 1fr;
   }
 
+  /* Secondary Export Action Buttons Grid (2-column on mobile) */
+  .export-bar-buttons,
+  .export-grid,
+  .export-grid.grid-cols-2,
+  .grid-cols-2 {
+    display: grid !important;
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 8px !important;
+  }
+  .btn-export {
+    padding: 8px 6px !important;
+    font-size: 0.74rem !important;
+    white-space: normal !important;
+    text-align: center !important;
+    width: 100% !important;
+  }
+
   /* Bento Grid Mobile Adjustments */
   .dashboard-header-flex {
     flex-direction: column;
