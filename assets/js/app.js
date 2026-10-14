@@ -839,9 +839,14 @@ window.CraftCVApp = window.CVForgeApp = (() => {
     });
 
     // Top Navigation: 'Home' Link
-    $('a[href="#home"]')?.addEventListener('click', e => {
-      e.preventDefault();
-      showHeroLanding();
+    $$('a[href="index.html"], a[href="#home"]').forEach(el => {
+      el.addEventListener('click', e => {
+        const builder = $('#builder');
+        if (builder && builder.classList.contains('builder-revealed')) {
+          e.preventDefault();
+          showHeroLanding();
+        }
+      });
     });
 
     // Hook Templates Showcase "Select & Build" buttons
