@@ -19,12 +19,45 @@ window.CraftCVApp = window.CVForgeApp = (() => {
   let activeFontSize = 10;
   let activeFitOnePage = false;
   let autoSaveTimeout = null;
+  let hasExplicitTheme = false;
 
   /**
    * Safe document query helpers
    */
   const $ = selector => document.querySelector(selector);
   const $$ = selector => [...document.querySelectorAll(selector)];
+
+  /**
+   * Check localStorage or current application state to see if a theme ID is stored/selected
+   * @returns {boolean}
+   */
+  function hasStoredTheme() {
+    if (hasExplicitTheme && activeTheme) return true;
+    try {
+      if (localStorage.getItem('craftcv_theme')) return true;
+      if (localStorage.getItem('selected_theme')) return true;
+      if (localStorage.getItem('theme')) return true;
+      const saved = (window.CraftCVStorage || window.CVForgeStorage)?.loadState();
+      if (saved && saved.theme && (saved.hasExplicitTheme || saved.themeSelected)) return true;
+    } catch (e) {}
+    return false;
+  }
+
+  /**
+   * Dynamically update Step 1 'Next' button text and data attribute based on theme selection
+   */
+  function updateStep1NextButton() {
+    const to2Btn = $('#to2');
+    if (!to2Btn) return;
+
+    if (hasStoredTheme()) {
+      to2Btn.textContent = 'Generate My CV ->';
+      to2Btn.setAttribute('data-bypass-theme', 'true');
+    } else {
+      to2Btn.textContent = 'Next: Choose Theme →';
+      to2Btn.removeAttribute('data-bypass-theme');
+    }
+  }
 
   /**
    * Navigate between wizard steps
@@ -62,6 +95,11 @@ window.CraftCVApp = window.CVForgeApp = (() => {
         conn.classList.toggle('active', num < stepNumber);
       }
     });
+
+    // If step 1, dynamically update the Next button based on theme state
+    if (stepNumber === 1) {
+      updateStep1NextButton();
+    }
 
     // If step 2, render real-data thumbnails
     if (stepNumber === 2) {
@@ -153,15 +191,27 @@ window.CraftCVApp = window.CVForgeApp = (() => {
   /**
    * Set active theme
    * @param {string} themeName 
+   * @param {boolean} [isExplicit=true]
    */
-  function setTheme(themeName) {
+  function setTheme(themeName, isExplicit = true) {
     activeTheme = themeName;
+    if (isExplicit) {
+      hasExplicitTheme = true;
+      try {
+        localStorage.setItem('craftcv_theme', themeName);
+        localStorage.setItem('selected_theme', themeName);
+        localStorage.setItem('theme', themeName);
+      } catch (e) {}
+    }
     $$('.th').forEach(el => {
       const isSelected = el.dataset.t === themeName;
       el.classList.toggle('sel', isSelected);
       el.setAttribute('aria-checked', isSelected);
     });
-    saveCurrentState();
+    if (isExplicit) {
+      saveCurrentState();
+    }
+    updateStep1NextButton();
     if (currentStep === 3) renderCV();
   }
 
@@ -344,6 +394,8 @@ window.CraftCVApp = window.CVForgeApp = (() => {
   function saveCurrentState() {
     const data = CraftCVForm.getFormData();
     data.theme = activeTheme;
+    data.hasExplicitTheme = hasExplicitTheme;
+    data.themeSelected = hasExplicitTheme;
     data.accent = activeAccent;
     data.step = currentStep;
     data.fontSize = activeFontSize;
@@ -409,9 +461,15 @@ window.CraftCVApp = window.CVForgeApp = (() => {
   function handleClearData() {
     const confirmed = window.confirm('Are you sure you want to clear all resume data? This action cannot be undone.');
     if (confirmed) {
+      hasExplicitTheme = false;
+      try {
+        localStorage.removeItem('craftcv_theme');
+        localStorage.removeItem('selected_theme');
+        localStorage.removeItem('theme');
+      } catch (e) {}
       CraftCVStorage.clearState();
       CraftCVForm.resetForm();
-      setTheme('classic');
+      setTheme('classic', false);
       setAccent(PRESET_COLORS[0]);
       activeFontSize = 10;
       activeFitOnePage = false;
@@ -422,6 +480,7 @@ window.CraftCVApp = window.CVForgeApp = (() => {
       const fitToggle = $('#fit-one-page-toggle');
       if (fitToggle) fitToggle.checked = false;
       updateATSAnalysis();
+      updateStep1NextButton();
       go(1);
     }
   }
@@ -474,7 +533,7 @@ window.CraftCVApp = window.CVForgeApp = (() => {
       card.setAttribute('tabindex', '0');
       card.setAttribute('aria-checked', card.dataset.t === activeTheme);
       
-      const selectCard = () => setTheme(card.dataset.t);
+      const selectCard = () => setTheme(card.dataset.t, true);
       card.addEventListener('click', selectCard);
       card.addEventListener('keydown', e => {
         if (e.key === 'Enter' || e.key === ' ') {
@@ -744,7 +803,14 @@ window.CraftCVApp = window.CVForgeApp = (() => {
     });
 
     // Next buttons
-    $('#to2')?.addEventListener('click', () => go(2));
+    $('#to2')?.addEventListener('click', (e) => {
+      if (e && e.preventDefault) e.preventDefault();
+      if (hasStoredTheme()) {
+        go(3);
+      } else {
+        go(2);
+      }
+    });
     $('#to3')?.addEventListener('click', () => go(3));
 
     // Sample data button
@@ -769,9 +835,18 @@ window.CraftCVApp = window.CVForgeApp = (() => {
 
     // Load saved state or default
     const saved = CraftCVStorage.loadState();
-    if (saved) {
+    const storedTheme = (() => {
+      try {
+        return localStorage.getItem('craftcv_theme') || 
+               localStorage.getItem('selected_theme') || 
+               localStorage.getItem('theme');
+      } catch (e) { return null; }
+    })();
+
+    if (saved && saved.theme) {
+      hasExplicitTheme = true;
       CraftCVForm.populateForm(saved);
-      if (saved.theme) setTheme(saved.theme);
+      setTheme(saved.theme, true);
       if (saved.accent) setAccent(saved.accent);
       if (saved.fontSize) {
         activeFontSize = saved.fontSize;
@@ -790,13 +865,31 @@ window.CraftCVApp = window.CVForgeApp = (() => {
       } else {
         go(1);
       }
+    } else if (storedTheme) {
+      hasExplicitTheme = true;
+      if (saved) CraftCVForm.populateForm(saved);
+      ['edu', 'exp', 'proj'].forEach(g => {
+        if (!saved || !saved[g] || !saved[g].length) CraftCVForm.addRow(g);
+      });
+      setTheme(storedTheme, true);
+      setAccent(saved?.accent || PRESET_COLORS[0]);
+      go(1);
+    } else if (saved) {
+      hasExplicitTheme = false;
+      CraftCVForm.populateForm(saved);
+      setTheme('classic', false);
+      if (saved.accent) setAccent(saved.accent);
+      go(1);
     } else {
       // Default rows
+      hasExplicitTheme = false;
       ['edu', 'exp', 'proj'].forEach(g => CraftCVForm.addRow(g));
-      setTheme('classic');
+      setTheme('classic', false);
       setAccent(PRESET_COLORS[0]);
       go(1);
     }
+
+    updateStep1NextButton();
 
     // Initial ATS analysis calculation and theme previews
     updateATSAnalysis();
@@ -854,8 +947,15 @@ window.CraftCVApp = window.CVForgeApp = (() => {
       btn.addEventListener('click', () => {
         const theme = btn.dataset.selectTheme;
         if (theme) {
-          setTheme(theme);
-          revealBuilder(2);
+          hasExplicitTheme = true;
+          try {
+            localStorage.setItem('craftcv_theme', theme);
+            localStorage.setItem('selected_theme', theme);
+            localStorage.setItem('theme', theme);
+          } catch (e) {}
+          setTheme(theme, true);
+          updateStep1NextButton();
+          revealBuilder(1);
           showToast(`✓ Selected ${theme.toUpperCase()} template!`);
         }
       });
@@ -1043,8 +1143,15 @@ window.CraftCVApp = window.CVForgeApp = (() => {
         else if (c.el.classList.contains('card-modern')) templateKey = 'modern';
         else if (c.el.classList.contains('card-creative')) templateKey = 'creative';
 
-        setTheme(templateKey);
-        revealBuilder(2);
+        hasExplicitTheme = true;
+        try {
+          localStorage.setItem('craftcv_theme', templateKey);
+          localStorage.setItem('selected_theme', templateKey);
+          localStorage.setItem('theme', templateKey);
+        } catch (e) {}
+        setTheme(templateKey, true);
+        updateStep1NextButton();
+        revealBuilder(1);
         showToast(`✓ Switched to ${templateKey.toUpperCase()} template!`);
       };
 
@@ -1400,7 +1507,10 @@ body { background: #eef1f6; font-family: 'Inter', sans-serif; display: flex; jus
     loadSampleData,
     updateATSAnalysis,
     revealBuilder,
-    showHeroLanding
+    showHeroLanding,
+    updateStep1NextButton,
+    hasStoredTheme,
+    getTheme: () => activeTheme
   };
 })();
 
