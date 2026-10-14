@@ -7,10 +7,10 @@
  */
 
 /* Import core modular CSS files */
-@import url('css/base.css');
-@import url('css/layout.css');
-@import url('css/themes.css');
-@import url('css/print.css');
+@import url('base.css');
+@import url('layout.css');
+@import url('themes.css');
+@import url('print.css');
 
 /* ==============================================
    DESIGN TOKENS (STRICT LIGHT MODE)
