@@ -146,9 +146,10 @@ body {
 }
 
 /* ==============================================
-   MAIN NAVIGATION HEADER
-   Refactored to remove solid/milky white aesthetic
-   Highly transparent background, delicate bottom border
+   MAIN NAVIGATION HEADER (FLOATING PILL STRUCTURE)
+   Centralized, detached floating pill structure
+   max-w-6xl w-[95%], margin: 1.5rem auto, border-radius: 9999px
+   Exact glassmorphic background & blur retained
    ============================================== */
 header.top-nav,
 .top-nav {
@@ -156,36 +157,66 @@ header.top-nav,
   top: 0;
   left: 0;
   right: 0;
+  margin: 1.5rem auto;
+  width: 95%;
+  max-width: 1152px; /* max-w-6xl */
   height: 64px;
   z-index: 1000;
   background: rgba(255, 255, 255, 0.15);
   backdrop-filter: blur(24px);
   -webkit-backdrop-filter: blur(24px);
-  border-bottom: 1px solid rgba(0, 0, 0, 0.04);
+  border: 1px solid rgba(0, 0, 0, 0.05);
+  border-radius: 9999px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.04), 0 1px 2px rgba(0, 0, 0, 0.02);
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 0 var(--sp-4);
+  padding: 0 1.25rem;
   box-sizing: border-box;
+  transition: all var(--tr-fast);
+}
+
+.max-w-6xl {
+  max-width: 1152px;
+}
+
+.w-\[95\%\] {
+  width: 95%;
 }
 
 .nav-container {
-  max-width: 1240px;
   width: 100%;
   height: 100%;
-  background: rgba(255, 255, 255, 0.15);
-  backdrop-filter: blur(24px);
-  -webkit-backdrop-filter: blur(24px);
-  border-bottom: 1px solid rgba(0, 0, 0, 0.04);
-  border-top: none;
-  border-left: none;
-  border-right: none;
-  border-radius: 0;
-  padding: 0 12px;
+  background: transparent;
+  border: none;
+  box-shadow: none;
+  border-radius: 9999px;
+  padding: 0;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  box-shadow: none;
+}
+
+/* Three Distinct Sections: Far Left (Logo), Absolute Middle (Links), Far Right (CTA) */
+.nav-left {
+  flex: 1 1 0%;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+.nav-center {
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.nav-right {
+  flex: 1 1 0%;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
 }
 
 /* Logo */
@@ -294,13 +325,17 @@ header.top-nav,
   transform: translateY(-100%);
 }
 
-/* Special Build CTA Button in Nav */
+/* Special Build CTA Button in Nav (Far Right) */
 .nav-roll-cta {
   background: #000000;
   color: #ffffff !important;
   border-radius: 9999px;
-  padding: 8px 20px;
+  padding: 8px 22px;
+  font-weight: 700;
+  font-size: 0.92rem;
+  letter-spacing: 0.02em;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.15);
+  transition: transform var(--tr-fast), background-color var(--tr-fast), box-shadow var(--tr-fast);
 }
 
 .nav-roll-cta .roll-primary span {
@@ -313,8 +348,10 @@ header.top-nav,
 
 .nav-roll-cta:hover,
 .nav-roll-cta:focus-visible {
-  background: #1e293b;
+  background: #111111;
   color: #ffffff !important;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.22);
 }
 
 /* ==============================================
@@ -2379,15 +2416,26 @@ footer,
   .hero-3d-scene {
     transform: scale(0.74);
   }
+  header.top-nav,
+  .top-nav {
+    margin: 1rem auto;
+    height: 56px;
+    padding: 0 0.85rem;
+    width: 94%;
+  }
   .nav-container {
-    padding: 0 var(--sp-3);
-    height: 52px;
+    padding: 0;
+    height: 100%;
   }
   .nav-links {
-    gap: var(--sp-1);
+    gap: 2px;
   }
   .nav-roll-link {
-    padding: 6px 8px;
+    padding: 6px 10px;
+    font-size: 0.82rem;
+  }
+  .nav-roll-cta {
+    padding: 6px 16px;
     font-size: 0.82rem;
   }
   .steps-grid {

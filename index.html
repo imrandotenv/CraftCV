@@ -31,15 +31,17 @@
      CSS-Only Staggered Text Reveal on Hover
      ============================================== -->
 <header class="top-nav noprint">
-  <div class="nav-container">
-    <!-- Logo -->
-    <a href="#home" class="logo" aria-label="CraftCV Home">
-      <span class="logo-badge" aria-hidden="true">📄</span>
-      <span class="satoshi-black">CraftCV</span>
-    </a>
+  <div class="nav-container max-w-6xl w-[95%]">
+    <!-- Far Left: Logo -->
+    <div class="nav-left">
+      <a href="#home" class="logo" aria-label="CraftCV Home">
+        <span class="logo-badge" aria-hidden="true">📄</span>
+        <span class="satoshi-black">CraftCV</span>
+      </a>
+    </div>
 
-    <!-- Navigation Links with CSS-Only Staggered Text Reveal -->
-    <nav aria-label="Primary Navigation">
+    <!-- Center: Navigation Links ('Home', 'Templates') with Rolling Text Hover Animation -->
+    <nav class="nav-center" aria-label="Primary Navigation">
       <ul class="nav-links">
         <!-- Home Link (4 Letters) -->
         <li>
@@ -68,22 +70,22 @@
             </span>
           </a>
         </li>
-
-        <!-- Build Link (5 Letters, Accent CTA) -->
-        <li>
-          <a href="#builder" class="nav-roll-link nav-roll-cta">
-            <span class="roll-box">
-              <span class="roll-primary" aria-hidden="true">
-                <span style="--i:0;">B</span><span style="--i:1;">u</span><span style="--i:2;">i</span><span style="--i:3;">l</span><span style="--i:4;">d</span>
-              </span>
-              <span class="roll-secondary">
-                <span style="--i:0;">B</span><span style="--i:1;">u</span><span style="--i:2;">i</span><span style="--i:3;">l</span><span style="--i:4;">d</span>
-              </span>
-            </span>
-          </a>
-        </li>
       </ul>
     </nav>
+
+    <!-- Far Right: Primary Solid-Black CTA Button ('Build') -->
+    <div class="nav-right">
+      <a href="#builder" class="nav-roll-link nav-roll-cta" aria-label="Build your resume">
+        <span class="roll-box">
+          <span class="roll-primary" aria-hidden="true">
+            <span style="--i:0;">B</span><span style="--i:1;">u</span><span style="--i:2;">i</span><span style="--i:3;">l</span><span style="--i:4;">d</span>
+          </span>
+          <span class="roll-secondary">
+            <span style="--i:0;">B</span><span style="--i:1;">u</span><span style="--i:2;">i</span><span style="--i:3;">l</span><span style="--i:4;">d</span>
+          </span>
+        </span>
+      </a>
+    </div>
   </div>
 </header>
 
