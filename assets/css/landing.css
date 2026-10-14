@@ -2106,6 +2106,92 @@ summary::-webkit-details-marker {
 }
 
 /* ==============================================
+   LEGAL / READING PAGES LAYOUT (Privacy & Terms)
+   Minimalist, single-column reading layout
+   ============================================== */
+.max-w-3xl {
+  max-width: 48rem;
+}
+
+.mx-auto {
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.pt-32 {
+  padding-top: 8rem;
+}
+
+.reading-layout {
+  max-width: 48rem;
+  margin-left: auto;
+  margin-right: auto;
+  padding-top: 8rem;
+  padding-bottom: 5rem;
+  padding-left: 1.5rem;
+  padding-right: 1.5rem;
+  min-height: calc(100vh - 160px);
+  box-sizing: border-box;
+}
+
+.reading-title {
+  font-family: 'Satoshi', 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-size: clamp(2.25rem, 4.5vw, 3.25rem);
+  font-weight: 900;
+  letter-spacing: -0.04em;
+  color: #000000;
+  line-height: 1.15;
+  text-transform: uppercase;
+  margin-bottom: 0.5rem;
+}
+
+.reading-meta {
+  font-family: 'Inter', sans-serif;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #6b7280;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 2.5rem;
+  padding-bottom: 1.25rem;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.reading-content {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  color: #374151; /* clean, muted dark-gray */
+  font-size: 1.05rem;
+  line-height: 1.8;
+}
+
+.reading-content h2 {
+  font-family: 'Satoshi', 'Plus Jakarta Sans', sans-serif;
+  font-size: 1.35rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  color: #111111;
+  text-transform: uppercase;
+  margin-top: 2.25rem;
+  margin-bottom: 0.75rem;
+}
+
+.reading-content p {
+  color: #374151; /* clean, muted dark-gray */
+  margin-bottom: 1.25rem;
+}
+
+.reading-content ul {
+  margin-bottom: 1.25rem;
+  padding-left: 1.5rem;
+  color: #374151;
+}
+
+.reading-content li {
+  margin-bottom: 0.5rem;
+  color: #374151;
+}
+
+/* ==============================================
    STRUCTURED PROFESSIONAL FOOTER COMPONENT
    Standard wide footer, subtle top border (#e5e7eb),
    stark black logo on left, minimalist utility links on right
