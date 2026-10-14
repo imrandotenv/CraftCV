@@ -2008,6 +2008,8 @@ footer,
   width: 100%;
   border-top: 1px solid #e5e7eb;
   background: transparent;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
   padding: 2rem var(--sp-4);
   position: relative;
   z-index: 100;
