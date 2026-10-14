@@ -158,7 +158,7 @@ header.top-nav,
   right: 0;
   height: 64px;
   z-index: 1000;
-  background: rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.15);
   backdrop-filter: blur(24px);
   -webkit-backdrop-filter: blur(24px);
   border-bottom: 1px solid rgba(0, 0, 0, 0.04);
@@ -173,7 +173,7 @@ header.top-nav,
   max-width: 1240px;
   width: 100%;
   height: 100%;
-  background: rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.15);
   backdrop-filter: blur(24px);
   -webkit-backdrop-filter: blur(24px);
   border-bottom: 1px solid rgba(0, 0, 0, 0.04);
@@ -226,25 +226,28 @@ header.top-nav,
   list-style: none;
 }
 
-/* Staggered Text Reveal on Hover */
+/* Staggered Rolling Text Reveal on Hover */
 .nav-roll-link {
-  display: inline-block;
+  display: inline-flex;
+  align-items: center;
   text-decoration: none;
-  color: #334155;
-  font-family: 'Inter', sans-serif;
+  color: #000000;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
   font-size: 0.92rem;
   font-weight: 700;
   letter-spacing: 0.02em;
-  padding: 8px 14px;
+  padding: 8px 16px;
   border-radius: 9999px;
   position: relative;
   overflow: hidden;
   transition: background-color var(--tr-fast), color var(--tr-fast);
 }
 
-.nav-roll-link:hover {
-  background-color: rgba(15, 23, 42, 0.05);
-  color: #0f172a;
+.nav-roll-link:hover,
+.nav-roll-link:focus-visible {
+  background-color: rgba(0, 0, 0, 0.04);
+  color: #000000;
+  outline: none;
 }
 
 .roll-box {
@@ -254,6 +257,7 @@ header.top-nav,
   overflow: hidden;
   height: 1.25em;
   line-height: 1.25em;
+  vertical-align: middle;
 }
 
 .roll-primary,
@@ -273,34 +277,44 @@ header.top-nav,
 .roll-secondary span {
   display: inline-block;
   transition: transform 0.36s cubic-bezier(0.76, 0, 0.24, 1);
-  transition-delay: calc(var(--i) * 26ms);
+  transition-delay: calc(var(--i, 0) * 26ms);
   will-change: transform;
 }
 
-/* Hover Roll Animation */
-.nav-roll-link:hover .roll-primary span {
+/* Hover Roll Animation: Push characters up, revealing duplicate from below */
+.nav-roll-link:hover .roll-primary span,
+.nav-roll-link:focus .roll-primary span,
+.nav-roll-link:focus-visible .roll-primary span {
   transform: translateY(-100%);
 }
 
-.nav-roll-link:hover .roll-secondary span {
+.nav-roll-link:hover .roll-secondary span,
+.nav-roll-link:focus .roll-secondary span,
+.nav-roll-link:focus-visible .roll-secondary span {
   transform: translateY(-100%);
 }
 
 /* Special Build CTA Button in Nav */
 .nav-roll-cta {
-  background: #0f172a;
+  background: #000000;
   color: #ffffff !important;
   border-radius: 9999px;
   padding: 8px 20px;
-  box-shadow: 0 2px 10px rgba(15, 23, 42, 0.15);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.15);
+}
+
+.nav-roll-cta .roll-primary span {
+  color: #ffffff !important;
 }
 
 .nav-roll-cta .roll-secondary {
   color: #93c5fd !important;
 }
 
-.nav-roll-cta:hover {
+.nav-roll-cta:hover,
+.nav-roll-cta:focus-visible {
   background: #1e293b;
+  color: #ffffff !important;
 }
 
 /* ==============================================
