@@ -2159,6 +2159,16 @@ summary::-webkit-details-marker {
   padding-top: 8rem;
 }
 
+.px-6 {
+  padding-left: 1.5rem;
+  padding-right: 1.5rem;
+}
+
+.min-h-screen {
+  min-height: 100vh;
+  box-sizing: border-box;
+}
+
 .reading-layout {
   max-width: 48rem;
   margin-left: auto;
