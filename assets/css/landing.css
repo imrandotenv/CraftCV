@@ -1999,6 +1999,113 @@ label.f {
 }
 
 /* ==============================================
+   FAQ ACCORDION COMPONENT
+   Brutalist high-contrast accordion with native <details> / <summary>
+   ============================================== */
+.faq-accordion {
+  max-width: 860px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+}
+
+.faq-item {
+  width: 100%;
+  border: none;
+  background: transparent;
+}
+
+/* Remove default browser dropdown arrow */
+.faq-item summary::-webkit-details-marker,
+summary::-webkit-details-marker {
+  display: none;
+}
+
+.faq-item summary,
+.faq-summary {
+  list-style: none;
+}
+
+.faq-item summary::marker,
+.faq-summary::marker {
+  display: none;
+}
+
+/* Style <summary> with bold, dark text (#111111), zero background, and subtle bottom border */
+.faq-item summary,
+.faq-summary {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+  font-family: 'Satoshi', 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-size: 1.125rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  color: #111111;
+  background: transparent;
+  border-bottom: 1px solid #e5e7eb;
+  padding: 1.25rem 0;
+  user-select: none;
+  outline: none;
+  transition: color 0.15s ease, border-color 0.15s ease;
+}
+
+.faq-item summary:hover,
+.faq-summary:hover {
+  color: #000000;
+  border-bottom-color: #111111;
+}
+
+.faq-item summary:focus-visible,
+.faq-summary:focus-visible {
+  outline: 2px solid #000000;
+  outline-offset: 4px;
+}
+
+/* Replace default arrow with clean CSS-based + and - toggle indicator */
+.faq-item summary::after,
+.faq-summary::after {
+  content: '+';
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-size: 1.25rem;
+  font-weight: 700;
+  line-height: 1;
+  color: #111111;
+  margin-left: 1.5rem;
+  flex-shrink: 0;
+  transition: transform 0.2s ease;
+}
+
+.faq-item[open] > summary::after,
+.faq-item[open] > .faq-summary::after {
+  content: '-';
+}
+
+.faq-answer {
+  padding: 1rem 0 1.5rem 0;
+  color: #4b5563;
+  font-size: 0.975rem;
+  line-height: 1.7;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.faq-answer p {
+  margin: 0;
+}
+
+.faq-answer code,
+.faq-answer kbd {
+  font-family: 'JetBrains Mono', 'Fira Code', monospace;
+  font-size: 0.85em;
+  background: #f1f5f9;
+  color: #0f172a;
+  padding: 2px 6px;
+  border-radius: 4px;
+  border: 1px solid #e2e8f0;
+}
+
+/* ==============================================
    STRUCTURED PROFESSIONAL FOOTER COMPONENT
    Standard wide footer, subtle top border (#e5e7eb),
    stark black logo on left, minimalist utility links on right
