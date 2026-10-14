@@ -67,6 +67,11 @@ window.CVForgeApp = (() => {
       renderCV();
     }
 
+    // Trigger smooth staggered reveals on active step items
+    if (window.CVForgeRevealActiveStep) {
+      window.CVForgeRevealActiveStep(stepNumber);
+    }
+
     // Scroll smoothly to top
     window.scrollTo({ top: 0, behavior: 'smooth' });
 
@@ -796,6 +801,14 @@ window.CVForgeApp = (() => {
     // Interactive 3D Hero Parallax Gallery
     setup3DHeroParallax();
 
+    // Category and Skill Selection Toggles
+    if (window.CVForgeForm && window.CVForgeForm.initSkillToggles) {
+      window.CVForgeForm.initSkillToggles();
+    }
+
+    // Staggered Scroll Fade-In-Up Reveals using IntersectionObserver
+    setupScrollReveals();
+
     // Check if initial load requested builder directly
     if (window.location.hash === '#builder') {
       revealBuilder(saved?.step || 1);
@@ -1031,6 +1044,55 @@ window.CVForgeApp = (() => {
         }
       });
     });
+  }
+
+  /**
+   * Vanilla JS IntersectionObserver for smooth, staggered fade-in-up reveals
+   * for form sections and bento grid items as the user scrolls.
+   */
+  function setupScrollReveals() {
+    const targets = $$(
+      '#form fieldset.card, .ats-dashboard-section, .bento-card, .showcase-bento-card, .step-box, .step2-bento-wrap, .bento-accent-card'
+    );
+
+    targets.forEach((el, index) => {
+      el.classList.add('reveal-on-scroll');
+      // Assign staggered delays within groups
+      const delay = (index % 4) * 80;
+      el.style.setProperty('--reveal-delay', `${delay}ms`);
+    });
+
+    // Provide a helper to reveal elements inside active step container
+    window.CVForgeRevealActiveStep = (stepNumber) => {
+      const stepEl = $(`#s${stepNumber}`);
+      if (stepEl) {
+        stepEl.querySelectorAll('.reveal-on-scroll').forEach((el, idx) => {
+          el.style.setProperty('--reveal-delay', `${idx * 60}ms`);
+          el.classList.add('is-revealed');
+        });
+      }
+    };
+
+    // Check IntersectionObserver support
+    if (!('IntersectionObserver' in window)) {
+      targets.forEach(el => el.classList.add('is-revealed'));
+      return;
+    }
+
+    const observer = new IntersectionObserver((entries, obs) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('is-revealed');
+          obs.unobserve(entry.target);
+        }
+      });
+    }, {
+      root: null,
+      rootMargin: '0px 0px -40px 0px',
+      threshold: 0.08
+    });
+
+    targets.forEach(el => observer.observe(el));
   }
 
   /**

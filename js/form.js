@@ -329,6 +329,9 @@ window.CVForgeForm = (() => {
         addRow(group);
       }
     });
+
+    // Sync visual skill toggle pills
+    syncSkillPills();
   }
 
   /**
@@ -345,6 +348,7 @@ window.CVForgeForm = (() => {
       if (container) container.innerHTML = '';
       addRow(group);
     });
+    syncSkillPills();
   }
 
   /**
@@ -440,6 +444,151 @@ window.CVForgeForm = (() => {
     return { isValid, errors };
   }
 
+  /**
+   * Helper to parse comma-separated skills from input
+   * @returns {string[]}
+   */
+  function parseCurrentSkills() {
+    const input = document.getElementById('inp-skills');
+    if (!input || !input.value) return [];
+    return input.value.split(/[,\n]/).map(s => s.trim()).filter(Boolean);
+  }
+
+  /**
+   * Synchronize visual active state of skill toggle pills with the current input value
+   */
+  function syncSkillPills() {
+    const container = document.getElementById('skill-pills-container');
+    if (!container) return;
+
+    const activeList = parseCurrentSkills();
+    const activeLower = activeList.map(s => s.toLowerCase());
+
+    // Update preset pills
+    container.querySelectorAll('.skill-toggle-pill').forEach(pill => {
+      const skillName = pill.dataset.skill;
+      if (!skillName) return;
+      const isActive = activeLower.includes(skillName.toLowerCase());
+      pill.classList.toggle('active', isActive);
+      pill.setAttribute('aria-pressed', isActive ? 'true' : 'false');
+    });
+
+    // Add custom pills for skills not in preset buttons
+    activeList.forEach(skillName => {
+      const exists = Array.from(container.querySelectorAll('.skill-toggle-pill')).some(
+        p => p.dataset.skill && p.dataset.skill.toLowerCase() === skillName.toLowerCase()
+      );
+      if (!exists && skillName) {
+        const newPill = document.createElement('button');
+        newPill.type = 'button';
+        newPill.className = 'skill-toggle-pill active';
+        newPill.dataset.skill = skillName;
+        newPill.dataset.category = 'custom';
+        newPill.setAttribute('aria-pressed', 'true');
+        newPill.textContent = skillName;
+        container.appendChild(newPill);
+      }
+    });
+  }
+
+  /**
+   * Initialize Skill and Category Selection Toggles
+   */
+  function initSkillToggles() {
+    const container = document.getElementById('skill-pills-container');
+    const skillsInput = document.getElementById('inp-skills');
+    const customInput = document.getElementById('inp-custom-skill');
+    const addBtn = document.getElementById('btn-add-custom-skill');
+    const catPills = document.querySelectorAll('.category-pill');
+
+    if (!container || !skillsInput) return;
+
+    // Toggle pill active on click
+    container.addEventListener('click', e => {
+      const pill = e.target.closest('.skill-toggle-pill');
+      if (!pill) return;
+
+      const skill = pill.dataset.skill.trim();
+      const currentList = parseCurrentSkills();
+      const index = currentList.findIndex(s => s.toLowerCase() === skill.toLowerCase());
+
+      if (index >= 0) {
+        // Toggle off
+        currentList.splice(index, 1);
+        pill.classList.remove('active');
+        pill.setAttribute('aria-pressed', 'false');
+        if (pill.dataset.category === 'custom') {
+          pill.remove();
+        }
+      } else {
+        // Toggle on
+        currentList.push(skill);
+        pill.classList.add('active');
+        pill.setAttribute('aria-pressed', 'true');
+      }
+
+      skillsInput.value = currentList.join(', ');
+      if (window.CVForgeApp && window.CVForgeApp.onFormChanged) {
+        window.CVForgeApp.onFormChanged();
+      }
+    });
+
+    // Category Tabs Filtering
+    catPills.forEach(catBtn => {
+      catBtn.addEventListener('click', () => {
+        catPills.forEach(b => {
+          b.classList.remove('active');
+          b.setAttribute('aria-selected', 'false');
+        });
+        catBtn.classList.add('active');
+        catBtn.setAttribute('aria-selected', 'true');
+
+        const targetCat = catBtn.dataset.cat;
+        container.querySelectorAll('.skill-toggle-pill').forEach(pill => {
+          if (targetCat === 'all' || pill.dataset.category === targetCat || (targetCat === 'all' && pill.dataset.category === 'custom')) {
+            pill.style.display = 'inline-flex';
+          } else {
+            pill.style.display = 'none';
+          }
+        });
+      });
+    });
+
+    // Custom Skill Adder
+    const handleAddCustom = () => {
+      if (!customInput) return;
+      const skillName = customInput.value.trim();
+      if (!skillName) return;
+
+      const currentList = parseCurrentSkills();
+      if (!currentList.some(s => s.toLowerCase() === skillName.toLowerCase())) {
+        currentList.push(skillName);
+        skillsInput.value = currentList.join(', ');
+        syncSkillPills();
+        if (window.CVForgeApp && window.CVForgeApp.onFormChanged) {
+          window.CVForgeApp.onFormChanged();
+        }
+      }
+      customInput.value = '';
+    };
+
+    addBtn?.addEventListener('click', handleAddCustom);
+    customInput?.addEventListener('keydown', e => {
+      if (e.key === 'Enter') {
+        e.preventDefault();
+        handleAddCustom();
+      }
+    });
+
+    // Sync when user types directly in skillsInput
+    skillsInput.addEventListener('input', () => {
+      syncSkillPills();
+    });
+
+    // Initial sync
+    syncSkillPills();
+  }
+
   return {
     addRow,
     getFormData,
@@ -453,6 +602,8 @@ window.CVForgeForm = (() => {
     reorderSection,
     getSectionOrder,
     applySectionOrder,
-    updateReorderButtonsState
+    updateReorderButtonsState,
+    initSkillToggles,
+    syncSkillPills
   };
 })();

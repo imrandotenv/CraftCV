@@ -1580,62 +1580,265 @@ nav[aria-label="Progress steps"] .steps {
   box-shadow: 0 0 0 3px rgba(15, 23, 42, 0.1);
 }
 
-/* Cards in Light Mode */
+/* Cards in Light Mode: clean white, 1px border, 1.5rem radius, soft shadow, magnetic lift on hover */
 .card {
-  background: rgba(255, 255, 255, 0.85) !important;
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border: 1px solid rgba(226, 232, 240, 0.9) !important;
-  border-radius: var(--radius-lg);
-  padding: var(--sp-5);
-  box-shadow: 0 4px 24px rgba(15, 23, 42, 0.03);
+  background: #ffffff !important;
+  border: 1px solid #f3f4f6 !important;
+  border-radius: 1.5rem !important;
+  padding: var(--sp-5) !important;
+  box-shadow: 0 4px 25px -4px rgba(0, 0, 0, 0.03), 0 2px 10px -2px rgba(0, 0, 0, 0.02) !important;
   margin-bottom: var(--sp-4);
+  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1),
+              box-shadow 0.25s cubic-bezier(0.16, 1, 0.3, 1),
+              border-color 0.25s ease !important;
+}
+
+.card:hover {
+  transform: translateY(-4px) scale(1.02) !important;
+  box-shadow: 0 16px 38px -6px rgba(0, 0, 0, 0.08), 0 6px 18px -4px rgba(0, 0, 0, 0.04) !important;
+  border-color: #e5e7eb !important;
 }
 
 .card h2 {
-  color: #0f172a !important;
-  font-weight: 800;
+  font-family: 'Satoshi', sans-serif !important;
+  font-weight: 900 !important;
+  color: #000000 !important;
+  letter-spacing: -0.04em !important;
+  text-transform: uppercase !important;
+  font-size: 1.25rem;
+  margin-bottom: var(--sp-3);
 }
 
 label.f {
-  color: #334155 !important;
-  font-weight: 600;
+  font-family: 'Satoshi', sans-serif;
+  color: #4b5563 !important;
+  font-weight: 700 !important;
+  font-size: 0.74rem !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.08em !important;
+  display: block;
+  margin-bottom: 4px;
 }
 
-input[type="text"],
-input[type="email"],
-input[type="tel"],
-input[type="url"],
-textarea,
-select {
-  background: #ffffff !important;
-  border: 1.5px solid #cbd5e1 !important;
-  color: #0f172a !important;
-  border-radius: var(--radius-md);
-  transition: border-color var(--tr-fast), box-shadow var(--tr-fast);
+/* ==============================================
+   TEXT INPUT FIELDS (NAME, EXPERIENCE, EDUCATION)
+   Transparent background, zero horizontal padding,
+   zero box-shadow, bottom border 2px solid #d1d5db.
+   On focus: transition bottom border to solid black,
+   remove browser outline.
+   ============================================== */
+#form input[type="text"],
+#form input[type="email"],
+#form input[type="tel"],
+#form input[type="url"],
+#form textarea,
+.field-group input,
+.field-group textarea,
+.row input,
+.row textarea,
+.custom-skill-input {
+  background: transparent !important;
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+  padding-top: 10px !important;
+  padding-bottom: 8px !important;
+  box-shadow: none !important;
+  border: none !important;
+  border-bottom: 2px solid #d1d5db !important;
+  border-radius: 0 !important;
+  color: #000000 !important;
+  font-family: inherit;
+  font-size: 0.95rem;
+  line-height: 1.5;
+  transition: border-bottom-color 0.25s ease !important;
+  width: 100%;
 }
 
-input:focus,
-textarea:focus,
-select:focus {
-  border-color: #2563eb !important;
-  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15) !important;
-  outline: none;
+#form input[type="text"]:focus,
+#form input[type="email"]:focus,
+#form input[type="tel"]:focus,
+#form input[type="url"]:focus,
+#form textarea:focus,
+.field-group input:focus,
+.field-group textarea:focus,
+.row input:focus,
+.row textarea:focus,
+.custom-skill-input:focus {
+  outline: none !important;
+  border-bottom-color: #000000 !important;
+  box-shadow: none !important;
 }
 
-/* Buttons in Wizard */
-.btn.pri {
-  background: #0f172a;
-  color: #ffffff;
+#form input::placeholder,
+#form textarea::placeholder {
+  color: #9ca3af !important;
+  font-size: 0.88rem;
+}
+
+/* ==============================================
+   CATEGORY & SKILL SELECTION TOGGLES
+   Pill-shaped buttons transitioning from transparent
+   with gray border to solid black with white text when active
+   ============================================== */
+.skills-toggle-section {
+  margin-bottom: var(--sp-3);
+}
+
+.skill-category-bar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 14px;
+}
+
+.category-pill {
+  background: transparent;
+  border: 1px solid #e5e7eb;
+  color: #6b7280;
   border-radius: 9999px;
-  padding: 12px 24px;
-  box-shadow: 0 4px 16px rgba(15, 23, 42, 0.15);
+  padding: 5px 14px;
+  font-size: 0.72rem;
   font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-.btn.pri:hover {
-  background: #1e293b;
+.category-pill:hover {
+  border-color: #000000;
+  color: #000000;
+}
+
+.category-pill.active {
+  background: #000000 !important;
+  border-color: #000000 !important;
+  color: #ffffff !important;
+}
+
+.skill-pills-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 14px;
+}
+
+.skill-toggle-pill {
+  background: transparent !important;
+  border: 1px solid #d1d5db !important;
+  color: #374151 !important;
+  border-radius: 9999px !important;
+  padding: 7px 16px !important;
+  font-size: 0.8rem !important;
+  font-weight: 600 !important;
+  cursor: pointer;
+  user-select: none;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1) !important;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.skill-toggle-pill:hover {
+  border-color: #000000 !important;
+  color: #000000 !important;
   transform: translateY(-1px);
+}
+
+.skill-toggle-pill.active {
+  background: #000000 !important;
+  border-color: #000000 !important;
+  color: #ffffff !important;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.18);
+  transform: translateY(-2px);
+}
+
+.skill-toggle-pill.active::after {
+  content: "✓";
+  font-size: 0.72rem;
+  font-weight: 900;
+}
+
+.custom-skill-adder {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  max-width: 440px;
+  margin-bottom: 12px;
+}
+
+.custom-skill-input {
+  flex: 1;
+}
+
+/* ==============================================
+   PRIMARY CTA BUTTONS & MICRO-ANIMATIONS
+   Solid black, fully rounded pills, ample padding (12px 32px),
+   magnetic lift (translateY(-4px) scale(1.02)) and enhanced shadow
+   ============================================== */
+.btn-primary-cta,
+.btn.pri,
+.btn-generate-cv {
+  background: #000000 !important;
+  color: #ffffff !important;
+  border-radius: 9999px !important;
+  padding: 12px 32px !important;
+  border: none !important;
+  font-family: 'Satoshi', 'Plus Jakarta Sans', sans-serif !important;
+  font-size: 0.88rem !important;
+  font-weight: 900 !important;
+  letter-spacing: 0.06em !important;
+  text-transform: uppercase !important;
+  cursor: pointer;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.12) !important;
+  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1),
+              box-shadow 0.25s cubic-bezier(0.16, 1, 0.3, 1),
+              background-color 0.2s ease !important;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  text-decoration: none;
+}
+
+.btn-primary-cta:hover,
+.btn.pri:hover,
+.btn-generate-cv:hover {
+  transform: translateY(-4px) scale(1.02) !important;
+  box-shadow: 0 16px 36px -6px rgba(0, 0, 0, 0.25), 0 6px 16px -4px rgba(0, 0, 0, 0.15) !important;
+  background: #111827 !important;
+}
+
+.btn-primary-cta:active,
+.btn.pri:active,
+.btn-generate-cv:active {
+  transform: translateY(-1px) scale(0.99) !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.18) !important;
+}
+
+/* ==============================================
+   STAGGERED SCROLL FADE-IN-UP REVEALS
+   ============================================== */
+.reveal-on-scroll {
+  opacity: 0;
+  transform: translateY(28px);
+  transition: opacity 0.65s cubic-bezier(0.16, 1, 0.3, 1),
+              transform 0.65s cubic-bezier(0.16, 1, 0.3, 1);
+  transition-delay: var(--reveal-delay, 0ms);
+  will-change: opacity, transform;
+}
+
+.reveal-on-scroll.is-revealed {
+  opacity: 1 !important;
+  transform: translateY(0) !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .reveal-on-scroll {
+    opacity: 1 !important;
+    transform: none !important;
+    transition: none !important;
+  }
 }
 
 .btn.sec {

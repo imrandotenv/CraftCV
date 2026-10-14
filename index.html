@@ -547,12 +547,79 @@
       <!-- Skills & Languages Card -->
       <fieldset class="card">
         <legend class="sr-only">Skills and Languages</legend>
-        <h2>🛠 Skills &amp; Languages</h2>
-        <div class="field-group">
-          <label class="f" for="inp-skills">Skills (comma separated)</label>
+        <div class="card-header-actions">
+          <h2>🛠 Skills &amp; Competencies</h2>
+          <span class="bento-subhead">CLICK PILLS TO TOGGLE SKILLS</span>
+        </div>
+
+        <!-- Category & Skill Selection Toggles -->
+        <div class="skills-toggle-section">
+          <!-- Category Filter Bar -->
+          <div class="skill-category-bar" role="tablist" aria-label="Skill Categories">
+            <button type="button" class="category-pill active" data-cat="all" role="tab" aria-selected="true">All</button>
+            <button type="button" class="category-pill" data-cat="frontend" role="tab" aria-selected="false">Frontend</button>
+            <button type="button" class="category-pill" data-cat="backend" role="tab" aria-selected="false">Backend</button>
+            <button type="button" class="category-pill" data-cat="data" role="tab" aria-selected="false">Languages &amp; Data</button>
+            <button type="button" class="category-pill" data-cat="tools" role="tab" aria-selected="false">Cloud &amp; Tools</button>
+            <button type="button" class="category-pill" data-cat="core" role="tab" aria-selected="false">Core Skills</button>
+          </div>
+
+          <!-- Preset Skill Pills Container -->
+          <div class="skill-pills-container" id="skill-pills-container">
+            <!-- Frontend -->
+            <button type="button" class="skill-toggle-pill" data-skill="HTML5" data-category="frontend">HTML5</button>
+            <button type="button" class="skill-toggle-pill" data-skill="CSS3" data-category="frontend">CSS3</button>
+            <button type="button" class="skill-toggle-pill" data-skill="JavaScript" data-category="frontend">JavaScript</button>
+            <button type="button" class="skill-toggle-pill" data-skill="TypeScript" data-category="frontend">TypeScript</button>
+            <button type="button" class="skill-toggle-pill" data-skill="React" data-category="frontend">React</button>
+            <button type="button" class="skill-toggle-pill" data-skill="Vue.js" data-category="frontend">Vue.js</button>
+            <button type="button" class="skill-toggle-pill" data-skill="Next.js" data-category="frontend">Next.js</button>
+            <button type="button" class="skill-toggle-pill" data-skill="Tailwind CSS" data-category="frontend">Tailwind CSS</button>
+
+            <!-- Backend -->
+            <button type="button" class="skill-toggle-pill" data-skill="Node.js" data-category="backend">Node.js</button>
+            <button type="button" class="skill-toggle-pill" data-skill="Express" data-category="backend">Express</button>
+            <button type="button" class="skill-toggle-pill" data-skill="Python" data-category="backend">Python</button>
+            <button type="button" class="skill-toggle-pill" data-skill="Django" data-category="backend">Django</button>
+            <button type="button" class="skill-toggle-pill" data-skill="Java" data-category="backend">Java</button>
+            <button type="button" class="skill-toggle-pill" data-skill="Spring Boot" data-category="backend">Spring Boot</button>
+            <button type="button" class="skill-toggle-pill" data-skill="REST APIs" data-category="backend">REST APIs</button>
+            <button type="button" class="skill-toggle-pill" data-skill="GraphQL" data-category="backend">GraphQL</button>
+
+            <!-- Languages & Data -->
+            <button type="button" class="skill-toggle-pill" data-skill="SQL" data-category="data">SQL</button>
+            <button type="button" class="skill-toggle-pill" data-skill="PostgreSQL" data-category="data">PostgreSQL</button>
+            <button type="button" class="skill-toggle-pill" data-skill="MongoDB" data-category="data">MongoDB</button>
+            <button type="button" class="skill-toggle-pill" data-skill="C++" data-category="data">C++</button>
+            <button type="button" class="skill-toggle-pill" data-skill="Data Analysis" data-category="data">Data Analysis</button>
+
+            <!-- Cloud & Tools -->
+            <button type="button" class="skill-toggle-pill" data-skill="Git" data-category="tools">Git</button>
+            <button type="button" class="skill-toggle-pill" data-skill="Docker" data-category="tools">Docker</button>
+            <button type="button" class="skill-toggle-pill" data-skill="AWS" data-category="tools">AWS</button>
+            <button type="button" class="skill-toggle-pill" data-skill="Linux" data-category="tools">Linux</button>
+            <button type="button" class="skill-toggle-pill" data-skill="CI/CD" data-category="tools">CI/CD</button>
+            <button type="button" class="skill-toggle-pill" data-skill="Figma" data-category="tools">Figma</button>
+
+            <!-- Core -->
+            <button type="button" class="skill-toggle-pill" data-skill="Problem Solving" data-category="core">Problem Solving</button>
+            <button type="button" class="skill-toggle-pill" data-skill="System Design" data-category="core">System Design</button>
+            <button type="button" class="skill-toggle-pill" data-skill="Agile / Scrum" data-category="core">Agile / Scrum</button>
+            <button type="button" class="skill-toggle-pill" data-skill="Team Leadership" data-category="core">Team Leadership</button>
+          </div>
+
+          <!-- Quick Custom Skill Input -->
+          <div class="custom-skill-adder">
+            <input type="text" id="inp-custom-skill" placeholder="+ Type custom skill and press Enter" class="custom-skill-input">
+            <button type="button" id="btn-add-custom-skill" class="bento-pill-btn" style="padding: 7px 16px; font-size: 0.72rem;">+ Add</button>
+          </div>
+        </div>
+
+        <div class="field-group" style="margin-top: 14px;">
+          <label class="f" for="inp-skills">Active Skills (comma separated)</label>
           <input id="inp-skills" name="skills" type="text" placeholder="HTML5, CSS3, JavaScript, Python, Git, Problem Solving">
         </div>
-        <div class="field-group" style="margin-top: 12px;">
+        <div class="field-group" style="margin-top: 14px;">
           <label class="f" for="inp-langs">Languages (comma separated)</label>
           <input id="inp-langs" name="langs" type="text" placeholder="English, Hindi, Maithili">
         </div>
