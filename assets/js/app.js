@@ -173,6 +173,44 @@ window.CraftCVApp = window.CVForgeApp = (() => {
     });
   }
 
+  const A4_HEIGHT_PX = 1122; // Standard A4 pixel height at 96 DPI (approx 1122px)
+
+  /**
+   * Dynamically calculate and apply scale transformation to fit CV on one page
+   * @param {HTMLElement} [container]
+   * @param {boolean} [isEnabled]
+   */
+  function applyFitToOnePage(container, isEnabled) {
+    const cv = container || $('#cv');
+    if (!cv) return;
+
+    const enabled = (isEnabled !== undefined) ? isEnabled : activeFitOnePage;
+    cv.classList.toggle('fit-one-page', enabled);
+
+    if (!enabled) {
+      cv.style.transform = '';
+      cv.style.transformOrigin = '';
+      return;
+    }
+
+    // Reset transform temporarily to measure true unscaled scrollHeight
+    cv.style.transform = '';
+    cv.style.transformOrigin = '';
+
+    // Calculate actual scroll height of the CV template container
+    const scrollHeight = cv.scrollHeight;
+
+    // If it exceeds the standard A4 pixel height (approx 1122px at 96 DPI), scale it
+    if (scrollHeight > A4_HEIGHT_PX) {
+      const scale = A4_HEIGHT_PX / scrollHeight;
+      cv.style.transformOrigin = 'top left';
+      cv.style.transform = `scale(${scale})`;
+    } else {
+      cv.style.transform = '';
+      cv.style.transformOrigin = '';
+    }
+  }
+
   /**
    * Render the resume to the stage sheet
    */
@@ -185,6 +223,7 @@ window.CraftCVApp = window.CVForgeApp = (() => {
     
     const cvContainer = $('#cv');
     CraftCVRender.renderToElement(cvContainer, data);
+    applyFitToOnePage(cvContainer, activeFitOnePage);
     document.title = (data.name ? `${data.name} - Resume` : 'CraftCV Resume');
   }
 
@@ -479,6 +518,7 @@ window.CraftCVApp = window.CVForgeApp = (() => {
       if (sliderVal) sliderVal.textContent = '10 pt';
       const fitToggle = $('#fit-one-page-toggle');
       if (fitToggle) fitToggle.checked = false;
+      applyFitToOnePage($('#cv'), false);
       updateATSAnalysis();
       updateStep1NextButton();
       go(1);
@@ -675,7 +715,12 @@ window.CraftCVApp = window.CVForgeApp = (() => {
         activeFontSize = parseFloat(e.target.value);
         if (sliderVal) sliderVal.textContent = `${activeFontSize} pt`;
         const cv = $('#cv');
-        if (cv) cv.style.setProperty('--sheet-font-size', `${activeFontSize}pt`);
+        if (cv) {
+          cv.style.setProperty('--sheet-font-size', `${activeFontSize}pt`);
+          if (activeFitOnePage) {
+            applyFitToOnePage(cv, true);
+          }
+        }
         saveCurrentState();
       });
     }
@@ -684,8 +729,7 @@ window.CraftCVApp = window.CVForgeApp = (() => {
       fitToggle.checked = activeFitOnePage;
       fitToggle.addEventListener('change', e => {
         activeFitOnePage = e.target.checked;
-        const cv = $('#cv');
-        if (cv) cv.classList.toggle('fit-one-page', activeFitOnePage);
+        applyFitToOnePage($('#cv'), activeFitOnePage);
         saveCurrentState();
       });
     }
@@ -821,9 +865,18 @@ window.CraftCVApp = window.CVForgeApp = (() => {
     // Clear data button
     $('#clear-data')?.addEventListener('click', handleClearData);
 
-    // Print button
+    // Print button & window print integration
     $('#print-btn')?.addEventListener('click', () => {
+      if (activeFitOnePage) {
+        applyFitToOnePage($('#cv'), true);
+      }
       window.print();
+    });
+
+    window.addEventListener('beforeprint', () => {
+      if (activeFitOnePage) {
+        applyFitToOnePage($('#cv'), true);
+      }
     });
 
     // Auto-save on form inputs
@@ -856,9 +909,10 @@ window.CraftCVApp = window.CVForgeApp = (() => {
         if (sliderVal) sliderVal.textContent = `${activeFontSize} pt`;
       }
       if (saved.fitOnePage !== undefined) {
-        activeFitOnePage = saved.fitOnePage;
+        activeFitOnePage = Boolean(saved.fitOnePage);
         const fitToggle = $('#fit-one-page-toggle');
         if (fitToggle) fitToggle.checked = activeFitOnePage;
+        applyFitToOnePage($('#cv'), activeFitOnePage);
       }
       if (saved.step && saved.step > 1 && saved.name) {
         go(saved.step);
@@ -1479,9 +1533,10 @@ body { background: #eef1f6; font-family: 'Inter', sans-serif; display: flex; jus
             if (sliderVal) sliderVal.textContent = `${activeFontSize} pt`;
           }
           if (json.fitOnePage !== undefined) {
-            activeFitOnePage = json.fitOnePage;
+            activeFitOnePage = Boolean(json.fitOnePage);
             const fitToggle = $('#fit-one-page-toggle');
             if (fitToggle) fitToggle.checked = activeFitOnePage;
+            applyFitToOnePage($('#cv'), activeFitOnePage);
           }
           saveCurrentState();
           updateATSAnalysis();
@@ -1510,7 +1565,9 @@ body { background: #eef1f6; font-family: 'Inter', sans-serif; display: flex; jus
     showHeroLanding,
     updateStep1NextButton,
     hasStoredTheme,
-    getTheme: () => activeTheme
+    getTheme: () => activeTheme,
+    applyFitToOnePage,
+    A4_HEIGHT_PX: () => A4_HEIGHT_PX
   };
 })();
 

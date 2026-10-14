@@ -243,6 +243,8 @@ window.CraftCVRender = window.CVForgeRender = (() => {
     `;
   }
 
+  const A4_HEIGHT_PX = 1122; // Standard A4 pixel height at 96 DPI (approx 1122px)
+
   /**
    * Render resume to DOM target container
    * @param {HTMLElement} container 
@@ -263,6 +265,24 @@ window.CraftCVRender = window.CVForgeRender = (() => {
     }
 
     container.innerHTML = buildResumeHtml(data);
+
+    // Dynamic scale calculation for Fit to One Page
+    if (fitOnePage) {
+      container.style.transform = '';
+      container.style.transformOrigin = '';
+      const scrollHeight = container.scrollHeight;
+      if (scrollHeight > A4_HEIGHT_PX) {
+        const scale = A4_HEIGHT_PX / scrollHeight;
+        container.style.transformOrigin = 'top left';
+        container.style.transform = `scale(${scale})`;
+      } else {
+        container.style.transform = '';
+        container.style.transformOrigin = '';
+      }
+    } else {
+      container.style.transform = '';
+      container.style.transformOrigin = '';
+    }
   }
 
   return {
@@ -271,6 +291,7 @@ window.CraftCVRender = window.CVForgeRender = (() => {
     renderItem,
     renderSection,
     buildResumeHtml,
-    renderToElement
+    renderToElement,
+    A4_HEIGHT_PX
   };
 })();
