@@ -303,7 +303,7 @@ body {
   align-items: center;
   justify-content: center;
   position: relative;
-  padding: var(--sp-5) var(--sp-4);
+  padding: clamp(60px, 9vh, 120px) var(--sp-4);
   background: transparent;
   border-bottom: 1px solid rgba(226, 232, 240, 0.8);
   box-sizing: border-box;
@@ -330,7 +330,7 @@ body {
 .hero-grid {
   display: grid;
   grid-template-columns: 1.15fr 0.85fr;
-  gap: var(--sp-6);
+  gap: clamp(2.5rem, 5vw, 5rem);
   align-items: center;
 }
 
@@ -368,14 +368,14 @@ body {
 }
 
 .hero-display-title {
-  font-size: clamp(3rem, 6.8vw, 5.4rem);
+  font-size: clamp(3.2rem, 7vw, 5.8rem);
   font-family: 'Satoshi', 'Plus Jakarta Sans', -apple-system, sans-serif;
   font-weight: 900;
   letter-spacing: -0.05em; /* tracking-tighter */
-  line-height: 0.94;
+  line-height: 0.92;
   color: #0f172a;
   text-transform: uppercase;
-  margin: 0 0 var(--sp-4);
+  margin: 0 0 clamp(2.25rem, 4.5vh, 3.75rem);
 }
 
 .hero-display-title .gold-gradient {
@@ -397,9 +397,9 @@ body {
 .hero-actions {
   display: flex;
   align-items: center;
-  gap: var(--sp-3);
+  gap: clamp(1rem, 2vw, 1.35rem);
   flex-wrap: wrap;
-  margin-bottom: var(--sp-5);
+  margin-bottom: 0;
 }
 
 /* Primary CTA Button: 'Generate my CV' */
@@ -894,7 +894,7 @@ body {
    ============================================== */
 .landing-section {
   max-width: 1100px;
-  margin: var(--sp-6) auto;
+  margin: clamp(4.5rem, 9vh, 8rem) auto;
   padding: 0 var(--sp-4);
   position: relative;
   z-index: 1;
@@ -902,15 +902,16 @@ body {
 
 .section-head {
   text-align: center;
-  margin-bottom: var(--sp-5);
+  margin-bottom: clamp(3rem, 6vh, 4.5rem);
 }
 
 .section-head h2 {
-  font-size: 2.2rem;
+  font-size: clamp(2.2rem, 4.5vw, 3.2rem);
   font-family: 'Satoshi', 'Plus Jakarta Sans', sans-serif;
   font-weight: 900;
   letter-spacing: -0.04em;
-  color: #0f172a;
+  color: #000000;
+  text-transform: uppercase;
   margin-bottom: var(--sp-2);
 }
 
@@ -922,42 +923,48 @@ body {
 .steps-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: var(--sp-4);
+  gap: clamp(1.75rem, 3.5vw, 2.75rem);
 }
 
 .step-box {
-  background: rgba(255, 255, 255, 0.8);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border: 1px solid rgba(226, 232, 240, 0.9);
-  border-radius: var(--radius-lg);
-  padding: var(--sp-5);
+  background: #ffffff;
+  border: 1px solid #f3f4f6;
+  border-radius: 1.5rem;
+  padding: clamp(2.5rem, 5vw, 3.75rem) clamp(2rem, 3.5vw, 2.75rem);
   position: relative;
-  transition: transform var(--tr-fast), border-color var(--tr-fast), box-shadow var(--tr-fast);
-  box-shadow: 0 4px 20px rgba(15, 23, 42, 0.03);
+  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1),
+              border-color 0.25s ease,
+              box-shadow 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
 }
 
 .step-box:hover {
-  transform: translateY(-4px);
-  border-color: #2563eb;
-  box-shadow: 0 10px 30px rgba(37, 99, 235, 0.08);
+  transform: translateY(-4px) scale(1.02);
+  border-color: #000000;
+  box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.08);
 }
 
 .step-num {
-  font-family: 'Satoshi', sans-serif;
-  font-size: 2.2rem;
+  font-family: 'Satoshi', 'Plus Jakarta Sans', sans-serif;
+  font-size: clamp(3.2rem, 6vw, 4.5rem);
   font-weight: 900;
-  color: #d97706;
+  color: #000000;
   line-height: 1;
-  margin-bottom: var(--sp-3);
+  margin-bottom: clamp(1.25rem, 2.5vh, 2rem);
   display: block;
+  letter-spacing: -0.05em;
 }
 
-.step-box h3 {
-  font-size: 1.15rem;
-  font-weight: 800;
-  color: #0f172a;
-  margin-bottom: var(--sp-2);
+.step-box h3,
+.step-box .step-title {
+  font-size: clamp(1.25rem, 2.2vw, 1.6rem);
+  font-family: 'Satoshi', 'Plus Jakarta Sans', sans-serif;
+  font-weight: 900;
+  color: #000000;
+  text-transform: uppercase;
+  letter-spacing: -0.03em;
+  margin-bottom: 0;
+  line-height: 1.15;
 }
 
 .step-box p {
