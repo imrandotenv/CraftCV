@@ -84,6 +84,33 @@ body {
 }
 
 /* ==============================================
+   RESPONSIVE UTILITY CLASSES (TAILWIND-COMPATIBLE)
+   ============================================== */
+.hidden {
+  display: none !important;
+}
+
+.text-3xl {
+  font-size: 1.875rem !important; /* ~30px */
+  line-height: 2.25rem !important;
+}
+
+.text-4xl {
+  font-size: 2.25rem !important; /* ~36px */
+  line-height: 2.5rem !important;
+}
+
+@media (min-width: 768px) {
+  .md\:flex {
+    display: flex !important;
+  }
+  .md\:text-5xl {
+    font-size: 3rem !important; /* ~48px */
+    line-height: 1.15 !important;
+  }
+}
+
+/* ==============================================
    ABSTRACT PASTEL GLOW BACKGROUND BLOBS
    Peach, Light Orange & Pink with blur(100px)
    ============================================== */
@@ -978,7 +1005,7 @@ header.top-nav,
 }
 
 .section-head h2 {
-  font-size: clamp(2.2rem, 4.5vw, 3.2rem);
+  font-size: clamp(1.85rem, 4vw, 3.2rem);
   font-family: 'Satoshi', 'Plus Jakarta Sans', sans-serif;
   font-weight: 900;
   letter-spacing: -0.04em;
@@ -2583,6 +2610,22 @@ footer,
   }
 }
 
+/* Mobile Header & Responsive Typography (< 768px) */
+@media (max-width: 767px) {
+  .nav-center {
+    display: none !important;
+  }
+  .section-head h2 {
+    font-size: 1.875rem !important; /* text-3xl */
+    line-height: 1.15;
+  }
+  #faq-title {
+    font-size: 1.75rem !important;
+    line-height: 1.15;
+    word-break: break-word;
+  }
+}
+
 @media (max-width: 640px) {
   .hero-display-title {
     font-size: 2.6rem;
@@ -2603,17 +2646,22 @@ footer,
   .nav-container {
     padding: 0;
     height: 100%;
+    justify-content: space-between;
   }
-  .nav-links {
-    gap: 2px;
-  }
-  .nav-roll-link {
-    padding: 6px 10px;
-    font-size: 0.82rem;
+  .nav-center {
+    display: none !important;
   }
   .nav-roll-cta {
     padding: 6px 16px;
     font-size: 0.82rem;
+  }
+  .section-head h2 {
+    font-size: 1.75rem !important;
+    line-height: 1.15;
+  }
+  #faq-title {
+    font-size: 1.6rem !important;
+    line-height: 1.15;
   }
   .steps-grid {
     grid-template-columns: 1fr;
