@@ -230,14 +230,39 @@ window.CVForgeApp = (() => {
     if (badgeScore) badgeScore.textContent = String(total);
     if (badgePill) {
       if (total >= 80) {
-        badgePill.style.background = '#d1fae5';
-        badgePill.style.color = '#065f46';
+        badgePill.style.background = '#000000';
+        badgePill.style.color = '#10b981';
       } else if (total >= 50) {
-        badgePill.style.background = '#fef3c7';
-        badgePill.style.color = '#92400e';
+        badgePill.style.background = '#000000';
+        badgePill.style.color = '#f59e0b';
       } else {
-        badgePill.style.background = '#fee2e2';
-        badgePill.style.color = '#991b1b';
+        badgePill.style.background = '#000000';
+        badgePill.style.color = '#ef4444';
+      }
+    }
+
+    // Update Status Indicator in Score Hero Card
+    const statusText = $('#ats-status-text');
+    const statusDot = $('#ats-status-dot');
+    if (statusText) {
+      if (total >= 80) {
+        statusText.textContent = 'PARSER READY';
+        if (statusDot) {
+          statusDot.style.background = '#10b981';
+          statusDot.style.boxShadow = '0 0 8px rgba(16, 185, 129, 0.6)';
+        }
+      } else if (total >= 50) {
+        statusText.textContent = 'COMPATIBLE';
+        if (statusDot) {
+          statusDot.style.background = '#f59e0b';
+          statusDot.style.boxShadow = '0 0 8px rgba(245, 158, 11, 0.6)';
+        }
+      } else {
+        statusText.textContent = 'NEEDS REVISION';
+        if (statusDot) {
+          statusDot.style.background = '#ef4444';
+          statusDot.style.boxShadow = '0 0 8px rgba(239, 68, 68, 0.6)';
+        }
       }
     }
 
@@ -290,6 +315,12 @@ window.CVForgeApp = (() => {
         weakPanel.style.display = 'none';
         weakList.innerHTML = '';
       }
+    }
+
+    // Toggle clean state indicator if no weak verbs are present
+    const cleanState = $('#weak-verbs-clean');
+    if (cleanState) {
+      cleanState.style.display = (analysis.weakVerbs && analysis.weakVerbs.length > 0) ? 'none' : 'flex';
     }
 
     return analysis;
@@ -755,8 +786,9 @@ window.CVForgeApp = (() => {
       go(1);
     }
 
-    // Initial ATS analysis calculation
+    // Initial ATS analysis calculation and theme previews
     updateATSAnalysis();
+    renderThemePreviews();
 
     // Phase 5: Setup Export features (HTML Blob, Plain Text, JSON Import/Export)
     setupExportFeatures();

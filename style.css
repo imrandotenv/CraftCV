@@ -967,88 +967,564 @@ body {
 }
 
 /* ==============================================
-   TEMPLATES SHOWCASE GRID
+/* ==============================================
+   ASYMMETRIC BENTO GRID ARCHITECTURE
+   Clean white cards (#ffffff), 1px border (#f3f4f6),
+   1.5rem rounded corners, soft shadows, brutalist typography
    ============================================== */
-.templates-showcase-grid {
+.bento-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-  gap: var(--sp-4);
+  grid-template-columns: repeat(12, 1fr);
+  gap: 1.25rem;
+  width: 100%;
 }
 
-.showcase-card {
-  background: rgba(255, 255, 255, 0.8);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border: 1px solid rgba(226, 232, 240, 0.9);
-  border-radius: var(--radius-lg);
-  padding: var(--sp-4);
+/* Asymmetric 12-Column Spans */
+.bento-col-12 { grid-column: span 12; }
+.bento-col-8  { grid-column: span 8; }
+.bento-col-7  { grid-column: span 7; }
+.bento-col-6  { grid-column: span 6; }
+.bento-col-5  { grid-column: span 5; }
+.bento-col-4  { grid-column: span 4; }
+.bento-col-3  { grid-column: span 3; }
+
+/* Bento Card Specification */
+.bento-card {
+  background: #ffffff !important;
+  border: 1px solid #f3f4f6 !important;
+  border-radius: 1.5rem !important;
+  box-shadow: 0 4px 25px -4px rgba(0, 0, 0, 0.03), 0 2px 10px -2px rgba(0, 0, 0, 0.02) !important;
+  padding: 1.5rem;
+  position: relative;
+  overflow: hidden;
+  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.25s ease, border-color 0.25s ease;
+}
+
+.bento-card:hover {
+  box-shadow: 0 12px 35px -5px rgba(0, 0, 0, 0.05), 0 4px 15px -3px rgba(0, 0, 0, 0.02) !important;
+}
+
+/* Brutalist Typography for Headings in Deep Black (#000000) */
+.bento-main-heading,
+.bento-heading,
+.bento-card h2,
+.bento-card h3,
+.pill-title {
+  font-family: 'Satoshi', 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif !important;
+  font-weight: 900 !important;
+  color: #000000 !important;
+  letter-spacing: -0.04em !important;
+  text-transform: uppercase !important;
+  line-height: 1.1;
+  margin: 0;
+}
+
+.bento-main-heading {
+  font-size: 1.6rem;
+  letter-spacing: -0.05em !important;
+}
+
+.bento-heading {
+  font-size: 1.15rem;
+}
+
+/* Minimal Descriptive Text: Secondary Labels & Helper Text in Muted Gray, Uppercase, Wide Letter Spacing */
+.bento-subhead,
+.bento-label,
+.pill-meta,
+.label-minimal {
+  color: #6b7280 !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.12em !important;
+  font-size: 0.72rem !important;
+  font-weight: 700 !important;
+  line-height: 1.35;
+  display: block;
+}
+
+.bento-card-header {
   display: flex;
   flex-direction: column;
-  transition: transform var(--tr-fast), border-color var(--tr-fast), box-shadow var(--tr-fast);
-  box-shadow: 0 4px 20px rgba(15, 23, 42, 0.03);
+  gap: 4px;
+  margin-bottom: 1.25rem;
 }
 
-.showcase-card:hover {
-  transform: translateY(-4px);
-  border-color: #2563eb;
-  box-shadow: 0 10px 30px rgba(37, 99, 235, 0.08);
+/* ==============================================
+   FROSTED GLASS PILL ELEMENT OVERLAY
+   rgba(255, 255, 255, 0.85), blur(12px), padding 1rem, border-radius 1rem
+   ============================================== */
+.frosted-glass-pill {
+  position: absolute;
+  bottom: 1rem;
+  left: 1rem;
+  right: 1rem;
+  background: rgba(255, 255, 255, 0.85) !important;
+  backdrop-filter: blur(12px) !important;
+  -webkit-backdrop-filter: blur(12px) !important;
+  padding: 1rem !important;
+  border-radius: 1rem !important;
+  border: 1px solid rgba(255, 255, 255, 0.8) !important;
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.08), 0 2px 6px -1px rgba(0, 0, 0, 0.03);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  z-index: 10;
+  pointer-events: auto;
+  transition: background 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
 }
 
-.showcase-card.highlight-card {
-  border-color: rgba(37, 99, 235, 0.35);
+.pill-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  text-align: left;
 }
 
-.showcase-tag {
-  align-self: flex-start;
-  font-size: 0.72rem;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.06em;
-  padding: 3px 10px;
-  border-radius: 9999px;
-  background: #f1f5f9;
-  color: #475569;
-  margin-bottom: var(--sp-2);
+.pill-title {
+  font-size: 1.02rem !important;
+  font-weight: 900 !important;
+  color: #000000 !important;
+  letter-spacing: -0.03em !important;
+  text-transform: uppercase !important;
 }
 
-.showcase-tag.featured {
-  background: rgba(37, 99, 235, 0.1);
-  color: #2563eb;
+.pill-meta {
+  color: #6b7280 !important;
+  font-size: 0.7rem !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.12em !important;
+  text-transform: uppercase !important;
 }
 
-.showcase-card h3 {
-  font-size: 1.2rem;
-  font-weight: 800;
-  color: #0f172a;
-  margin-bottom: var(--sp-2);
-}
-
-.showcase-card p {
-  color: #64748b;
+.pill-check-indicator {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: #f3f4f6;
+  color: #9ca3af;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   font-size: 0.85rem;
-  line-height: 1.5;
-  flex: 1;
+  font-weight: 900;
+  transition: all 0.2s ease;
+  flex-shrink: 0;
+}
+
+.bento-pill-btn {
+  background: #000000 !important;
+  color: #ffffff !important;
+  border: none !important;
+  border-radius: 9999px !important;
+  padding: 9px 18px !important;
+  font-family: 'Satoshi', sans-serif !important;
+  font-size: 0.74rem !important;
+  font-weight: 900 !important;
+  letter-spacing: 0.08em !important;
+  text-transform: uppercase !important;
+  cursor: pointer;
+  transition: transform 0.2s ease, background 0.2s ease;
+  white-space: nowrap;
+}
+
+.bento-pill-btn:hover {
+  background: #1f2937 !important;
+  transform: scale(1.04);
+}
+
+/* ==============================================
+   TEMPLATE SELECTION BENTO CARDS (STEP 2 & LANDING)
+   ============================================== */
+.th.bento-card,
+.showcase-bento-card {
+  padding: 0 !important;
+  cursor: pointer;
+  border: 1px solid #f3f4f6 !important;
+  border-radius: 1.5rem !important;
+  outline: none;
+}
+
+.th.bento-card:hover,
+.showcase-bento-card:hover {
+  transform: translateY(-4px);
+  border-color: #e5e7eb !important;
+  box-shadow: 0 14px 35px -6px rgba(0, 0, 0, 0.08) !important;
+}
+
+.th.bento-card.sel {
+  border-color: #000000 !important;
+  box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.12), 0 14px 35px -6px rgba(0, 0, 0, 0.08) !important;
+}
+
+.th.bento-card.sel .frosted-glass-pill {
+  background: rgba(255, 255, 255, 0.95) !important;
+  border-color: #000000 !important;
+}
+
+.th.bento-card.sel .pill-check-indicator {
+  background: #000000;
+  color: #ffffff;
+  box-shadow: 0 0 0 2px #ffffff, 0 0 0 4px #000000;
+}
+
+/* Template Preview Wrappers */
+.th-preview-wrap,
+.showcase-preview-frame {
+  position: relative;
+  width: 100%;
+  height: 290px;
+  background: #fafafa;
+  overflow: hidden;
+  border-radius: 1.5rem;
+}
+
+.bento-col-7 .th-preview-wrap,
+.bento-col-7 .showcase-preview-frame {
+  height: 340px;
+}
+
+.bento-col-5 .th-preview-wrap,
+.bento-col-5 .showcase-preview-frame {
+  height: 340px;
+}
+
+.th-preview-scale,
+.showcase-thumb-scale {
+  width: 794px;
+  height: 1123px;
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%) scale(0.26);
+  transform-origin: top center;
+  pointer-events: none;
+  user-select: none;
+}
+
+.bento-col-7 .th-preview-scale,
+.bento-col-7 .showcase-thumb-scale {
+  transform: translateX(-50%) scale(0.33);
+}
+
+.bento-col-5 .th-preview-scale,
+.bento-col-5 .showcase-thumb-scale {
+  transform: translateX(-50%) scale(0.29);
+}
+
+/* Accent Palette Bento Card in Step 2 */
+.step2-bento-wrap {
   margin-bottom: var(--sp-4);
 }
 
-.btn-use-tpl {
-  background: rgba(37, 99, 235, 0.08);
-  color: #2563eb;
-  border: 1px solid rgba(37, 99, 235, 0.2);
-  border-radius: 9999px;
-  padding: 8px 14px;
-  font-size: 0.84rem;
-  font-weight: 700;
-  cursor: pointer;
-  width: 100%;
-  text-align: center;
-  transition: background-color var(--tr-fast), color var(--tr-fast), border-color var(--tr-fast);
+.step2-header {
+  margin-bottom: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
 }
 
-.btn-use-tpl:hover {
-  background: #2563eb;
-  color: #ffffff;
-  border-color: #2563eb;
+.bento-accent-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 1.25rem;
+}
+
+.accent-card-header {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+/* ==============================================
+   ATS PERFORMANCE DASHBOARD BENTO SECTION
+   ============================================== */
+.ats-dashboard-section {
+  margin-top: var(--sp-4);
+  margin-bottom: var(--sp-4);
+}
+
+.dashboard-header-flex {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: 1rem;
+  margin-bottom: 1.25rem;
+  flex-wrap: wrap;
+}
+
+.ats-score-badge {
+  background: #000000 !important;
+  color: #ffffff !important;
+  font-family: 'Satoshi', sans-serif !important;
+  font-weight: 900 !important;
+  letter-spacing: 0.08em !important;
+  font-size: 0.82rem !important;
+  padding: 6px 16px !important;
+  border-radius: 9999px !important;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.12);
+  display: inline-flex;
+  align-items: center;
+}
+
+/* Score Hero Card (Span 4) */
+.ats-score-hero-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  text-align: center;
+}
+
+.ats-score-hero-card .bento-card-header {
+  align-items: center;
+  width: 100%;
+}
+
+.score-status-indicator {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: #f9fafb;
+  border: 1px solid #f3f4f6;
+  padding: 5px 14px;
+  border-radius: 9999px;
+  margin-top: 1rem;
+}
+
+.status-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #10b981;
+  box-shadow: 0 0 8px rgba(16, 185, 129, 0.6);
+}
+
+/* Parser Benchmarks Breakdown (Span 8) */
+.ats-breakdown-card .ats-breakdown-list {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.75rem;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.ats-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #f9fafb !important;
+  border: 1px solid #f3f4f6 !important;
+  border-radius: 0.85rem !important;
+  padding: 10px 14px !important;
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: #1f2937 !important;
+  transition: transform 0.15s ease, background 0.15s ease;
+}
+
+.ats-item:hover {
+  background: #f3f4f6 !important;
+  transform: translateY(-1px);
+}
+
+.ats-item.pass .ats-icon {
+  background: #ecfdf5 !important;
+  color: #059669 !important;
+}
+
+.ats-item.fail .ats-icon {
+  background: #fef2f2 !important;
+  color: #e11d48 !important;
+}
+
+.ats-pts {
+  font-family: 'Satoshi', sans-serif;
+  font-weight: 900;
+  font-size: 0.75rem;
+  color: #000000;
+  letter-spacing: -0.02em;
+}
+
+/* Job Description Keyword Matcher (Span 7) */
+.jd-matcher-card .jd-input {
+  width: 100%;
+  min-height: 88px;
+  border: 1.5px solid #e5e7eb !important;
+  border-radius: 0.85rem !important;
+  padding: 12px;
+  font-size: 0.85rem;
+  background: #f9fafb !important;
+  color: #0f172a !important;
+  resize: vertical;
+  margin-top: 6px;
+  margin-bottom: 12px;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.jd-matcher-card .jd-input:focus {
+  border-color: #000000 !important;
+  box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.08) !important;
+}
+
+.jd-actions-bar {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 12px;
+}
+
+.bento-btn {
+  background: #000000 !important;
+  color: #ffffff !important;
+  border-radius: 9999px !important;
+  font-family: 'Satoshi', sans-serif !important;
+  font-weight: 900 !important;
+  letter-spacing: 0.08em !important;
+  font-size: 0.76rem !important;
+  padding: 9px 20px !important;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.12);
+  cursor: pointer;
+  border: none !important;
+  transition: background 0.2s ease, transform 0.2s ease;
+}
+
+.bento-btn:hover {
+  background: #1f2937 !important;
+  transform: translateY(-1px);
+}
+
+.jd-meter-wrap {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 10px;
+}
+
+.jd-meter-bar {
+  flex: 1;
+  height: 8px;
+  background: #f3f4f6;
+  border-radius: 9999px;
+  overflow: hidden;
+}
+
+.jd-meter-fill {
+  height: 100%;
+  background: #000000;
+  border-radius: 9999px;
+  transition: width 0.4s ease;
+}
+
+.jd-chips-container {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+.jd-chip {
+  display: inline-block;
+  padding: 3px 8px;
+  border-radius: 6px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  margin: 2px;
+  text-transform: uppercase;
+}
+
+.jd-chip.matched {
+  background: #ecfdf5;
+  color: #047857;
+  border: 1px solid #a7f3d0;
+}
+
+.jd-chip.missing {
+  background: #fff1f2;
+  color: #be123c;
+  border: 1px solid #fecdd3;
+}
+
+/* Action Verb Auditor (Span 5) */
+.weak-verbs-card {
+  display: flex;
+  flex-direction: column;
+}
+
+.weak-verbs-clean-state {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 1.25rem;
+  background: #f9fafb;
+  border: 1px solid #f3f4f6;
+  border-radius: 1rem;
+  margin-top: auto;
+  margin-bottom: auto;
+}
+
+.clean-check-icon {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: #ecfdf5;
+  color: #059669;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.1rem;
+  font-weight: 900;
+  flex-shrink: 0;
+}
+
+.clean-title {
+  font-family: 'Satoshi', sans-serif;
+  font-weight: 900;
+  font-size: 0.85rem;
+  color: #000000;
+  letter-spacing: -0.02em;
+  display: block;
+}
+
+.btn-suggest {
+  background: #000000 !important;
+  color: #ffffff !important;
+  border-radius: 9999px !important;
+  font-size: 0.72rem !important;
+  font-weight: 700 !important;
+  padding: 3px 10px !important;
+  border: none !important;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.btn-suggest:hover {
+  background: #374151 !important;
+}
+
+/* Tips & Recommendations Box (Span 12) */
+.ats-tips-card {
+  border-left: 4px solid #000000 !important;
+}
+
+.ats-tips-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 8px;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.ats-tips-list li {
+  background: #f9fafb;
+  border: 1px solid #f3f4f6;
+  border-radius: 0.75rem;
+  padding: 10px 14px;
+  font-size: 0.82rem;
+  color: #374151;
+  font-weight: 600;
 }
 
 /* ==============================================
@@ -1304,6 +1780,28 @@ select:focus {
   .hero-3d-scene {
     transform: scale(0.9);
   }
+
+  /* Bento Grid Responsive Collapsing for Tablets */
+  .bento-col-12,
+  .bento-col-8,
+  .bento-col-7,
+  .bento-col-6,
+  .bento-col-5,
+  .bento-col-4,
+  .bento-col-3 {
+    grid-column: span 12 !important;
+  }
+  .ats-breakdown-card .ats-breakdown-list {
+    grid-template-columns: 1fr;
+  }
+  .th-preview-wrap,
+  .showcase-preview-frame {
+    height: 270px !important;
+  }
+  .th-preview-scale,
+  .showcase-thumb-scale {
+    transform: translateX(-50%) scale(0.25) !important;
+  }
 }
 
 @media (max-width: 640px) {
@@ -1329,6 +1827,31 @@ select:focus {
   }
   .steps-grid {
     grid-template-columns: 1fr;
+  }
+
+  /* Bento Grid Mobile Adjustments */
+  .dashboard-header-flex {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .bento-card {
+    padding: 1.2rem !important;
+    border-radius: 1.25rem !important;
+  }
+  .jd-chips-container {
+    grid-template-columns: 1fr;
+  }
+  .frosted-glass-pill {
+    padding: 0.75rem !important;
+    bottom: 0.75rem !important;
+    left: 0.75rem !important;
+    right: 0.75rem !important;
+  }
+  .pill-title {
+    font-size: 0.9rem !important;
+  }
+  .pill-meta {
+    font-size: 0.65rem !important;
   }
 }
 
