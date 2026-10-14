@@ -165,14 +165,14 @@ textarea{resize:vertical;min-height:62px}
       <h2 style="margin-top:18px">Accent colour</h2>
       <div class="colors" id="colors"></div>
     </div>
-    <div class="nav"><button class="btn sec" data-go="1">← Back</button><button class="btn pri" id="to3">Generate my CV →</button></div>
+    <div class="nav"><button class="btn sec" data-go="1">← Back</button><button class="btn pri" id="to3">Generate My CV →</button></div>
   </section>
 
   <!-- STEP 3 -->
   <section class="step" id="s3">
     <div class="nav noprint" style="margin-bottom:14px">
       <button class="btn sec" data-go="1">✏️ Edit details</button>
-      <button class="btn sec" data-go="2">🎨 Change theme</button>
+      <button class="btn sec" id="change-theme-btn" data-go="2">🎨 Change Theme</button>
       <button class="btn pri" onclick="window.print()">🖨 Print / Save as PDF</button>
     </div>
     <p class="noprint" style="font-size:.78rem;color:var(--muted);margin-bottom:10px">Tip: in the print dialog choose "Save as PDF", set margins to <b>None</b> and turn on <b>Background graphics</b>.</p>
@@ -248,12 +248,19 @@ function hasWizardTheme() {
   return false;
 }
 
-function updateWizardNextBtn() {
-  const btn = $('#to2');
-  if (btn) {
-    btn.textContent = hasWizardTheme() ? 'Generate My CV ->' : 'Next: Choose Theme →';
-  }
+function initWizardTheme() {
+  try {
+    const stored = localStorage.getItem('craftcv_theme') || 
+                   localStorage.getItem('selected_theme') || 
+                   localStorage.getItem('theme') ||
+                   (window.CraftCVStorage && window.CraftCVStorage.loadState()?.theme);
+    if (stored) {
+      theme = stored;
+      $$('#themes .th').forEach(x => x.classList.toggle('sel', x.dataset.t === stored));
+    }
+  } catch(e) {}
 }
+initWizardTheme();
 updateWizardNextBtn();
 
 $$('[data-go]').forEach(b=>b.onclick=()=>{go(+b.dataset.go); if(+b.dataset.go===1) updateWizardNextBtn();});
