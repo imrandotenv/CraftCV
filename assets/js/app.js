@@ -1,10 +1,16 @@
 /**
- * CVForge - Application Wiring & Controller
+ * CraftCV - Application Wiring & Controller
  * Manages step navigation, user interactions, auto-save, themes, photo upload, and formatting
  */
 
-window.CVForgeApp = (() => {
+window.CraftCVApp = window.CVForgeApp = (() => {
   const PRESET_COLORS = ['#2563eb', '#059669', '#e11d48', '#d97706', '#7c3aed', '#0f766e'];
+  
+  // Module bindings with resilient fallbacks
+  const CraftCVForm = window.CraftCVForm || window.CVForgeForm;
+  const CraftCVRender = window.CraftCVRender || window.CVForgeRender;
+  const CraftCVStorage = window.CraftCVStorage || window.CVForgeStorage;
+  const CraftCVATS = window.CraftCVATS || window.CVForgeATS;
   
   // App state
   let currentStep = 1;
@@ -29,7 +35,7 @@ window.CVForgeApp = (() => {
 
     // Validate before moving past step 1
     if (stepNumber > 1 && currentStep === 1) {
-      const validation = CVForgeForm.validate();
+      const validation = CraftCVForm.validate();
       if (!validation.isValid) {
         return;
       }
@@ -68,8 +74,9 @@ window.CVForgeApp = (() => {
     }
 
     // Trigger smooth staggered reveals on active step items
-    if (window.CVForgeRevealActiveStep) {
-      window.CVForgeRevealActiveStep(stepNumber);
+    const revealFn = window.CraftCVRevealActiveStep || window.CVForgeRevealActiveStep;
+    if (revealFn) {
+      revealFn(stepNumber);
     }
 
     // Scroll smoothly to top
@@ -89,7 +96,7 @@ window.CVForgeApp = (() => {
    * Render real user data in scaled thumbnails in Step 2
    */
   function renderThemePreviews() {
-    const data = CVForgeForm.getFormData();
+    const data = CraftCVForm.getFormData();
     // Provide clean fallback text for empty fields so miniature previews look realistic
     const previewData = {
       name: data.name || 'Aarav Kumar',
@@ -109,7 +116,7 @@ window.CVForgeApp = (() => {
         { a: 'Web Development Intern', b: 'Apex Tech Solutions', c: '2025', d: 'Built responsive components\nCollaborated using Git' }
       ],
       proj: (data.proj && data.proj.length) ? data.proj : [
-        { a: 'CVForge Resume Wizard', b: 'HTML, CSS, JS', c: '2025', d: 'Print-ready A4 resume generator' }
+        { a: 'CraftCV Resume Wizard', b: 'HTML, CSS, JS', c: '2025', d: 'Print-ready A4 resume generator' }
       ],
       photo: data.photo || null,
       photoShape: data.photoShape || 'circle',
@@ -121,7 +128,7 @@ window.CVForgeApp = (() => {
 
     $$('[data-thumb]').forEach(thumbEl => {
       const template = thumbEl.dataset.thumb;
-      CVForgeRender.renderToElement(thumbEl, {
+      CraftCVRender.renderToElement(thumbEl, {
         ...previewData,
         theme: template
       });
@@ -132,15 +139,15 @@ window.CVForgeApp = (() => {
    * Render the resume to the stage sheet
    */
   function renderCV() {
-    const data = CVForgeForm.getFormData();
+    const data = CraftCVForm.getFormData();
     data.theme = activeTheme;
     data.accent = activeAccent;
     data.fontSize = activeFontSize;
     data.fitOnePage = activeFitOnePage;
     
     const cvContainer = $('#cv');
-    CVForgeRender.renderToElement(cvContainer, data);
-    document.title = (data.name ? `${data.name} - Resume` : 'CVForge Resume');
+    CraftCVRender.renderToElement(cvContainer, data);
+    document.title = (data.name ? `${data.name} - Resume` : 'CraftCV Resume');
   }
 
   /**
@@ -203,11 +210,11 @@ window.CVForgeApp = (() => {
    * Update ATS Score Ring, Checklist, Tips, and Weak Verbs Audit
    */
   function updateATSAnalysis() {
-    if (!window.CVForgeATS) return;
+    if (!window.CraftCVATS) return;
 
-    const data = CVForgeForm.getFormData();
+    const data = CraftCVForm.getFormData();
     const jdText = $('#jd-input-text')?.value || '';
-    const analysis = CVForgeATS.scoreResume(data, jdText);
+    const analysis = CraftCVATS.scoreResume(data, jdText);
 
     // Update Circular Ring Score
     const scoreProgress = $('#score-ring-progress');
@@ -335,13 +342,13 @@ window.CVForgeApp = (() => {
    * Persist state to storage
    */
   function saveCurrentState() {
-    const data = CVForgeForm.getFormData();
+    const data = CraftCVForm.getFormData();
     data.theme = activeTheme;
     data.accent = activeAccent;
     data.step = currentStep;
     data.fontSize = activeFontSize;
     data.fitOnePage = activeFitOnePage;
-    CVForgeStorage.saveState(data);
+    CraftCVStorage.saveState(data);
   }
 
   /**
@@ -376,7 +383,7 @@ window.CVForgeApp = (() => {
       ],
       proj: [
         {
-          a: 'CVForge Resume Builder',
+          a: 'CraftCV Resume Builder',
           b: 'HTML5, CSS3, Vanilla JS',
           c: '2025',
           d: 'Created a 3-step responsive resume wizard supporting 7 templates and A4 print export\nImplemented accessible validation, photo upload, and section reordering'
@@ -385,7 +392,7 @@ window.CVForgeApp = (() => {
       sectionOrder: ['edu', 'exp', 'proj']
     };
 
-    CVForgeForm.populateForm(sample);
+    CraftCVForm.populateForm(sample);
     saveCurrentState();
     updateATSAnalysis();
     
@@ -402,8 +409,8 @@ window.CVForgeApp = (() => {
   function handleClearData() {
     const confirmed = window.confirm('Are you sure you want to clear all resume data? This action cannot be undone.');
     if (confirmed) {
-      CVForgeStorage.clearState();
-      CVForgeForm.resetForm();
+      CraftCVStorage.clearState();
+      CraftCVForm.resetForm();
       setTheme('classic');
       setAccent(PRESET_COLORS[0]);
       activeFontSize = 10;
@@ -532,16 +539,16 @@ window.CVForgeApp = (() => {
             const ctx = canvas.getContext('2d');
             ctx.drawImage(img, 0, 0, w, h);
             const optimizedUrl = canvas.toDataURL('image/jpeg', 0.88);
-            CVForgeForm.setPhoto(optimizedUrl);
+            CraftCVForm.setPhoto(optimizedUrl);
           } catch (e) {
-            CVForgeForm.setPhoto(rawDataUrl);
+            CraftCVForm.setPhoto(rawDataUrl);
           }
           onFormChanged();
           if (currentStep === 2) renderThemePreviews();
           if (currentStep === 3) renderCV();
         };
         img.onerror = () => {
-          CVForgeForm.setPhoto(rawDataUrl);
+          CraftCVForm.setPhoto(rawDataUrl);
           onFormChanged();
           if (currentStep === 2) renderThemePreviews();
           if (currentStep === 3) renderCV();
@@ -560,7 +567,7 @@ window.CVForgeApp = (() => {
     });
 
     removeBtn?.addEventListener('click', () => {
-      CVForgeForm.setPhoto(null);
+      CraftCVForm.setPhoto(null);
       if (input) input.value = '';
       if (errPhoto) errPhoto.classList.remove('visible');
       onFormChanged();
@@ -570,7 +577,7 @@ window.CVForgeApp = (() => {
 
     $$('input[name="photoShape"]').forEach(radio => {
       radio.addEventListener('change', e => {
-        CVForgeForm.setPhotoShape(e.target.value);
+        CraftCVForm.setPhotoShape(e.target.value);
         onFormChanged();
         if (currentStep === 2) renderThemePreviews();
         if (currentStep === 3) renderCV();
@@ -587,11 +594,11 @@ window.CVForgeApp = (() => {
       if (!btn) return;
       const section = btn.dataset.section;
       const dir = btn.dataset.reorder;
-      CVForgeForm.reorderSection(section, dir);
+      CraftCVForm.reorderSection(section, dir);
       if (currentStep === 2) renderThemePreviews();
       if (currentStep === 3) renderCV();
     });
-    CVForgeForm.updateReorderButtonsState();
+    CraftCVForm.updateReorderButtonsState();
   }
 
   /**
@@ -638,7 +645,7 @@ window.CVForgeApp = (() => {
     const missingChips = $('#jd-missing-chips');
 
     const runJDMatch = () => {
-      const data = CVForgeForm.getFormData();
+      const data = CraftCVForm.getFormData();
       const jdText = jdInput?.value || '';
       if (!jdText.trim()) {
         if (jdResultBox) jdResultBox.classList.remove('visible');
@@ -646,7 +653,7 @@ window.CVForgeApp = (() => {
         return;
       }
 
-      const match = CVForgeATS.matchJobDescription(CVForgeATS.extractFullText(data), jdText);
+      const match = CraftCVATS.matchJobDescription(CraftCVATS.extractFullText(data), jdText);
       if (jdResultBox) jdResultBox.classList.add('visible');
       if (jdPctText) jdPctText.textContent = `Match: ${match.percentage}% (${match.matched.length}/${match.totalKeywords} keywords)`;
       if (jdMeterFill) {
@@ -726,7 +733,7 @@ window.CVForgeApp = (() => {
     // Hook repeatable row add buttons
     $$('.btn-add, .add').forEach(btn => {
       btn.addEventListener('click', () => {
-        CVForgeForm.addRow(btn.dataset.g, {}, true);
+        CraftCVForm.addRow(btn.dataset.g, {}, true);
         onFormChanged();
       });
     });
@@ -761,9 +768,9 @@ window.CVForgeApp = (() => {
     }
 
     // Load saved state or default
-    const saved = CVForgeStorage.loadState();
+    const saved = CraftCVStorage.loadState();
     if (saved) {
-      CVForgeForm.populateForm(saved);
+      CraftCVForm.populateForm(saved);
       if (saved.theme) setTheme(saved.theme);
       if (saved.accent) setAccent(saved.accent);
       if (saved.fontSize) {
@@ -785,7 +792,7 @@ window.CVForgeApp = (() => {
       }
     } else {
       // Default rows
-      ['edu', 'exp', 'proj'].forEach(g => CVForgeForm.addRow(g));
+      ['edu', 'exp', 'proj'].forEach(g => CraftCVForm.addRow(g));
       setTheme('classic');
       setAccent(PRESET_COLORS[0]);
       go(1);
@@ -802,8 +809,8 @@ window.CVForgeApp = (() => {
     setup3DHeroParallax();
 
     // Category and Skill Selection Toggles
-    if (window.CVForgeForm && window.CVForgeForm.initSkillToggles) {
-      window.CVForgeForm.initSkillToggles();
+    if (window.CraftCVForm && window.CraftCVForm.initSkillToggles) {
+      window.CraftCVForm.initSkillToggles();
     }
 
     // Staggered Scroll Fade-In-Up Reveals using IntersectionObserver
@@ -886,7 +893,7 @@ window.CVForgeApp = (() => {
       // Hide extra landing sections to keep interface focused on builder
       $$('.landing-section').forEach(sec => sec.style.display = 'none');
 
-      // Reveal the existing CVForge multi-step form interface
+      // Reveal the existing CraftCV multi-step form interface
       builder.classList.remove('builder-hidden');
       builder.classList.remove('builder-revealed');
       void builder.offsetWidth; // Reflow to cleanly restart subtle fade-in keyframe
@@ -1063,7 +1070,7 @@ window.CVForgeApp = (() => {
     });
 
     // Provide a helper to reveal elements inside active step container
-    window.CVForgeRevealActiveStep = (stepNumber) => {
+    window.CraftCVRevealActiveStep = window.CVForgeRevealActiveStep = (stepNumber) => {
       const stepEl = $(`#s${stepNumber}`);
       if (stepEl) {
         stepEl.querySelectorAll('.reveal-on-scroll').forEach((el, idx) => {
@@ -1116,7 +1123,7 @@ window.CVForgeApp = (() => {
   function setupExportFeatures() {
     // 1. Download as HTML (Blob + URL.createObjectURL with inlined CSS)
     $('#download-html-btn')?.addEventListener('click', () => {
-      const data = CVForgeForm.getFormData();
+      const data = CraftCVForm.getFormData();
       data.theme = activeTheme;
       data.accent = activeAccent;
       data.fontSize = activeFontSize;
@@ -1127,7 +1134,7 @@ window.CVForgeApp = (() => {
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>${CVForgeRender.esc(data.name || 'Resume')} - CVForge</title>
+<title>${CraftCVRender.esc(data.name || 'Resume')} - CraftCV</title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
 <style>
 :root {
@@ -1217,7 +1224,7 @@ body { background: #eef1f6; font-family: 'Inter', sans-serif; display: flex; jus
 <body>
 <div class="stage">
   <article class="sheet t-${data.theme}${data.photo ? ' has-photo' : ''}${data.fitOnePage ? ' fit-one-page' : ''}">
-    ${CVForgeRender.buildResumeHtml(data)}
+    ${CraftCVRender.buildResumeHtml(data)}
   </article>
 </div>
 </body>
@@ -1238,7 +1245,7 @@ body { background: #eef1f6; font-family: 'Inter', sans-serif; display: flex; jus
 
     // 2. Copy Plain Text
     $('#copy-text-btn')?.addEventListener('click', () => {
-      const data = CVForgeForm.getFormData();
+      const data = CraftCVForm.getFormData();
       const lines = [];
       lines.push(data.name || 'Your Name');
       if (data.title) lines.push(data.title);
@@ -1312,7 +1319,7 @@ body { background: #eef1f6; font-family: 'Inter', sans-serif; display: flex; jus
 
     // 3. Export JSON
     $('#export-json-btn')?.addEventListener('click', () => {
-      const data = CVForgeForm.getFormData();
+      const data = CraftCVForm.getFormData();
       data.theme = activeTheme;
       data.accent = activeAccent;
       data.fontSize = activeFontSize;
@@ -1343,7 +1350,7 @@ body { background: #eef1f6; font-family: 'Inter', sans-serif; display: flex; jus
       reader.onload = ev => {
         try {
           const json = JSON.parse(ev.target.result);
-          CVForgeForm.populateForm(json);
+          CraftCVForm.populateForm(json);
           if (json.theme) setTheme(json.theme);
           if (json.accent) setAccent(json.accent);
           if (json.fontSize) {
@@ -1388,5 +1395,5 @@ body { background: #eef1f6; font-family: 'Inter', sans-serif; display: flex; jus
 
 // Bootstrap on DOM ready
 document.addEventListener('DOMContentLoaded', () => {
-  CVForgeApp.init();
+  (window.CraftCVApp || window.CVForgeApp).init();
 });

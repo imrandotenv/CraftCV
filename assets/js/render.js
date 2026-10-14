@@ -1,9 +1,9 @@
 /**
- * CVForge - Render Module
+ * CraftCV - Render Module
  * Builds sanitized, accessible CV HTML from user data
  */
 
-window.CVForgeRender = (() => {
+window.CraftCVRender = window.CVForgeRender = (() => {
   /**
    * Escape special HTML characters to prevent XSS
    * @param {string} str 

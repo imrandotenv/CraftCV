@@ -1,9 +1,9 @@
 /**
- * CVForge - Form Module
+ * CraftCV - Form Module
  * Dynamic repeatable rows, data extraction, and accessible validation
  */
 
-window.CVForgeForm = (() => {
+window.CraftCVForm = window.CVForgeForm = (() => {
   const LABELS = {
     edu: ['Degree / Course', 'College / University', 'Year / Duration', 'Grade / CGPA (optional)'],
     exp: ['Job Title / Role', 'Company / Organization', 'Duration / Dates', 'Key Achievements (one per line)'],
@@ -17,7 +17,7 @@ window.CVForgeForm = (() => {
   /**
    * Helper: Escape HTML
    */
-  const esc = CVForgeRender.esc;
+  const esc = (window.CraftCVRender || window.CVForgeRender).esc;
 
   /**
    * Update visual photo preview and remove button visibility
@@ -106,8 +106,9 @@ window.CVForgeForm = (() => {
     }
 
     updateReorderButtonsState();
-    if (window.CVForgeApp) {
-      window.CVForgeApp.onFormChanged();
+    const app = window.CraftCVApp || window.CVForgeApp;
+    if (app && app.onFormChanged) {
+      app.onFormChanged();
     }
   }
 
@@ -175,7 +176,10 @@ window.CVForgeForm = (() => {
     const removeBtn = row.querySelector('.x');
     removeBtn.addEventListener('click', () => {
       row.remove();
-      CVForgeApp.onFormChanged();
+      const app = window.CraftCVApp || window.CVForgeApp;
+      if (app && app.onFormChanged) {
+        app.onFormChanged();
+      }
     });
 
     container.appendChild(row);
@@ -528,8 +532,9 @@ window.CVForgeForm = (() => {
       }
 
       skillsInput.value = currentList.join(', ');
-      if (window.CVForgeApp && window.CVForgeApp.onFormChanged) {
-        window.CVForgeApp.onFormChanged();
+      const app = window.CraftCVApp || window.CVForgeApp;
+      if (app && app.onFormChanged) {
+        app.onFormChanged();
       }
     });
 
@@ -565,8 +570,9 @@ window.CVForgeForm = (() => {
         currentList.push(skillName);
         skillsInput.value = currentList.join(', ');
         syncSkillPills();
-        if (window.CVForgeApp && window.CVForgeApp.onFormChanged) {
-          window.CVForgeApp.onFormChanged();
+        const app = window.CraftCVApp || window.CVForgeApp;
+        if (app && app.onFormChanged) {
+          app.onFormChanged();
         }
       }
       customInput.value = '';

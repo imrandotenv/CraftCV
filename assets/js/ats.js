@@ -1,10 +1,10 @@
 /**
- * CVForge - ATS Scoring Module
+ * CraftCV - ATS Scoring Module
  * Pure functions for ATS analysis, Job Description keyword matching, and Action-Verb auditing
  * SPEC SECTION 7 COMPLIANT
  */
 
-window.CVForgeATS = (() => {
+window.CraftCVATS = window.CVForgeATS = (() => {
   // Common English stopwords to filter out during JD keyword extraction
   const STOPWORDS = new Set([
     'a', 'about', 'above', 'after', 'again', 'against', 'all', 'am', 'an', 'and', 'any', 'are', 'aren',

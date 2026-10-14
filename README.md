@@ -1,4 +1,4 @@
-# CVForge — 3-Step Resume Builder & ATS Scorer
+# CraftCV — 3-Step Resume Builder & ATS Scorer
 
 > **College Competition Submission**  
 > **Mode:** `STANDARD` (Vanilla JavaScript — Zero frameworks, zero build tools, zero dependencies)  
@@ -8,7 +8,7 @@
 
 ## 🚀 Overview
 
-**CVForge** is a fast, responsive, and privacy-first web application designed to build, audit, and print competition-grade, ATS-optimized resumes in 3 intuitive steps:
+**CraftCV** is a fast, responsive, and privacy-first web application designed to build, audit, and print competition-grade, ATS-optimized resumes in 3 intuitive steps:
 
 1. **Details:** Fill personal info, upload photo, reorder sections, add education, experience, and projects with live action-verb auditing and real-time 100-point ATS score feedback.
 2. **Theme:** Select from 7 handcrafted templates displayed in live scaled thumbnails with real user data, and customize the accent color via preset palettes or a 24-bit custom color picker.

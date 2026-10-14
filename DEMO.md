@@ -1,4 +1,4 @@
-# CVForge — 3-Minute Demo Script for Judges
+# CraftCV — 3-Minute Demo Script for Judges
 
 > **Goal:** Showcase front-end engineering excellence, design polish, client-side resilience, and the ATS intelligence engine in exactly 3 minutes.
 
@@ -14,7 +14,7 @@
 ### What to Say:
 > *"Resumes today are screened by automated ATS algorithms before a human ever sees them. Most online resume builders require logins, track user data, or break when printed.*
 >
-> *We built **CVForge** — a privacy-first, zero-dependency, 100% client-side resume builder and ATS auditor.*
+> *We built **CraftCV** — a privacy-first, zero-dependency, 100% client-side resume builder and ATS auditor.*
 >
 > *Notice our custom dark luxury interface. Check out the fixed navigation bar: when I hover over these links, notice the smooth mechanical character roll. That's built using pure CSS custom properties with ascending transition delays — zero JavaScript overhead.*
 >
