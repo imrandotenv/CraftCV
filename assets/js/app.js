@@ -1284,18 +1284,16 @@ window.CraftCVApp = window.CVForgeApp = (() => {
   }
 
   /**
-   * Phase 5: Export features (Download HTML Blob, Copy Text, Export JSON, Import JSON)
+   * 1. Download Standalone HTML Resume
    */
-  function setupExportFeatures() {
-    // 1. Download as HTML (Blob + URL.createObjectURL with inlined CSS)
-    $('#download-html-btn')?.addEventListener('click', () => {
-      const data = CraftCVForm.getFormData();
-      data.theme = activeTheme;
-      data.accent = activeAccent;
-      data.fontSize = activeFontSize;
-      data.fitOnePage = activeFitOnePage;
+  function downloadHtmlResume() {
+    const data = CraftCVForm.getFormData();
+    data.theme = activeTheme;
+    data.accent = activeAccent;
+    data.fontSize = activeFontSize;
+    data.fitOnePage = activeFitOnePage;
 
-      const standaloneHtml = `<!DOCTYPE html>
+    const standaloneHtml = `<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -1402,6 +1400,7 @@ body { background: #eef1f6; font-family: 'Inter', sans-serif; display: flex; jus
 </body>
 </html>`;
 
+    try {
       const blob = new Blob([standaloneHtml], { type: 'text/html;charset=utf-8' });
       const url = URL.createObjectURL(blob);
       const a = document.createElement('a');
@@ -1411,92 +1410,144 @@ body { background: #eef1f6; font-family: 'Inter', sans-serif; display: flex; jus
       document.body.appendChild(a);
       a.click();
       document.body.removeChild(a);
-      URL.revokeObjectURL(url);
+      setTimeout(() => URL.revokeObjectURL(url), 1000);
       showToast('✓ Downloaded standalone HTML resume!');
-    });
+    } catch (err) {
+      showToast('Failed to download HTML file.');
+    }
+  }
 
-    // 2. Copy Plain Text
-    $('#copy-text-btn')?.addEventListener('click', () => {
-      const data = CraftCVForm.getFormData();
-      const lines = [];
-      lines.push(data.name || 'Your Name');
-      if (data.title) lines.push(data.title);
-      lines.push('----------------------------------------');
-      const contact = [data.email, data.phone, data.loc, data.link].filter(Boolean).join(' | ');
-      if (contact) lines.push(contact);
-      lines.push('');
-
-      if (data.sum) {
-        lines.push('PROFESSIONAL SUMMARY');
-        lines.push(data.sum);
-        lines.push('');
-      }
-
-      if (data.skills && data.skills.length) {
-        lines.push('TECHNICAL & CORE SKILLS');
-        lines.push(data.skills.join(', '));
-        lines.push('');
-      }
-
-      const order = data.sectionOrder || ['edu', 'exp', 'proj'];
-      order.forEach(secKey => {
-        if (secKey === 'exp' && data.exp && data.exp.length) {
-          lines.push('WORK EXPERIENCE');
-          data.exp.forEach(e => {
-            lines.push(`• ${e.a} - ${e.b} (${e.c})`);
-            if (e.d) e.d.split('\n').forEach(b => lines.push(`  - ${b.trim()}`));
-          });
-          lines.push('');
-        }
-        if (secKey === 'proj' && data.proj && data.proj.length) {
-          lines.push('PROJECTS');
-          data.proj.forEach(p => {
-            lines.push(`• ${p.a} | ${p.b} (${p.c})`);
-            if (p.d) p.d.split('\n').forEach(b => lines.push(`  - ${b.trim()}`));
-          });
-          lines.push('');
-        }
-        if (secKey === 'edu' && data.edu && data.edu.length) {
-          lines.push('EDUCATION');
-          data.edu.forEach(ed => {
-            lines.push(`• ${ed.a} - ${ed.b} (${ed.c}) ${ed.e ? `[${ed.e}]` : ''}`);
-          });
-          lines.push('');
-        }
-      });
-
-      if (data.certs && data.certs.length) {
-        lines.push('CERTIFICATIONS & ACHIEVEMENTS');
-        data.certs.forEach(c => lines.push(`• ${c}`));
-        lines.push('');
-      }
-
-      const text = lines.join('\n');
-      if (navigator.clipboard && navigator.clipboard.writeText) {
-        navigator.clipboard.writeText(text).then(() => {
-          showToast('✓ Resume plain text copied to clipboard!');
-        }).catch(() => {
-          showToast('Failed to copy. Please check browser permissions.');
-        });
-      } else {
-        const ta = document.createElement('textarea');
-        ta.value = text;
-        document.body.appendChild(ta);
-        ta.select();
-        document.execCommand('copy');
-        document.body.removeChild(ta);
+  /**
+   * Fallback Copy method using temporary textarea
+   */
+  function fallbackCopyText(text, onSuccess) {
+    try {
+      const ta = document.createElement('textarea');
+      ta.value = text;
+      ta.style.position = 'fixed';
+      ta.style.left = '-9999px';
+      ta.style.top = '0';
+      ta.setAttribute('readonly', '');
+      document.body.appendChild(ta);
+      ta.focus();
+      ta.select();
+      const successful = document.execCommand('copy');
+      document.body.removeChild(ta);
+      if (successful) {
+        if (onSuccess) onSuccess();
         showToast('✓ Resume plain text copied to clipboard!');
+      } else {
+        showToast('Failed to copy. Please check browser permissions.');
+      }
+    } catch (e) {
+      showToast('Failed to copy. Please check browser permissions.');
+    }
+  }
+
+  /**
+   * 2. Copy Plain Text with modern clipboard API and 'Copied!' button feedback
+   */
+  function copyPlainTextResume(btn) {
+    const data = CraftCVForm.getFormData();
+    const copyBtn = btn || $('#copy-text-btn');
+    
+    // Cache original text safely
+    if (copyBtn && !copyBtn.dataset.originalText) {
+      copyBtn.dataset.originalText = copyBtn.textContent.trim() || '📋 Copy Plain Text';
+    }
+    const originalText = (copyBtn && copyBtn.dataset.originalText) ? copyBtn.dataset.originalText : '📋 Copy Plain Text';
+
+    const lines = [];
+    lines.push(data.name || 'Your Name');
+    if (data.title) lines.push(data.title);
+    lines.push('----------------------------------------');
+    const contact = [data.email, data.phone, data.loc, data.link].filter(Boolean).join(' | ');
+    if (contact) lines.push(contact);
+    lines.push('');
+
+    if (data.sum) {
+      lines.push('PROFESSIONAL SUMMARY');
+      lines.push(data.sum);
+      lines.push('');
+    }
+
+    if (data.skills && data.skills.length) {
+      lines.push('TECHNICAL & CORE SKILLS');
+      lines.push(data.skills.join(', '));
+      lines.push('');
+    }
+
+    const order = data.sectionOrder || ['edu', 'exp', 'proj'];
+    order.forEach(secKey => {
+      if (secKey === 'exp' && data.exp && data.exp.length) {
+        lines.push('WORK EXPERIENCE');
+        data.exp.forEach(e => {
+          lines.push(`• ${e.a || ''} - ${e.b || ''} (${e.c || ''})`);
+          if (e.d) e.d.split('\n').forEach(b => lines.push(`  - ${b.trim()}`));
+        });
+        lines.push('');
+      }
+      if (secKey === 'proj' && data.proj && data.proj.length) {
+        lines.push('PROJECTS');
+        data.proj.forEach(p => {
+          lines.push(`• ${p.a || ''} | ${p.b || ''} (${p.c || ''})`);
+          if (p.d) p.d.split('\n').forEach(b => lines.push(`  - ${b.trim()}`));
+        });
+        lines.push('');
+      }
+      if (secKey === 'edu' && data.edu && data.edu.length) {
+        lines.push('EDUCATION');
+        data.edu.forEach(ed => {
+          lines.push(`• ${ed.a || ''} - ${ed.b || ''} (${ed.c || ''}) ${ed.e ? `[${ed.e}]` : ''}`);
+        });
+        lines.push('');
       }
     });
 
-    // 3. Export JSON
-    $('#export-json-btn')?.addEventListener('click', () => {
-      const data = CraftCVForm.getFormData();
-      data.theme = activeTheme;
-      data.accent = activeAccent;
-      data.fontSize = activeFontSize;
-      data.fitOnePage = activeFitOnePage;
+    if (data.certs && data.certs.length) {
+      lines.push('CERTIFICATIONS & ACHIEVEMENTS');
+      data.certs.forEach(c => lines.push(`• ${c}`));
+      lines.push('');
+    }
 
+    const text = lines.join('\n');
+
+    // Visual feedback helper
+    const updateButtonFeedback = () => {
+      if (copyBtn) {
+        copyBtn.textContent = 'Copied!';
+        if (copyBtn._copiedTimer) clearTimeout(copyBtn._copiedTimer);
+        copyBtn._copiedTimer = setTimeout(() => {
+          copyBtn.textContent = originalText;
+        }, 2000);
+      }
+    };
+
+    const clipboardApi = (typeof navigator !== 'undefined' && navigator.clipboard) || (typeof window !== 'undefined' && window.navigator && window.navigator.clipboard);
+    if (clipboardApi && clipboardApi.writeText) {
+      clipboardApi.writeText(text).then(() => {
+        updateButtonFeedback();
+        showToast('✓ Resume plain text copied to clipboard!');
+      }).catch(err => {
+        // Fallback to execCommand if permissions prompt was denied or blocked
+        fallbackCopyText(text, updateButtonFeedback);
+      });
+    } else {
+      fallbackCopyText(text, updateButtonFeedback);
+    }
+  }
+
+  /**
+   * 3. Export JSON Resume
+   */
+  function exportJsonResume() {
+    const data = CraftCVForm.getFormData();
+    data.theme = activeTheme;
+    data.accent = activeAccent;
+    data.fontSize = activeFontSize;
+    data.fitOnePage = activeFitOnePage;
+
+    try {
       const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
       const url = URL.createObjectURL(blob);
       const a = document.createElement('a');
@@ -1505,14 +1556,52 @@ body { background: #eef1f6; font-family: 'Inter', sans-serif; display: flex; jus
       document.body.appendChild(a);
       a.click();
       document.body.removeChild(a);
-      URL.revokeObjectURL(url);
+      setTimeout(() => URL.revokeObjectURL(url), 1000);
       showToast('✓ Exported resume JSON file!');
-    });
+    } catch (err) {
+      showToast('Failed to export JSON file.');
+    }
+  }
+
+  /**
+   * Phase 5: Export features (Download HTML Blob, Copy Text, Export JSON, Import JSON)
+   */
+  function setupExportFeatures() {
+    // 1. Download as HTML (Blob + URL.createObjectURL with inlined CSS)
+    const downloadHtmlBtn = $('#download-html-btn');
+    if (downloadHtmlBtn) {
+      downloadHtmlBtn.addEventListener('click', e => {
+        if (e && e.preventDefault) e.preventDefault();
+        downloadHtmlResume();
+      });
+    }
+
+    // 2. Copy Plain Text
+    const copyTextBtn = $('#copy-text-btn');
+    if (copyTextBtn) {
+      copyTextBtn.addEventListener('click', e => {
+        if (e && e.preventDefault) e.preventDefault();
+        copyPlainTextResume(copyTextBtn);
+      });
+    }
+
+    // 3. Export JSON
+    const exportJsonBtn = $('#export-json-btn');
+    if (exportJsonBtn) {
+      exportJsonBtn.addEventListener('click', e => {
+        if (e && e.preventDefault) e.preventDefault();
+        exportJsonResume();
+      });
+    }
 
     // 4. Import JSON
-    $('#import-json-btn')?.addEventListener('click', () => {
-      $('#import-json-input')?.click();
-    });
+    const importJsonBtn = $('#import-json-btn');
+    if (importJsonBtn) {
+      importJsonBtn.addEventListener('click', e => {
+        if (e && e.preventDefault) e.preventDefault();
+        $('#import-json-input')?.click();
+      });
+    }
 
     $('#import-json-input')?.addEventListener('change', e => {
       const file = e.target.files[0];
@@ -1567,7 +1656,10 @@ body { background: #eef1f6; font-family: 'Inter', sans-serif; display: flex; jus
     hasStoredTheme,
     getTheme: () => activeTheme,
     applyFitToOnePage,
-    A4_HEIGHT_PX: () => A4_HEIGHT_PX
+    A4_HEIGHT_PX: () => A4_HEIGHT_PX,
+    downloadHtmlResume,
+    copyPlainTextResume,
+    exportJsonResume
   };
 })();
 
