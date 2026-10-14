@@ -1974,13 +1974,14 @@ label.f {
    Standard wide footer, subtle top border (#e5e7eb),
    stark black logo on left, minimalist utility links on right
    ============================================== */
+footer,
 .app-footer {
   width: 100%;
   border-top: 1px solid #e5e7eb;
-  background: #ffffff;
+  background: transparent;
   padding: 2rem var(--sp-4);
   position: relative;
-  z-index: 10;
+  z-index: 100;
   box-sizing: border-box;
 }
 
