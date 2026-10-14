@@ -226,26 +226,50 @@ COLORS.forEach((c,i)=>{const d=document.createElement('div');d.className='cd'+(i
 
 /* ---------- build the CV ---------- */
 function render(){
+  if (window.CraftCVRender) {
+    const data = (window.CraftCVForm && window.CraftCVForm.getFormData) ? CraftCVForm.getFormData() : {
+      name: val('name'),
+      title: val('title'),
+      email: val('email'),
+      phone: val('phone'),
+      loc: val('loc'),
+      link: val('link'),
+      sum: val('sum'),
+      skills: list(val('skills')),
+      langs: list(val('langs')),
+      certs: val('certs').split('\n').filter(x=>x.trim()),
+      edu: rows('edu'),
+      exp: rows('exp'),
+      proj: rows('proj'),
+      theme: theme,
+      accent: accent
+    };
+    data.theme = theme;
+    data.accent = accent;
+    CraftCVRender.renderToElement($('#cv'), data);
+    document.title = (val('name') || 'Resume') + ' - Resume';
+    return;
+  }
   const f=n=>esc(val(n)), bullets=t=>t?`<ul>${t.split('\n').filter(x=>x.trim()).map(x=>`<li>${esc(x)}</li>`).join('')}</ul>`:'';
-  const item=(o,sub)=>`<div class="it"><b>${esc(o.a)}</b><span>${esc(sub)}</span>${bullets(o.d)}</div>`;
+  const item=(o,sub)=>`<div class="it"><b>${esc(o.a||o.title||o.role||o.degree||o.b)}</b><span>${esc(sub)}</span>${bullets(o.d||o.desc||o.description)}</div>`;
   const contact=[['✉',val('email')],['☎',val('phone')],['📍',val('loc')],['🔗',val('link')]].filter(x=>x[1]).map(x=>`<li>${x[0]} ${esc(x[1])}</li>`).join('');
   const skills=list(val('skills')), langs=list(val('langs')), certs=val('certs').split('\n').filter(x=>x.trim());
   const edu=rows('edu'), exp=rows('exp'), proj=rows('proj'), sum=val('sum');
-  const sec=(t,h)=>h?`<section><h3>${t}</h3>${h}</section>`:'';
+  const sec=(t,h,c)=>h?`<section class="cv-section ${c||''}"><h3>${t}</h3>${h}</section>`:'';
   $('#cv').className='sheet t-'+theme;
   $('#cv').innerHTML=`
    <header><h1>${f('name')}</h1><p class="role">${f('title')}</p></header>
    <aside>
-     ${sec('Contact',contact&&`<ul class="p">${contact}</ul>`)}
-     ${sec('Skills',skills.length&&`<ul class="tags">${skills.map(s=>`<li>${esc(s)}</li>`).join('')}</ul>`)}
-     ${sec('Languages',langs.length&&`<ul class="p">${langs.map(s=>`<li>${esc(s)}</li>`).join('')}</ul>`)}
+     ${sec('Contact',contact&&`<ul class="p">${contact}</ul>`,'cv-sec-contact')}
+     ${sec('Skills',skills.length&&`<ul class="tags">${skills.map(s=>`<li>${esc(s)}</li>`).join('')}</ul>`,'cv-sec-skills')}
+     ${sec('Languages',langs.length&&`<ul class="p">${langs.map(s=>`<li>${esc(s)}</li>`).join('')}</ul>`,'cv-sec-languages')}
    </aside>
-   <main>
-     ${sec('Summary',sum&&`<p>${esc(sum)}</p>`)}
-     ${sec('Experience',exp.map(o=>item(o,[o.b,o.c].filter(Boolean).join(' · '))).join(''))}
-     ${sec('Projects',proj.map(o=>item(o,[o.b,o.c].filter(Boolean).join(' · '))).join(''))}
-     ${sec('Education',edu.map(o=>item(o,[o.b,o.c,o.e].filter(Boolean).join(' · '))).join(''))}
-     ${sec('Certifications',certs.length&&`<ul>${certs.map(s=>`<li>${esc(s)}</li>`).join('')}</ul>`)}
+   <main class="cv-main" id="cv-main">
+     ${sec('Summary',sum&&`<p>${esc(sum)}</p>`,'cv-sec-summary')}
+     ${sec('Experience',exp.map(o=>item(o,[o.b||o.company,o.c||o.dates].filter(Boolean).join(' · '))).join(''),'cv-sec-experience')}
+     ${sec('Projects',proj.map(o=>item(o,[o.b||o.tech,o.c||o.link].filter(Boolean).join(' · '))).join(''),'cv-sec-projects')}
+     ${sec('Education',edu.map(o=>item(o,[o.b||o.school,o.c||o.year,o.e||o.grade].filter(Boolean).join(' · '))).join(''),'cv-sec-education')}
+     ${sec('Certifications',certs.length&&`<ul>${certs.map(s=>`<li>${esc(s)}</li>`).join('')}</ul>`,'cv-sec-certifications')}
    </main>`;
   document.title=(val('name')||'Resume')+' - Resume';
 }

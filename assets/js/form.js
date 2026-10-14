@@ -276,12 +276,12 @@ window.CraftCVForm = window.CVForgeForm = (() => {
     };
 
     setVal('name', data.name);
-    setVal('title', data.title);
+    setVal('title', data.title || data.role || data.jobTitle);
     setVal('email', data.email);
-    setVal('phone', data.phone);
-    setVal('loc', data.loc);
-    setVal('link', data.link);
-    setVal('sum', data.sum);
+    setVal('phone', data.phone || data.telephone || data.mobile);
+    setVal('loc', data.loc || data.location || data.city || data.address);
+    setVal('link', data.link || data.website || data.url || data.portfolio);
+    setVal('sum', data.sum || data.summary || data.about || data.profile || data.objective);
 
     if (Array.isArray(data.skills)) {
       setVal('skills', data.skills.join(', '));
@@ -289,16 +289,18 @@ window.CraftCVForm = window.CVForgeForm = (() => {
       setVal('skills', data.skills);
     }
 
-    if (Array.isArray(data.langs)) {
-      setVal('langs', data.langs.join(', '));
-    } else if (typeof data.langs === 'string') {
-      setVal('langs', data.langs);
+    const langsData = data.langs || data.languages;
+    if (Array.isArray(langsData)) {
+      setVal('langs', langsData.join(', '));
+    } else if (typeof langsData === 'string') {
+      setVal('langs', langsData);
     }
 
-    if (Array.isArray(data.certs)) {
-      setVal('certs', data.certs.join('\n'));
-    } else if (typeof data.certs === 'string') {
-      setVal('certs', data.certs);
+    const certsData = data.certs || data.certifications;
+    if (Array.isArray(certsData)) {
+      setVal('certs', certsData.join('\n'));
+    } else if (typeof certsData === 'string') {
+      setVal('certs', certsData);
     }
 
     // Restore Photo & Shape
@@ -325,7 +327,17 @@ window.CraftCVForm = window.CVForgeForm = (() => {
     ['edu', 'exp', 'proj'].forEach(group => {
       const container = document.getElementById(`g-${group}`);
       if (container) container.innerHTML = '';
-      const items = Array.isArray(data[group]) ? data[group] : [];
+      const alias = (group === 'edu') ? 'education' : ((group === 'exp') ? 'experience' : 'projects');
+      const rawItems = Array.isArray(data[group]) ? data[group] : (Array.isArray(data[alias]) ? data[alias] : []);
+      const items = rawItems.map(item => ({
+        a: item.a || item.title || item.degree || item.role || item.position || item.name || '',
+        b: item.b || item.company || item.school || item.institution || item.college || item.university || item.organization || item.tech || '',
+        c: item.c || item.dates || item.duration || item.year || item.link || '',
+        d: Array.isArray(item.d || item.bullets || item.highlights)
+          ? (item.d || item.bullets || item.highlights).join('\n')
+          : (item.d || item.desc || item.description || ''),
+        e: item.e || item.grade || item.gpa || item.score || item.marks || ''
+      }));
       if (items.length > 0) {
         items.forEach(item => addRow(group, item));
       } else {

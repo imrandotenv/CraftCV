@@ -1161,42 +1161,48 @@ body { background: #eef1f6; font-family: 'Inter', sans-serif; display: flex; jus
 .sheet .avatar-circle { width: 78px; height: 78px; border-radius: 50%; overflow: hidden; display: flex; align-items: center; justify-content: center; border: 2px solid var(--accent); background: #f1f5f9; color: var(--accent); font-weight: 700; font-size: 1.5rem; }
 .sheet .avatar-circle.is-rounded { border-radius: 14px !important; }
 .sheet .avatar-img { width: 100%; height: 100%; object-fit: cover; }
+/* Content Body Safeguards */
+.sheet main, .sheet .cv-main { display: block !important; visibility: visible !important; opacity: 1 !important; height: auto !important; }
+.sheet section, .sheet .cv-section { display: block !important; visibility: visible !important; opacity: 1 !important; height: auto !important; }
 /* Classic */
 .t-classic { font-family: "Playfair Display", Georgia, serif; padding: 16mm; }
+.t-classic main { display: block !important; margin-top: 14px; }
 .t-classic header { text-align: center; border-bottom: 3px double var(--accent); padding-bottom: 12px; margin-bottom: 14px; }
 .t-classic aside ul.p { display: flex; flex-wrap: wrap; justify-content: center; gap: 12px; }
 /* Modern */
-.t-modern { display: grid; grid-template-columns: 34% 66%; grid-template-areas: "h h" "s m"; }
+.t-modern { display: grid; grid-template-columns: 34% 66%; grid-template-rows: auto 1fr; grid-template-areas: "h h" "s m"; }
 .t-modern header { grid-area: h; background: var(--accent); color: #fff !important; padding: 14mm 12mm 10mm; }
 .t-modern header h1, .t-modern header .role { color: #fff !important; }
 .t-modern aside { grid-area: s; background: #f8fafc; padding: 8mm 7mm; border-right: 1px solid #e2e8f0; }
-.t-modern main { grid-area: m; padding: 8mm 10mm; }
+.t-modern main { grid-area: m; padding: 8mm 10mm; display: block !important; }
 /* Minimal */
 .t-minimal { padding: 16mm; }
+.t-minimal main { display: block !important; margin-top: 14px; }
 .t-minimal h3 { border: 0; border-left: 4px solid var(--accent); padding-left: 8px; }
 .t-minimal header { border-bottom: 1px solid #e5e7eb; padding-bottom: 12px; margin-bottom: 14px; }
 /* Bold */
-.t-bold { display: grid; grid-template-columns: 34% 66%; grid-template-areas: "h h" "s m"; }
+.t-bold { display: grid; grid-template-columns: 34% 66%; grid-template-rows: auto 1fr; grid-template-areas: "h h" "s m"; }
 .t-bold header { grid-area: h; background: linear-gradient(125deg, var(--accent) 0%, #111827 100%); color: #fff !important; padding: 16mm 12mm; }
 .t-bold header h1, .t-bold header .role { color: #fff !important; }
 .t-bold aside { grid-area: s; background: #f3f4f6; padding: 8mm 7mm; }
-.t-bold main { grid-area: m; padding: 8mm 10mm; }
+.t-bold main { grid-area: m; padding: 8mm 10mm; display: block !important; }
 .t-bold h3 { border: 0; background: var(--accent); color: #fff !important; padding: 3px 8px; border-radius: 3px; display: inline-block; }
 /* Creative */
-.t-creative { display: grid; grid-template-columns: 33% 67%; grid-template-areas: "s m"; }
+.t-creative { display: grid; grid-template-columns: 33% 67%; grid-template-rows: auto 1fr; grid-template-areas: "s h" "s m"; }
+.t-creative header { grid-area: h; border-bottom: 2px solid var(--accent); padding: 12mm 10mm 6mm; margin-bottom: 0; }
+.t-creative header h1 { color: var(--accent); font-size: 26pt; }
 .t-creative aside { grid-area: s; background: var(--accent); color: #fff !important; padding: 12mm 8mm; }
 .t-creative aside h3 { color: #fff !important; border-bottom: 2px solid rgba(255,255,255,0.4); }
 .t-creative aside .tags li { background: rgba(255,255,255,0.2); border: 1px solid rgba(255,255,255,0.45); color: #fff !important; }
-.t-creative main { grid-area: m; padding: 12mm 10mm; }
-.t-creative header { border-bottom: 2px solid var(--accent); padding-bottom: 12px; margin-bottom: 14px; }
+.t-creative main { grid-area: m; padding: 6mm 10mm 12mm; display: block !important; }
 /* Executive */
-.t-executive { display: grid; grid-template-columns: 33% 67%; grid-template-areas: "h h" "s m"; }
+.t-executive { display: grid; grid-template-columns: 33% 67%; grid-template-rows: auto 1fr; grid-template-areas: "h h" "s m"; }
 .t-executive header { grid-area: h; background: #0f172a; color: #fff !important; padding: 14mm 12mm; border-bottom: 4px solid #d4af37; }
 .t-executive header h1 { font-family: "Playfair Display", Georgia, serif; color: #fff !important; }
 .t-executive header .role { color: #d4af37 !important; }
 .t-executive aside { grid-area: s; background: #1e293b; color: #e2e8f0 !important; padding: 10mm 8mm; }
 .t-executive aside h3 { color: #d4af37 !important; border-bottom: 1.5px solid #475569; }
-.t-executive main { grid-area: m; padding: 10mm 12mm; }
+.t-executive main { grid-area: m; padding: 10mm 12mm; display: block !important; }
 .t-executive main h3 { font-family: "Playfair Display", Georgia, serif; border-bottom: 2px solid #d4af37; }
 /* Compact */
 .t-compact { padding: 9mm 12mm; font-size: 9pt; line-height: 1.35; }

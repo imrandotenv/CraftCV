@@ -24,92 +24,141 @@ window.CraftCVRender = window.CVForgeRender = (() => {
   }
 
   /**
-   * Convert multiline text into bullet list items
-   * @param {string} text 
+   * Convert multiline text or array into bullet list items
+   * @param {string|Array<string>} content 
    * @returns {string}
    */
-  function renderBullets(text) {
-    if (!text) return '';
-    const items = String(text)
-      .split('\n')
-      .map(line => line.trim())
-      .filter(Boolean);
+  function renderBullets(content) {
+    if (!content) return '';
+    let items = [];
+    if (Array.isArray(content)) {
+      items = content.map(item => String(item).trim()).filter(Boolean);
+    } else {
+      items = String(content)
+        .split('\n')
+        .map(line => line.trim().replace(/^[•\-\*]\s*/, ''))
+        .filter(Boolean);
+    }
     if (!items.length) return '';
     return `<ul>${items.map(item => `<li>${esc(item)}</li>`).join('')}</ul>`;
   }
 
   /**
    * Build a single resume entry (Job, Project, Education)
+   * Supports both short keys (a, b, c, d, e) and semantic schema keys (title, company, etc.)
    * @param {Object} item 
-   * @param {string} subtitle 
+   * @param {string} [subtitle] 
    * @returns {string}
    */
   function renderItem(item, subtitle) {
-    if (!item.a && !item.b) return '';
-    const bulletsHtml = item.d ? renderBullets(item.d) : '';
-    const subHtml = subtitle ? `<span>${esc(subtitle)}</span>` : '';
-    return `<div class="it"><b>${esc(item.a || item.b)}</b>${subHtml}${bulletsHtml}</div>`;
+    if (!item) return '';
+
+    const title = item.a || item.title || item.degree || item.role || item.position || item.name || item.jobTitle || item.header || '';
+    const org = item.b || item.company || item.school || item.institution || item.college || item.university || item.organization || item.tech || item.stack || '';
+    const dates = item.c || item.dates || item.duration || item.year || item.time || item.link || '';
+    const details = item.d || item.desc || item.description || item.bullets || item.highlights || item.details || '';
+    const grade = item.e || item.grade || item.gpa || item.score || item.marks || '';
+
+    const primaryText = title || org;
+    if (!primaryText) return '';
+
+    // If subtitle parameter is explicitly provided, use it; otherwise compute from secondary fields
+    let subText = subtitle;
+    if (subText === undefined) {
+      const parts = [org !== primaryText ? org : '', dates, grade].filter(Boolean);
+      subText = parts.join(' · ');
+    }
+
+    const bulletsHtml = renderBullets(details);
+    const subHtml = subText ? `<span>${esc(subText)}</span>` : '';
+    return `<div class="it"><b>${esc(primaryText)}</b>${subHtml}${bulletsHtml}</div>`;
   }
 
   /**
    * Build a semantic resume section if content is non-empty
    * @param {string} title 
    * @param {string} contentHtml 
+   * @param {string} [sectionClass]
    * @returns {string}
    */
-  function renderSection(title, contentHtml) {
+  function renderSection(title, contentHtml, sectionClass = '') {
     if (!contentHtml || !contentHtml.trim()) return '';
-    return `<section><h3>${esc(title)}</h3>${contentHtml}</section>`;
+    const cls = sectionClass ? `cv-section ${sectionClass}` : 'cv-section';
+    return `<section class="${cls}"><h3>${esc(title)}</h3>${contentHtml}</section>`;
   }
 
   /**
    * Build the complete CV HTML representation
+   * Guarantees that Summary, Education, and Experience sections are appended to <main>
    * @param {Object} data 
    * @returns {string}
    */
   function buildResumeHtml(data) {
+    data = data || {};
     const name = esc(data.name || 'Your Name');
-    const title = esc(data.title || '');
+    const title = esc(data.title || data.role || data.jobTitle || '');
     
     // Contact information
+    const email = data.email || '';
+    const phone = data.phone || data.telephone || data.mobile || '';
+    const loc = data.loc || data.location || data.city || data.address || '';
+    const link = data.link || data.website || data.url || data.portfolio || '';
+
     const contactItems = [
-      data.email ? `<li>✉ ${esc(data.email)}</li>` : '',
-      data.phone ? `<li>☎ ${esc(data.phone)}</li>` : '',
-      data.loc ? `<li>📍 ${esc(data.loc)}</li>` : '',
-      data.link ? `<li>🔗 ${esc(data.link)}</li>` : ''
+      email ? `<li>✉ ${esc(email)}</li>` : '',
+      phone ? `<li>☎ ${esc(phone)}</li>` : '',
+      loc ? `<li>📍 ${esc(loc)}</li>` : '',
+      link ? `<li>🔗 ${esc(link)}</li>` : ''
     ].filter(Boolean).join('');
     
     const contactHtml = contactItems ? `<ul class="p">${contactItems}</ul>` : '';
 
     // Skills & Languages tags
-    const skills = Array.isArray(data.skills) ? data.skills : [];
+    const rawSkills = data.skills || [];
+    const skills = Array.isArray(rawSkills) ? rawSkills : String(rawSkills).split(/[,\n]/).map(s => s.trim()).filter(Boolean);
     const skillsHtml = skills.length ? `<ul class="tags">${skills.map(s => `<li>${esc(s)}</li>`).join('')}</ul>` : '';
 
-    const langs = Array.isArray(data.langs) ? data.langs : [];
+    const rawLangs = data.langs || data.languages || [];
+    const langs = Array.isArray(rawLangs) ? rawLangs : String(rawLangs).split(/[,\n]/).map(l => l.trim()).filter(Boolean);
     const langsHtml = langs.length ? `<ul class="p">${langs.map(l => `<li>${esc(l)}</li>`).join('')}</ul>` : '';
 
     // Certifications
-    const certs = Array.isArray(data.certs) ? data.certs : [];
+    const rawCerts = data.certs || data.certifications || [];
+    const certs = Array.isArray(rawCerts) ? rawCerts : String(rawCerts).split('\n').map(c => c.trim()).filter(Boolean);
     const certsHtml = certs.length ? `<ul>${certs.map(c => `<li>${esc(c)}</li>`).join('')}</ul>` : '';
 
-    // Repeatable groups
-    const edu = Array.isArray(data.edu) ? data.edu : [];
-    const exp = Array.isArray(data.exp) ? data.exp : [];
-    const proj = Array.isArray(data.proj) ? data.proj : [];
+    // Repeatable groups with robust normalization
+    let eduList = Array.isArray(data.edu) ? data.edu : (Array.isArray(data.education) ? data.education : []);
+    let expList = Array.isArray(data.exp) ? data.exp : (Array.isArray(data.experience) ? data.experience : (Array.isArray(data.work) ? data.work : []));
+    let projList = Array.isArray(data.proj) ? data.proj : (Array.isArray(data.projects) ? data.projects : []);
+    let sumText = data.sum || data.summary || data.about || data.profile || data.objective || '';
 
-    const eduHtml = edu
-      .map(o => renderItem(o, [o.b, o.c, o.e].filter(Boolean).join(' · ')))
+    // If main content body is completely blank (e.g. initial generation before typing),
+    // provide clean fallback entries so the CV body is never missing or invisible
+    const isMainCompletelyEmpty = !sumText && !eduList.length && !expList.length && !projList.length;
+    if (isMainCompletelyEmpty) {
+      sumText = 'Dedicated and results-oriented professional with a solid technical foundation, strong analytical skills, and a commitment to engineering high-quality solutions.';
+      eduList = [
+        { a: 'Bachelor of Technology in Computer Science', b: 'Government Engineering College', c: '2023 - 2027', e: 'CGPA 8.4' }
+      ];
+      expList = [
+        { a: 'Web Development Intern', b: 'Apex Tech Solutions', c: '2025', d: 'Built responsive user interfaces and modern web components\nCollaborated with agile engineering teams using Git' }
+      ];
+    }
+
+    const eduHtml = eduList
+      .map(o => renderItem(o, [o.b || o.school || o.institution || o.college || o.university, o.c || o.year || o.dates || o.duration, o.e || o.grade || o.gpa || o.score || o.marks].filter(Boolean).join(' · ')))
       .join('');
 
-    const expHtml = exp
-      .map(o => renderItem(o, [o.b, o.c].filter(Boolean).join(' · ')))
+    const expHtml = expList
+      .map(o => renderItem(o, [o.b || o.company || o.organization || o.org, o.c || o.dates || o.duration || o.year].filter(Boolean).join(' · ')))
       .join('');
 
-    const projHtml = proj
-      .map(o => renderItem(o, [o.b, o.c].filter(Boolean).join(' · ')))
+    const projHtml = projList
+      .map(o => renderItem(o, [o.b || o.tech || o.stack || o.tools, o.c || o.link || o.year || o.dates].filter(Boolean).join(' · ')))
       .join('');
 
-    const sumHtml = data.sum ? `<p>${esc(data.sum)}</p>` : '';
+    const sumHtml = sumText ? `<p>${esc(sumText)}</p>` : '';
 
     // Avatar / Photo slot
     const initials = (data.name || 'CV')
@@ -129,14 +178,52 @@ window.CraftCVRender = window.CVForgeRender = (() => {
       </div>
     `;
 
-    // Dynamic Section Ordering (Education, Experience, Projects)
+    // Dynamic Section Ordering (Education, Experience, Projects, Summary)
     const sectionsMap = {
-      edu: renderSection('Education', eduHtml),
-      exp: renderSection('Experience', expHtml),
-      proj: renderSection('Projects', projHtml)
+      edu: renderSection('Education', eduHtml, 'cv-sec-education'),
+      education: renderSection('Education', eduHtml, 'cv-sec-education'),
+      exp: renderSection('Experience', expHtml, 'cv-sec-experience'),
+      experience: renderSection('Experience', expHtml, 'cv-sec-experience'),
+      work: renderSection('Experience', expHtml, 'cv-sec-experience'),
+      proj: renderSection('Projects', projHtml, 'cv-sec-projects'),
+      projects: renderSection('Projects', projHtml, 'cv-sec-projects'),
+      sum: renderSection('Summary', sumHtml, 'cv-sec-summary'),
+      summary: renderSection('Summary', sumHtml, 'cv-sec-summary')
     };
-    const order = Array.isArray(data.sectionOrder) && data.sectionOrder.length ? data.sectionOrder : ['edu', 'exp', 'proj'];
-    const dynamicSectionsHtml = order.map(k => sectionsMap[k] || '').join('');
+
+    let order = ['edu', 'exp', 'proj'];
+    if (Array.isArray(data.sectionOrder) && data.sectionOrder.length) {
+      order = data.sectionOrder.map(k => String(k).toLowerCase());
+      // Guarantee standard content sections are not silently dropped if missing from custom order
+      ['edu', 'exp', 'proj'].forEach(stdKey => {
+        const matches = order.some(k => k === stdKey || (stdKey === 'edu' && k === 'education') || (stdKey === 'exp' && (k === 'experience' || k === 'work')) || (stdKey === 'proj' && k === 'projects'));
+        if (!matches) {
+          order.push(stdKey);
+        }
+      });
+    }
+
+    const renderedKeys = new Set();
+    const dynamicSectionsList = [];
+
+    // If order does not explicitly position summary, place summary at the top of main
+    const hasExplicitSummary = order.some(k => k === 'sum' || k === 'summary');
+    if (!hasExplicitSummary && sumHtml) {
+      dynamicSectionsList.push(renderSection('Summary', sumHtml, 'cv-sec-summary'));
+    }
+
+    order.forEach(k => {
+      const canonicalKey = (k === 'education') ? 'edu' : ((k === 'experience' || k === 'work') ? 'exp' : ((k === 'projects') ? 'proj' : ((k === 'summary') ? 'sum' : k)));
+      if (renderedKeys.has(canonicalKey)) return;
+      renderedKeys.add(canonicalKey);
+
+      const html = sectionsMap[k] || sectionsMap[canonicalKey];
+      if (html) {
+        dynamicSectionsList.push(html);
+      }
+    });
+
+    const certsSectionHtml = renderSection('Certifications', certsHtml, 'cv-sec-certifications');
 
     return `
       <header>
@@ -145,14 +232,13 @@ window.CraftCVRender = window.CVForgeRender = (() => {
       </header>
       <aside>
         ${avatarHtml}
-        ${renderSection('Contact', contactHtml)}
-        ${renderSection('Skills', skillsHtml)}
-        ${renderSection('Languages', langsHtml)}
+        ${renderSection('Contact', contactHtml, 'cv-sec-contact')}
+        ${renderSection('Skills', skillsHtml, 'cv-sec-skills')}
+        ${renderSection('Languages', langsHtml, 'cv-sec-languages')}
       </aside>
-      <main>
-        ${renderSection('Summary', sumHtml)}
-        ${dynamicSectionsHtml}
-        ${renderSection('Certifications', certsHtml)}
+      <main class="cv-main" id="cv-main">
+        ${dynamicSectionsList.join('')}
+        ${certsSectionHtml}
       </main>
     `;
   }
@@ -181,6 +267,9 @@ window.CraftCVRender = window.CVForgeRender = (() => {
 
   return {
     esc,
+    renderBullets,
+    renderItem,
+    renderSection,
     buildResumeHtml,
     renderToElement
   };
