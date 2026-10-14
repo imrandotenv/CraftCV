@@ -19,12 +19,14 @@
 ## 🌟 Key Features
 
 ### 🎨 Visual & UI Design
-- **Luxury Dark Landing Screen:** Deep obsidian background (`#161310`) and creamy warm off-white text (`#ecdfcc`).
-- **Fixed Top Navigation with CSS-Only Staggered Character Reveal:** Split into individual `<span>` characters driven by ascending `--i` CSS custom properties for a seamless roll effect on hover.
-- **Full-Screen Hero & Display Typography:** Massive `CRAFT YOUR / CAREER` uppercase display headings styled with `.satoshi-black` and `.tracking-tighter` (`-0.05em`).
-- **Interactive 3D Parallax Template Gallery:** 3D perspective scene with window mousemove parallax tilt (`rotateX`, `rotateY`) and tiered depth staggering across layered template preview cards.
-- **Smooth Transition CTA ('Generate my CV'):** Bold primary button with spring scale-up on hover; on click, animates hero opacity to 0 and `translateY(-20px)` over 500ms, then sets `display: none` and reveals the 3-step builder with a subtle fade-in animation.
-- **Responsive & Accessible:** Strict semantic HTML5 (`header`, `nav`, `main`, `section`, `fieldset`, `legend`), full keyboard navigation (Tab/Shift+Tab, Enter/Space), and WCAG 4.5:1 contrast ratios.
+- **Strict Light Mode & Clean White Canvas:** Global body background set to pure `#ffffff` with high-contrast slate typography (`#0f172a`, `#334155`).
+- **Abstract Pastel Gradient Glow Blobs:** Absolute-positioned background elements with faint peach, light orange, and pink radial gradients diffused with `filter: blur(100px)`.
+- **Glassmorphic Floating Pill Navigation:** Translucent white background (`background: rgba(255, 255, 255, 0.7)`), heavy blur (`backdrop-filter: blur(12px)`), thin white border (`border: 1px solid rgba(255, 255, 255, 0.4)`), and fully rounded pill shape (`border-radius: 9999px`) with CSS-only staggered hover character roll.
+- **Glassmorphic Floating CV Formatting Toolbar:** Sticky pill toolbar in Step 3 styled with the same glassmorphism tokens for font size adjustments and fit-to-one-page toggling.
+- **Fixed Bottom Gradient Overlay:** Sticky bottom container (`bottom: 0, z-index: 50, pointer-events: none`) with `linear-gradient(to top, #ffffff, rgba(255, 255, 255, 0.8), transparent)` that smoothly fades out scrolling long input forms.
+- **Full-Screen Hero & 3D Parallax Gallery:** Massive `CRAFT YOUR / CAREER` uppercase display headings with interactive 3D template cards that tilt dynamically with window mouse coordinates.
+- **Smooth Transition CTA ('Generate my CV'):** Bold primary button with hover scale-up; on click, animates hero opacity to 0 and `translateY(-20px)` over 500ms, then reveals the 3-step builder with a subtle fade-in animation.
+- **Responsive & Accessible:** Strict semantic HTML5 (`header`, `nav`, `main`, `section`, `fieldset`, `legend`), full keyboard navigation, and WCAG AA contrast.
 
 ### 📄 7 Handcrafted Resume Templates
 1. **Classic:** Elegant serif (`Playfair Display`), centered header, double underline accents, and timeless academic hierarchy.
