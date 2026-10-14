@@ -90,6 +90,14 @@ body {
   display: none !important;
 }
 
+.flex-wrap {
+  flex-wrap: wrap !important;
+}
+
+.flex-col {
+  flex-direction: column !important;
+}
+
 .text-3xl {
   font-size: 1.875rem !important; /* ~30px */
   line-height: 2.25rem !important;
@@ -1183,6 +1191,7 @@ header.top-nav,
   border: 1px solid rgba(0, 0, 0, 0.04) !important;
   box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.04), 0 2px 6px -1px rgba(0, 0, 0, 0.02);
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
   justify-content: space-between;
   gap: 0.75rem;
@@ -2679,18 +2688,102 @@ footer,
   .jd-chips-container {
     grid-template-columns: 1fr;
   }
+  /* Template Cards Mobile Optimization */
   .frosted-glass-pill {
-    height: 56px !important;
-    padding: 0 0.85rem !important;
+    height: auto !important;
+    min-height: 52px !important;
+    padding: 8px 12px !important;
     bottom: 0.75rem !important;
     left: 0.75rem !important;
     right: 0.75rem !important;
+    display: flex !important;
+    flex-wrap: wrap !important;
+    gap: 8px !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+  }
+  .pill-info {
+    display: flex;
+    align-items: center;
+    flex: 0 1 auto;
+    min-width: 0;
   }
   .pill-title {
-    font-size: 0.9rem !important;
+    font-size: 0.88rem !important;
+    letter-spacing: -0.02em !important;
   }
   .pill-meta {
     display: none !important;
+  }
+  .bento-pill-btn {
+    padding: 6px 12px !important;
+    font-size: 0.7rem !important;
+    letter-spacing: 0.04em !important;
+    white-space: nowrap !important;
+    flex-shrink: 0 !important;
+    max-width: 100% !important;
+    box-sizing: border-box !important;
+  }
+}
+
+/* Extra-small screens (<= 480px): Stack frosted glass pill overlay vertically (flex-col) */
+@media (max-width: 480px) {
+  .showcase-preview-frame {
+    height: 300px !important;
+  }
+
+  .showcase-bento-card .frosted-glass-pill {
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: center !important;
+    height: auto !important;
+    min-height: unset !important;
+    padding: 8px 10px !important;
+    gap: 6px !important;
+    bottom: 0.5rem !important;
+    left: 0.5rem !important;
+    right: 0.5rem !important;
+    border-radius: 0.85rem !important;
+  }
+
+  .showcase-bento-card .pill-info {
+    width: 100% !important;
+    justify-content: center !important;
+    text-align: center !important;
+  }
+
+  .showcase-bento-card .pill-title {
+    font-size: 0.82rem !important;
+    text-align: center !important;
+    margin: 0 auto !important;
+    letter-spacing: -0.02em !important;
+  }
+
+  .showcase-bento-card .bento-pill-btn {
+    width: 100% !important;
+    max-width: 220px !important;
+    padding: 6px 10px !important;
+    font-size: 0.68rem !important;
+    letter-spacing: 0.04em !important;
+    text-align: center !important;
+    justify-content: center !important;
+    box-sizing: border-box !important;
+  }
+
+  .th.bento-card .frosted-glass-pill {
+    flex-direction: row !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    height: 48px !important;
+    min-height: 48px !important;
+    padding: 0 10px !important;
+    bottom: 0.5rem !important;
+    left: 0.5rem !important;
+    right: 0.5rem !important;
+  }
+
+  .th.bento-card .pill-title {
+    font-size: 0.82rem !important;
   }
 }
 
