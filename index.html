@@ -912,46 +912,59 @@
        STEP 3: PREVIEW & DOWNLOAD
        ============================================== -->
   <section class="step" id="s3" aria-labelledby="step3-heading">
-    <!-- Top Action Nav & Export Toolbar (Phase 5) -->
-    <div class="nav noprint" style="margin-bottom: 16px;">
-      <div class="nav-group">
+    <!-- Primary Action Navigation: Edit Details, Change Theme, and Prominent Print / PDF CTA -->
+    <div class="step3-action-row noprint">
+      <div class="step3-nav-group">
         <button type="button" class="btn sec" data-go="1">✏️ Edit Details</button>
         <button type="button" class="btn sec" id="change-theme-btn" data-go="2">🎨 Change Theme</button>
       </div>
-      <div class="export-nav">
-        <button type="button" class="btn pri" id="print-btn">🖨️ Print / Save as PDF</button>
-        <button type="button" class="btn btn-export" id="download-html-btn">💾 Download as HTML</button>
-        <button type="button" class="btn btn-export" id="copy-text-btn">📋 Copy Plain Text</button>
-        <button type="button" class="btn btn-export" id="export-json-btn">📤 Export JSON</button>
-        <button type="button" class="btn btn-export" id="import-json-btn">📥 Import JSON</button>
+      <div class="step3-cta-group">
+        <button type="button" class="btn pri btn-print-main satoshi-black" id="print-btn">🖨️ PRINT / SAVE AS PDF</button>
+      </div>
+    </div>
+
+    <!-- Compact Secondary Export Bar: Distinct Row for HTML, Plain Text & JSON Backups -->
+    <div class="secondary-export-bar noprint">
+      <span class="export-bar-label">Quick Exports:</span>
+      <div class="export-bar-buttons">
+        <button type="button" class="btn btn-export btn-export-sm" id="download-html-btn" title="Download standalone HTML file">💾 Download as HTML</button>
+        <button type="button" class="btn btn-export btn-export-sm" id="copy-text-btn" title="Copy formatted text to clipboard">📋 Copy Plain Text</button>
+        <button type="button" class="btn btn-export btn-export-sm" id="export-json-btn" title="Save resume JSON backup">📤 Export JSON</button>
+        <button type="button" class="btn btn-export btn-export-sm" id="import-json-btn" title="Load resume JSON file">📥 Import JSON</button>
         <input type="file" id="import-json-input" accept=".json" class="file-input-hidden">
       </div>
     </div>
 
-    <div class="noprint" style="background: var(--panel); border: 1px solid var(--line); border-radius: var(--radius-md); padding: 12px 16px; margin-bottom: 16px; font-size: 0.85rem; color: var(--muted);">
-      💡 <strong>Print Tip:</strong> In the browser print dialog, choose <strong>Save as PDF</strong>, set Margins to <strong>None</strong>, and turn on <strong>Background graphics</strong> to ensure flawless A4 alignment.
+    <!-- Sleek Condensed Print Tip Banner -->
+    <div class="print-tip-pill noprint">
+      <span class="tip-icon">💡</span>
+      <span><strong>Print Tip:</strong> Choose <strong>Save as PDF</strong>, set Margins to <strong>None</strong>, and enable <strong>Background graphics</strong> for flawless A4 alignment.</span>
     </div>
 
-    <!-- Formatting Controls Toolbar (Phase 3) -->
-    <div class="formatting-controls noprint">
-      <div class="format-group">
-        <div class="slider-group">
-          <label for="font-size-slider">Font Size:</label>
-          <input type="range" id="font-size-slider" min="9" max="12" step="0.5" value="10" aria-label="Resume font size slider">
-          <span class="slider-val" id="font-size-val">10 pt</span>
+    <!-- CV Stage Container with Directly Attached Sticky Formatting Toolbar -->
+    <div class="cv-stage-container" id="cv-stage-container">
+      <!-- Sticky Compact Glassmorphic Toolbar directly attached to top edge of CV preview -->
+      <div class="formatting-controls sticky-cv-toolbar noprint">
+        <div class="format-group">
+          <div class="slider-group">
+            <label for="font-size-slider">Font Size:</label>
+            <input type="range" id="font-size-slider" min="9" max="12" step="0.5" value="10" aria-label="Resume font size slider">
+            <span class="slider-val" id="font-size-val">10 pt</span>
+          </div>
+        </div>
+        <div class="format-divider" aria-hidden="true"></div>
+        <div class="format-group">
+          <label class="toggle-group" for="fit-one-page-toggle">
+            <input type="checkbox" id="fit-one-page-toggle">
+            <span>📄 Fit to one page</span>
+          </label>
         </div>
       </div>
-      <div class="format-group">
-        <label class="toggle-group" for="fit-one-page-toggle">
-          <input type="checkbox" id="fit-one-page-toggle">
-          <span>📄 Fit to one page</span>
-        </label>
-      </div>
-    </div>
 
-    <!-- CV Stage (Pristine White A4 Sheet) -->
-    <div class="stage">
-      <article class="sheet" id="cv" aria-label="Printable Resume"></article>
+      <!-- CV Stage (Pristine White A4 Sheet) -->
+      <div class="stage">
+        <article class="sheet" id="cv" aria-label="Printable Resume"></article>
+      </div>
     </div>
   </section>
 </main>

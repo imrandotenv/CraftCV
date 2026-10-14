@@ -15,13 +15,13 @@
 @media(prefers-color-scheme:dark){:root{--bg:#0f172a;--panel:#1e293b;--ink:#e5e7eb;--muted:#94a3b8;--line:#334155}}
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:Inter,system-ui,sans-serif;background:var(--bg);color:var(--ink);min-height:100vh}
-.wrap{max-width:860px;margin:0 auto;padding:20px 14px 60px}
-.brand{text-align:center;margin:10px 0 18px}
-.brand h1{font-size:1.7rem;color:var(--accent)}
-.brand p{color:var(--muted);font-size:.9rem}
+.wrap{max-width:860px;margin:0 auto;padding:12px 14px 48px}
+.brand{text-align:center;margin:6px 0 12px}
+.brand h1{font-size:1.5rem;color:var(--accent)}
+.brand p{color:var(--muted);font-size:.85rem}
 
 /* progress */
-.steps{display:flex;justify-content:center;gap:8px;margin-bottom:18px}
+.steps{display:flex;justify-content:center;gap:8px;margin-bottom:12px}
 .dot{display:flex;align-items:center;gap:6px;font-size:.8rem;color:var(--muted);font-weight:600}
 .dot i{width:26px;height:26px;border-radius:50%;background:var(--line);color:#fff;display:grid;place-items:center;font-style:normal;transition:.3s}
 .dot.on{color:var(--ink)}.dot.on i{background:var(--accent)}
@@ -170,12 +170,14 @@ textarea{resize:vertical;min-height:62px}
 
   <!-- STEP 3 -->
   <section class="step" id="s3">
-    <div class="nav noprint" style="margin-bottom:14px">
-      <button class="btn sec" data-go="1">✏️ Edit details</button>
-      <button class="btn sec" id="change-theme-btn" data-go="2">🎨 Change Theme</button>
-      <button class="btn pri" onclick="window.print()">🖨 Print / Save as PDF</button>
+    <div class="nav noprint" style="margin-bottom:8px;display:flex;justify-content:space-between;align-items:center">
+      <div style="display:flex;gap:8px">
+        <button class="btn sec" data-go="1">✏️ Edit details</button>
+        <button class="btn sec" id="change-theme-btn" data-go="2">🎨 Change Theme</button>
+      </div>
+      <button class="btn pri" onclick="window.print()">🖨️ Print / Save as PDF</button>
     </div>
-    <p class="noprint" style="font-size:.78rem;color:var(--muted);margin-bottom:10px">Tip: in the print dialog choose "Save as PDF", set margins to <b>None</b> and turn on <b>Background graphics</b>.</p>
+    <p class="noprint" style="font-size:.76rem;color:var(--muted);margin-bottom:8px;text-align:center">💡 <strong>Print Tip:</strong> In print dialog choose "Save as PDF", set margins to <b>None</b> and turn on <b>Background graphics</b>.</p>
     <div class="stage"><article class="sheet" id="cv"></article></div>
   </section>
 </div>
