@@ -2169,6 +2169,19 @@ summary::-webkit-details-marker {
   box-sizing: border-box;
 }
 
+.text-4xl {
+  font-size: 2.25rem;
+  line-height: 2.5rem;
+}
+
+.font-bold {
+  font-weight: 700;
+}
+
+.text-center {
+  text-align: center;
+}
+
 .reading-layout {
   max-width: 48rem;
   margin-left: auto;
