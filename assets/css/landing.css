@@ -2443,7 +2443,38 @@ label.f {
 }
 
 @media print {
-  .mobile-bottom-nav {
+  header,
+  .top-nav,
+  header.top-nav,
+  .brand,
+  .nav-top,
+  .mobile-bottom-nav,
+  nav.mobile-bottom-nav,
+  .mobile-bottom-nav-container,
+  .bottom-nav-item,
+  .bottom-nav-build,
+  .formatting-controls,
+  .formatting-controls-card,
+  #formatting-controls-card,
+  .sticky-cv-toolbar,
+  .formatting-controls-inner,
+  .export-grid,
+  #export-controls,
+  .secondary-export-bar,
+  .print-tip-pill,
+  .steps,
+  .nav,
+  .step3-action-row,
+  footer,
+  .app-footer,
+  .footer-container,
+  .toast-msg,
+  #toast-msg,
+  .pastel-glow-backdrop,
+  .bottom-fade-container,
+  .noprint,
+  #s1,
+  #s2 {
     display: none !important;
   }
   .pb-24,
@@ -2453,7 +2484,8 @@ label.f {
   main.pb-24,
   main.pb-28,
   .wrap.pb-24,
-  .wrap.pb-28 {
+  .wrap.pb-28,
+  .cv-wrapper {
     padding-bottom: 0 !important;
   }
 }

@@ -31,15 +31,37 @@
     color-adjust: exact !important;
   }
 
-  /* Hide entire wizard UI, navigation, progress bar, tips, and footers */
+  /* Strictly hide top header, mobile bottom navigation, formatting toolbars, and non-resume UI */
+  header,
+  .top-nav,
+  header.top-nav,
   .brand,
+  .nav-top,
+  .mobile-bottom-nav,
+  nav.mobile-bottom-nav,
+  .mobile-bottom-nav-container,
+  .bottom-nav-item,
+  .bottom-nav-build,
+  .formatting-controls,
+  .formatting-controls-card,
+  #formatting-controls-card,
+  .sticky-cv-toolbar,
+  .formatting-controls-inner,
+  .export-grid,
+  #export-controls,
+  .secondary-export-bar,
+  .print-tip-pill,
   .steps,
   .nav,
-  .noprint,
+  .step3-action-row,
+  footer,
   .app-footer,
-  .mobile-bottom-nav,
+  .footer-container,
   .toast-msg,
   #toast-msg,
+  .pastel-glow-backdrop,
+  .bottom-fade-container,
+  .noprint,
   #s1,
   #s2 {
     display: none !important;
@@ -65,13 +87,17 @@
     margin: 0 !important;
   }
 
-  .wrap {
+  .wrap,
+  main.wrap,
+  .cv-wrapper {
     max-width: none !important;
     padding: 0 !important;
     margin: 0 !important;
   }
 
-  .stage {
+  .stage,
+  .cv-wrapper,
+  .cv-stage-container {
     padding: 0 !important;
     margin: 0 !important;
     overflow: visible !important;
