@@ -10,7 +10,20 @@
   padding: var(--sp-5) var(--sp-4) var(--sp-6);
 }
 
-/* Header & Brand */
+/* Header & Brand with Hide-on-Scroll Transition */
+header.top-nav,
+.top-nav,
+header,
+.brand {
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.header-hidden,
+header.header-hidden,
+.top-nav.header-hidden {
+  transform: translateY(-150%) !important;
+}
+
 .brand {
   text-align: center;
   margin: var(--sp-3) 0 var(--sp-5);

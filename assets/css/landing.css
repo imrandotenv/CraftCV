@@ -407,8 +407,15 @@ header.top-nav,
   justify-content: center;
   align-items: center;
   padding: 0 1.25rem;
-  box-sizing: border-box;
-  transition: all var(--tr-fast);
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  will-change: transform;
+}
+
+/* Smart Hide-on-Scroll Top Floating Header */
+.header-hidden,
+header.header-hidden,
+.top-nav.header-hidden {
+  transform: translateY(-150%) !important;
 }
 
 .max-w-6xl {

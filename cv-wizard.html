@@ -199,11 +199,24 @@ body.basic-mode .smart-mode-label{color:#9ca3af}
   .sheet{box-shadow:none!important;width:210mm!important;min-height:297mm!important;margin:0!important;border-radius:0!important}
   *{-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important}
 }
+
+/* Smart Hide-on-Scroll Top Floating Header */
+header.top-nav,
+.top-nav,
+header,
+.brand {
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.header-hidden,
+header.header-hidden,
+.top-nav.header-hidden {
+  transform: translateY(-150%) !important;
+}
 </style>
 </head>
 <body class="pb-28 pb-24">
 <div class="wrap pb-28 pb-24">
-  <div class="brand"><a href="index.html" style="text-decoration:none;color:inherit;" aria-label="CraftCV Home"><h1>📄 CraftCV</h1></a><p>Build a professional resume in 3 simple steps</p></div>
+  <header class="brand top-nav-brand"><a href="index.html" style="text-decoration:none;color:inherit;" aria-label="CraftCV Home"><h1>📄 CraftCV</h1></a><p>Build a professional resume in 3 simple steps</p></header>
   <div class="steps">
     <div class="dot on" id="d1"><i>1</i><span>Details</span></div>
     <div class="dot" id="d2"><i>2</i><span>Theme</span></div>
@@ -619,6 +632,23 @@ $('#sample').onclick=()=>{
       } catch (err) {}
     });
   }
+})();
+
+// Smart hide-on-scroll behavior for top floating header
+(function() {
+  let lastScrollY = typeof window !== 'undefined' ? (window.scrollY || 0) : 0;
+  window.addEventListener('scroll', () => {
+    const currentScrollY = window.scrollY;
+    const header = document.querySelector('header.top-nav') || document.querySelector('header.brand') || document.querySelector('header:not(#cv header)') || document.querySelector('header');
+    if (header) {
+      if (currentScrollY > lastScrollY && currentScrollY > 80) {
+        header.classList.add('header-hidden');
+      } else if (currentScrollY < lastScrollY || currentScrollY <= 80) {
+        header.classList.remove('header-hidden');
+      }
+    }
+    lastScrollY = currentScrollY;
+  }, { passive: true });
 })();
 </script>
 <!-- Modular Scripts -->

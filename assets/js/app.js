@@ -877,11 +877,39 @@ window.CraftCVApp = window.CVForgeApp = (() => {
   }
 
   /**
+   * Smart hide-on-scroll behavior for top floating header
+   * Tracks scroll direction and toggles .header-hidden class
+   */
+  function setupSmartHeaderScroll() {
+    let lastScrollY = typeof window !== 'undefined' ? (window.scrollY || 0) : 0;
+
+    if (typeof window !== 'undefined' && window.addEventListener) {
+      window.addEventListener('scroll', () => {
+        const currentScrollY = window.scrollY;
+        const header = document.querySelector('header.top-nav') || document.querySelector('header.brand') || document.querySelector('header:not(#cv header)') || document.querySelector('header');
+
+        if (header && header.classList) {
+          if (currentScrollY > lastScrollY && currentScrollY > 80) {
+            header.classList.add('header-hidden');
+          } else if (currentScrollY < lastScrollY || currentScrollY <= 80) {
+            header.classList.remove('header-hidden');
+          }
+        }
+
+        lastScrollY = currentScrollY;
+      }, { passive: true });
+    }
+  }
+
+  /**
    * Bind all event handlers and initialize app
    */
   function init() {
     // Setup Smart / Basic Mode Toggle
     setupModeToggle();
+
+    // Setup Smart Hide-on-Scroll Top Floating Header
+    setupSmartHeaderScroll();
 
     // Setup themes and colors
     setupColorSwatches();
@@ -1745,7 +1773,8 @@ body { background: #eef1f6; font-family: 'Inter', sans-serif; display: flex; jus
       }
       try { localStorage.setItem('craftcv_smart_mode', basic ? 'basic' : 'smart'); } catch (e) {}
     },
-    isSmartMode: () => Boolean(typeof document !== 'undefined' && document.body && document.body.classList && !document.body.classList.contains('basic-mode'))
+    isSmartMode: () => Boolean(typeof document !== 'undefined' && document.body && document.body.classList && !document.body.classList.contains('basic-mode')),
+    setupSmartHeaderScroll
   };
 })();
 
@@ -1765,4 +1794,11 @@ if (typeof document !== 'undefined' && document.addEventListener) {
   document.addEventListener('DOMContentLoaded', () => {
     (window.CraftCVApp || window.CVForgeApp).init();
   });
+}
+
+// Self-init smart header scroll if DOM is already loaded
+if (typeof window !== 'undefined' && typeof document !== 'undefined') {
+  if (document.readyState === 'complete' || document.readyState === 'interactive') {
+    (window.CraftCVApp || window.CVForgeApp)?.setupSmartHeaderScroll?.();
+  }
 }
