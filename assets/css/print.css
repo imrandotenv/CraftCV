@@ -37,9 +37,21 @@
   .nav,
   .noprint,
   .app-footer,
+  .mobile-bottom-nav,
+  .toast-msg,
+  #toast-msg,
   #s1,
   #s2 {
     display: none !important;
+  }
+
+  .pb-24,
+  .pb-28,
+  body.pb-24,
+  body.pb-28,
+  .wrap.pb-24,
+  .wrap.pb-28 {
+    padding-bottom: 0 !important;
   }
 
   /* Show only Step 3 CV container */

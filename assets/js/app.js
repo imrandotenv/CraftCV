@@ -1338,6 +1338,12 @@ window.CraftCVApp = window.CVForgeApp = (() => {
     const toast = $('#toast-msg');
     if (!toast) return;
     toast.textContent = msg;
+    // On mobile devices (<= 768px), position comfortably at 5rem above floating bottom nav
+    if (typeof window !== 'undefined' && window.innerWidth <= 768) {
+      toast.style.bottom = '5rem';
+    } else {
+      toast.style.bottom = '';
+    }
     toast.classList.add('visible');
     clearTimeout(toast.timeoutId);
     toast.timeoutId = setTimeout(() => {

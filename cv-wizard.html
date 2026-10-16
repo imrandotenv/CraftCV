@@ -77,7 +77,11 @@ textarea{resize:vertical;min-height:62px}
 }
 
 /* Mobile Bottom Navigation Bar - High-Depth Floating Pill */
-.pb-24{padding-bottom:6rem!important}
+.pb-24,.pb-28,body.pb-24,body.pb-28,.wrap.pb-24,.wrap.pb-28{padding-bottom:7rem!important}
+.toast-msg{position:fixed;bottom:24px;right:24px;background:#065f46;color:#ecfdf5;padding:10px 18px;border-radius:9999px;box-shadow:0 8px 30px rgba(0,0,0,.15);font-size:.88rem;font-weight:600;z-index:2000;display:none;animation:toastFadeIn .3s ease}
+.toast-msg.visible{display:block}
+@keyframes toastFadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+@media(max-width:768px){.toast-msg,#toast-msg,.selected-template-pill{bottom:5rem!important;left:50%!important;right:auto!important;transform:translateX(-50%)!important;width:max-content!important;max-width:90%!important;text-align:center!important;box-sizing:border-box!important;z-index:2000!important}}
 .mobile-bottom-nav{position:fixed!important;bottom:1.5rem!important;left:50%!important;transform:translateX(-50%)!important;width:max-content!important;min-width:85%!important;max-width:92%!important;margin:0 auto!important;z-index:100!important;display:flex!important;border-radius:9999px!important;background:rgba(255,255,255,.75)!important;-webkit-backdrop-filter:blur(20px)!important;backdrop-filter:blur(20px)!important;border:1px solid rgba(0,0,0,.08)!important;box-shadow:0 10px 25px -5px rgba(0,0,0,.1)!important}
 .mobile-bottom-nav-container{display:flex!important;justify-content:space-between!important;align-items:center!important;padding:.5rem .5rem!important;gap:1rem!important;width:100%!important;box-sizing:border-box!important}
 .bottom-nav-item{display:inline-flex!important;align-items:center!important;justify-content:center!important;min-height:36px!important;padding:.375rem .75rem!important;font-size:.75rem!important;font-weight:900!important;color:#4b5563!important;text-transform:uppercase!important;letter-spacing:.05em!important;text-decoration:none!important;border-radius:9999px!important;transition:all .2s ease!important;cursor:pointer!important;white-space:nowrap!important}
@@ -96,7 +100,7 @@ textarea{resize:vertical;min-height:62px}
 .px-6{padding-left:1.5rem!important;padding-right:1.5rem!important}
 .py-2-5,.py-2\.5{padding-top:.625rem!important;padding-bottom:.625rem!important}
 @media(min-width:768px){.mobile-bottom-nav,.md\:hidden{display:none!important}}
-@media print{.mobile-bottom-nav{display:none!important}body.pb-24,.wrap.pb-24{padding-bottom:0!important}}
+@media print{.mobile-bottom-nav{display:none!important}body.pb-24,body.pb-28,.wrap.pb-24,.wrap.pb-28,.pb-24,.pb-28{padding-bottom:0!important}}
 body.basic-mode .smart-feature,html.basic-mode .smart-feature{display:none!important}
 .footer-mode-item{display:inline-flex;align-items:center}
 .smart-mode-toggle{display:inline-flex;align-items:center;gap:8px;cursor:pointer;user-select:none;font-size:.75rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:#6b7280;transition:color .2s}
@@ -179,8 +183,8 @@ body.basic-mode .smart-mode-label{color:#9ca3af}
 }
 </style>
 </head>
-<body class="pb-24">
-<div class="wrap pb-24">
+<body class="pb-28 pb-24">
+<div class="wrap pb-28 pb-24">
   <div class="brand"><a href="index.html" style="text-decoration:none;color:inherit;" aria-label="CraftCV Home"><h1>📄 CraftCV</h1></a><p>Build a professional resume in 3 simple steps</p></div>
   <div class="steps">
     <div class="dot on" id="d1"><i>1</i><span>Details</span></div>
@@ -605,6 +609,9 @@ $('#sample').onclick=()=>{
 <script src="assets/js/form.js"></script>
 <script src="assets/js/ats.js"></script>
 <script src="assets/js/app.js"></script>
+
+<!-- Toast Message Container -->
+<div class="toast-msg" id="toast-msg" role="status" aria-live="polite"></div>
 
 <!-- Mobile Bottom Navigation Bar - High-Depth Floating Pill -->
 <nav class="mobile-bottom-nav flex md:hidden fixed z-[100] noprint" style="width: max-content; min-width: 85%; margin: 0 auto; bottom: 1.5rem; left: 50%; transform: translateX(-50%); border-radius: 9999px; background: rgba(255, 255, 255, 0.75); -webkit-backdrop-filter: blur(20px); backdrop-filter: blur(20px); border: 1px solid rgba(0, 0, 0, 0.08); box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);" aria-label="Mobile Navigation">

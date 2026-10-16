@@ -177,8 +177,15 @@ body {
   font-weight: 700 !important;
 }
 
-.pb-24 {
-  padding-bottom: 6rem !important;
+.pb-24,
+.pb-28,
+body.pb-24,
+body.pb-28,
+main.pb-24,
+main.pb-28,
+.wrap.pb-24,
+.wrap.pb-28 {
+  padding-bottom: 7rem !important;
 }
 
 /* Mobile Bottom Navigation Bar Styles - High-Depth Floating Pill Redesign */
@@ -2416,6 +2423,39 @@ label.f {
 @keyframes toastFadeIn {
   from { opacity: 0; transform: translateY(8px); }
   to { opacity: 1; transform: translateY(0); }
+}
+
+/* Responsive Mobile Toast Positioning (Sits cleanly above floating bottom nav at bottom: 5rem) */
+@media (max-width: 768px) {
+  .toast-msg,
+  #toast-msg,
+  .selected-template-pill {
+    bottom: 5rem !important;
+    left: 50% !important;
+    right: auto !important;
+    transform: translateX(-50%) !important;
+    width: max-content !important;
+    max-width: 90% !important;
+    text-align: center !important;
+    box-sizing: border-box !important;
+    z-index: 2000 !important;
+  }
+}
+
+@media print {
+  .mobile-bottom-nav {
+    display: none !important;
+  }
+  .pb-24,
+  .pb-28,
+  body.pb-24,
+  body.pb-28,
+  main.pb-24,
+  main.pb-28,
+  .wrap.pb-24,
+  .wrap.pb-28 {
+    padding-bottom: 0 !important;
+  }
 }
 
 /* ==============================================
