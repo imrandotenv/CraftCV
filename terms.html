@@ -150,12 +150,12 @@
   </div>
 </footer>
 
-<!-- Mobile Bottom Navigation Bar -->
-<nav class="mobile-bottom-nav flex md:hidden fixed bottom-0 left-0 w-full z-[100] noprint" style="background: rgba(255, 255, 255, 0.85); -webkit-backdrop-filter: blur(20px); backdrop-filter: blur(20px); border-top: 1px solid rgba(0, 0, 0, 0.05);" aria-label="Mobile Navigation">
-  <div class="mobile-bottom-nav-container flex justify-around items-center py-3 px-4 w-full max-w-md mx-auto">
-    <a href="index.html" class="bottom-nav-item font-bold text-sm text-gray-800 hover:text-black py-2 px-4 rounded-full transition-colors">Home</a>
-    <a href="index.html#templates" class="bottom-nav-item font-bold text-sm text-gray-800 hover:text-black py-2 px-4 rounded-full transition-colors">Templates</a>
-    <a href="index.html#builder" class="bottom-nav-item bottom-nav-build bg-black text-white px-5 py-2 rounded-full font-bold text-sm shadow-sm transition-transform active:scale-95">Build</a>
+<!-- Mobile Bottom Navigation Bar - High-Depth Floating Pill -->
+<nav class="mobile-bottom-nav flex md:hidden fixed z-[100] noprint" style="width: max-content; min-width: 85%; margin: 0 auto; bottom: 1.5rem; left: 50%; transform: translateX(-50%); border-radius: 9999px; background: rgba(255, 255, 255, 0.75); -webkit-backdrop-filter: blur(20px); backdrop-filter: blur(20px); border: 1px solid rgba(0, 0, 0, 0.08); box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);" aria-label="Mobile Navigation">
+  <div class="mobile-bottom-nav-container flex justify-between items-center px-2 py-2 gap-4 w-full">
+    <a href="index.html" class="bottom-nav-item text-xs font-black text-gray-600 uppercase tracking-wider hover:text-black px-3 py-2 rounded-full transition-colors">Home</a>
+    <a href="index.html#templates" class="bottom-nav-item text-xs font-black text-gray-600 uppercase tracking-wider hover:text-black px-3 py-2 rounded-full transition-colors">Templates</a>
+    <a href="index.html#builder" class="bottom-nav-item bottom-nav-build bg-black text-white px-6 py-2.5 rounded-full text-xs font-black uppercase shadow-sm transition-transform active:scale-95">Build</a>
   </div>
 </nav>
 </body>
