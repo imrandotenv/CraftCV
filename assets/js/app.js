@@ -905,11 +905,68 @@ window.CraftCVApp = window.CVForgeApp = (() => {
     // Apply initial state
     applyMode(isBasic);
 
+    let isTransitioning = false;
+
+    /**
+     * Handle mode toggle with realistic loading state
+     * When switching from Basic to Smart mode:
+     * - Immediately prevents the UI from changing (preserves basic-mode)
+     * - Shows full-screen loading overlay for 1500ms using setTimeout
+     * - After 1500ms: hides overlay, removes basic-mode class, triggers ATS score animation, and re-renders CV preview
+     */
+    function handleModeToggle(checked) {
+      if (isTransitioning) return;
+      const willBeBasic = !checked;
+      const currentlyBasic = typeof document !== 'undefined' && document.body && document.body.classList.contains('basic-mode');
+
+      // Check if transitioning from Basic to Smart mode
+      if (!willBeBasic && currentlyBasic) {
+        isTransitioning = true;
+
+        // Immediately prevent the UI from changing! Keep basic-mode active during loading
+        if (typeof document !== 'undefined' && document.body && !document.body.classList.contains('basic-mode')) {
+          document.body.classList.add('basic-mode');
+        }
+
+        // Show the full-screen loading overlay (z-[999])
+        const loader = typeof document !== 'undefined' ? (document.getElementById('smart-mode-loader') || document.querySelector('.smart-mode-loader')) : null;
+        if (loader) {
+          loader.classList.remove('hidden');
+          loader.classList.add('active');
+          loader.style.display = 'flex';
+          loader.style.opacity = '1';
+        }
+
+        // Keep toggle inputs checked to show intent
+        toggleInputs.forEach(input => {
+          if (input) input.checked = true;
+        });
+
+        // 1500ms delay for realistic heavy process completion
+        setTimeout(() => {
+          // Hide overlay
+          if (loader) {
+            loader.classList.add('hidden');
+            loader.classList.remove('active');
+            loader.style.display = 'none';
+          }
+
+          // Complete Smart Mode switch:
+          // Remove basic-mode class, trigger ATS score animation, and re-render CV preview
+          applyMode(false);
+          isTransitioning = false;
+        }, 1500);
+      } else {
+        // Switching to Basic mode
+        applyMode(willBeBasic);
+      }
+    }
+
     // Bind change listeners on all toggle inputs
     toggleInputs.forEach(input => {
       if (input && input.addEventListener) {
         input.addEventListener('change', (e) => {
-          applyMode(!e.target.checked);
+          handleModeToggle(e.target.checked);
         });
       }
     });
@@ -918,7 +975,7 @@ window.CraftCVApp = window.CVForgeApp = (() => {
     if (typeof document !== 'undefined' && document.addEventListener) {
       document.addEventListener('change', (e) => {
         if (e && e.target && (e.target.id === 'smart-mode-toggle' || (e.target.classList && e.target.classList.contains('smart-mode-input')))) {
-          applyMode(!e.target.checked);
+          handleModeToggle(e.target.checked);
         }
       });
     }

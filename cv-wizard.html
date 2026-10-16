@@ -159,6 +159,14 @@ body.basic-mode #s2,body.basic-mode #d2,body.basic-mode #step2,body.basic-mode .
 .score-pop-animation{animation:scorePop .6s cubic-bezier(.34,1.56,.64,1) forwards!important}
 @keyframes smartReveal{0%{opacity:.4;filter:blur(4px);transform:scale(0.98)}100%{opacity:1;filter:blur(0px);transform:scale(1)}}
 .smart-reveal-animation{animation:smartReveal .45s cubic-bezier(.16,1,.3,1) forwards!important}
+.z-\[999\],.z-999{z-index:999!important}
+@keyframes spin{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
+.animate-spin{animation:spin .85s linear infinite!important}
+#smart-mode-loader,body.basic-mode #smart-mode-loader{position:fixed!important;inset:0!important;top:0!important;left:0!important;right:0!important;bottom:0!important;width:100vw!important;height:100vh!important;z-index:999!important;background:rgba(15,23,42,.75)!important;backdrop-filter:blur(12px)!important;-webkit-backdrop-filter:blur(12px)!important;display:none;align-items:center!important;justify-content:center!important;font-family:'Inter',-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif!important}
+#smart-mode-loader.active,#smart-mode-loader:not(.hidden){display:flex!important}
+#smart-mode-loader .smart-loader-box,body.basic-mode #smart-mode-loader .smart-loader-box{display:flex!important;flex-direction:column!important;align-items:center!important;justify-content:center!important;padding:2rem 2.5rem!important;border-radius:1.25rem!important;background:rgba(15,23,42,.9)!important;border:1px solid rgba(255,255,255,.2)!important;box-shadow:0 25px 50px -12px rgba(0,0,0,.6)!important;max-width:24rem!important;margin:0 1rem!important;text-align:center!important;color:#fff!important}
+#smart-mode-loader .smart-loader-spinner,body.basic-mode #smart-mode-loader .smart-loader-spinner{width:3rem!important;height:3rem!important;margin-bottom:1.25rem!important;border:4px solid rgba(255,255,255,.2)!important;border-top-color:#fff!important;border-radius:9999px!important;animation:spin .85s linear infinite!important}
+#smart-mode-loader .smart-loader-text,body.basic-mode #smart-mode-loader .smart-loader-text{font-size:.95rem!important;font-weight:600!important;letter-spacing:.025em!important;color:#fff!important;margin:0!important;font-family:'Inter',-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif!important}
 .footer-mode-item{display:inline-flex;align-items:center}
 .smart-mode-toggle{display:inline-flex;align-items:center;gap:8px;cursor:pointer;user-select:none;font-size:.75rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:#6b7280;transition:color .2s}
 .smart-mode-toggle:hover{color:#000}
@@ -445,6 +453,14 @@ header.header-hidden,
     </nav>
   </div>
 </footer>
+
+<!-- Full-Screen AI ATS Optimization & Formatting Loading Overlay (Smart Mode Transition) -->
+<div id="smart-mode-loader" class="fixed inset-0 z-[999] hidden flex flex-col items-center justify-center bg-black/75 backdrop-blur-md text-white transition-opacity duration-300 noprint" role="status" aria-live="polite" style="display: none;">
+  <div class="smart-loader-box flex flex-col items-center justify-center p-8 rounded-2xl bg-black/80 border border-white/20 shadow-2xl max-w-sm mx-4 text-center">
+    <div class="smart-loader-spinner w-12 h-12 mb-4 border-4 border-white/20 border-t-white rounded-full animate-spin"></div>
+    <p class="smart-loader-text text-sm font-semibold tracking-wide text-white">Applying AI ATS Optimization &amp; Formatting...</p>
+  </div>
+</div>
 
 <script>
 const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
@@ -767,31 +783,62 @@ render();
     if (typeof updateWizardNextBtn === 'function') updateWizardNextBtn();
   } catch (e) {}
   if (toggle) {
+    let isTransitioning = false;
     toggle.addEventListener('change', e => {
-      const isBasic = !e.target.checked;
-      document.body.classList.toggle('basic-mode', isBasic);
-      try {
-        localStorage.setItem('craftcv_smart_mode', isBasic ? 'basic' : 'smart');
-      } catch (err) {}
-      if (typeof updateWizardNextBtn === 'function') updateWizardNextBtn();
-      if (typeof render === 'function') render();
-      if (!isBasic) {
-        // Smart mode turned ON! Animate ATS score popping up & resume template reveal
-        if (window.CraftCVApp && typeof CraftCVApp.updateATSAnalysis === 'function') {
-          CraftCVApp.updateATSAnalysis();
+      if (isTransitioning) return;
+      const willBeBasic = !e.target.checked;
+      const currentlyBasic = document.body.classList.contains('basic-mode');
+
+      if (!willBeBasic && currentlyBasic) {
+        isTransitioning = true;
+        // Keep basic-mode active during loading
+        document.body.classList.add('basic-mode');
+
+        const loader = document.getElementById('smart-mode-loader');
+        if (loader) {
+          loader.classList.remove('hidden');
+          loader.classList.add('active');
+          loader.style.display = 'flex';
+          loader.style.opacity = '1';
         }
-        const atsBadge = document.querySelector('#ats-badge-pill');
-        if (atsBadge) {
-          atsBadge.classList.remove('score-pop-animation');
-          void atsBadge.offsetWidth;
-          atsBadge.classList.add('score-pop-animation');
-        }
-        const cvEl = document.querySelector('#cv');
-        if (cvEl) {
-          cvEl.classList.remove('smart-reveal-animation');
-          void cvEl.offsetWidth;
-          cvEl.classList.add('smart-reveal-animation');
-        }
+
+        setTimeout(() => {
+          if (loader) {
+            loader.classList.add('hidden');
+            loader.classList.remove('active');
+            loader.style.display = 'none';
+          }
+          document.body.classList.remove('basic-mode');
+          try {
+            localStorage.setItem('craftcv_smart_mode', 'smart');
+          } catch (err) {}
+          if (typeof updateWizardNextBtn === 'function') updateWizardNextBtn();
+          if (typeof render === 'function') render();
+
+          if (window.CraftCVApp && typeof CraftCVApp.updateATSAnalysis === 'function') {
+            CraftCVApp.updateATSAnalysis();
+          }
+          const atsBadge = document.querySelector('#ats-badge-pill');
+          if (atsBadge) {
+            atsBadge.classList.remove('score-pop-animation');
+            void atsBadge.offsetWidth;
+            atsBadge.classList.add('score-pop-animation');
+          }
+          const cvEl = document.querySelector('#cv');
+          if (cvEl) {
+            cvEl.classList.remove('smart-reveal-animation');
+            void cvEl.offsetWidth;
+            cvEl.classList.add('smart-reveal-animation');
+          }
+          isTransitioning = false;
+        }, 1500);
+      } else {
+        document.body.classList.toggle('basic-mode', willBeBasic);
+        try {
+          localStorage.setItem('craftcv_smart_mode', willBeBasic ? 'basic' : 'smart');
+        } catch (err) {}
+        if (typeof updateWizardNextBtn === 'function') updateWizardNextBtn();
+        if (typeof render === 'function') render();
       }
     });
   }
