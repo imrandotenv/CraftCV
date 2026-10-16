@@ -251,7 +251,7 @@ window.CraftCVApp = window.CVForgeApp = (() => {
       saveCurrentState();
     }
     updateStep1NextButton();
-    if (currentStep === 3) renderCV();
+    renderCV();
   }
 
   /**
@@ -281,7 +281,7 @@ window.CraftCVApp = window.CVForgeApp = (() => {
 
     saveCurrentState();
     if (currentStep === 2) renderThemePreviews();
-    if (currentStep === 3) renderCV();
+    renderCV();
   }
 
   /**
@@ -969,11 +969,15 @@ window.CraftCVApp = window.CVForgeApp = (() => {
       }
     });
 
-    // Auto-save on form inputs
+    // Real-time live preview rendering and auto-save on form inputs
     const form = $('#form');
     if (form) {
-      form.addEventListener('input', onFormChanged);
-      form.addEventListener('change', onFormChanged);
+      const handleLiveInput = () => {
+        renderCV();
+        onFormChanged();
+      };
+      form.addEventListener('input', handleLiveInput);
+      form.addEventListener('change', handleLiveInput);
     }
 
     // Load saved state or default
@@ -1038,6 +1042,7 @@ window.CraftCVApp = window.CVForgeApp = (() => {
     // Initial ATS analysis calculation and theme previews
     updateATSAnalysis();
     renderThemePreviews();
+    renderCV();
 
     // Phase 5: Setup Export features (HTML Blob, Plain Text, JSON Import/Export)
     setupExportFeatures();

@@ -285,6 +285,58 @@ window.CraftCVRender = window.CVForgeRender = (() => {
     }
   }
 
+  /**
+   * Real-time update of specific text nodes or HTML elements in the CV template
+   * @param {HTMLElement} container - The #cv container element
+   * @param {string} fieldName - Field name (name, title, sum, email, phone, loc, link)
+   * @param {*} value - Field value
+   */
+  function updateLiveNode(container, fieldName, value) {
+    if (!container) return;
+    const escVal = esc(value);
+    switch (fieldName) {
+      case 'name': {
+        const h1 = container.querySelector('header h1');
+        if (h1) h1.textContent = value || 'Your Name';
+        break;
+      }
+      case 'title': {
+        let role = container.querySelector('header .role');
+        if (value) {
+          if (!role) {
+            role = document.createElement('p');
+            role.className = 'role';
+            container.querySelector('header')?.appendChild(role);
+          }
+          role.textContent = value;
+        } else if (role) {
+          role.remove();
+        }
+        break;
+      }
+      case 'sum': {
+        const sumSec = container.querySelector('.cv-sec-summary');
+        if (value) {
+          if (sumSec) {
+            const p = sumSec.querySelector('p');
+            if (p) p.textContent = value;
+          } else {
+            const main = container.querySelector('main, .cv-main');
+            if (main) {
+              const secHtml = renderSection('Summary', `<p>${escVal}</p>`, 'cv-sec-summary');
+              main.insertAdjacentHTML('afterbegin', secHtml);
+            }
+          }
+        } else if (sumSec) {
+          sumSec.remove();
+        }
+        break;
+      }
+      default:
+        break;
+    }
+  }
+
   return {
     esc,
     renderBullets,
@@ -292,6 +344,8 @@ window.CraftCVRender = window.CVForgeRender = (() => {
     renderSection,
     buildResumeHtml,
     renderToElement,
+    updateLiveNode,
     A4_HEIGHT_PX
   };
 })();
+

@@ -172,11 +172,29 @@ window.CraftCVForm = window.CVForgeForm = (() => {
       </div>
     `;
 
+    // Real-time data binding on input and change
+    row.querySelectorAll('input, textarea').forEach(input => {
+      const handleInput = () => {
+        const app = window.CraftCVApp || window.CVForgeApp;
+        if (app && app.renderCV) {
+          app.renderCV();
+        }
+        if (app && app.onFormChanged) {
+          app.onFormChanged();
+        }
+      };
+      input.addEventListener('input', handleInput);
+      input.addEventListener('change', handleInput);
+    });
+
     // Hook remove button
     const removeBtn = row.querySelector('.x');
     removeBtn.addEventListener('click', () => {
       row.remove();
       const app = window.CraftCVApp || window.CVForgeApp;
+      if (app && app.renderCV) {
+        app.renderCV();
+      }
       if (app && app.onFormChanged) {
         app.onFormChanged();
       }
@@ -607,6 +625,28 @@ window.CraftCVForm = window.CVForgeForm = (() => {
     syncSkillPills();
   }
 
+  /**
+   * Initialize real-time data binding on all form fields
+   * @param {Function} [onUpdate] - Optional callback fired on every input keystroke
+   */
+  function initRealTimeBinding(onUpdate) {
+    const form = document.getElementById('form');
+    if (!form) return;
+
+    const handleInput = (e) => {
+      const app = window.CraftCVApp || window.CVForgeApp;
+      if (app && app.renderCV) {
+        app.renderCV();
+      }
+      if (typeof onUpdate === 'function') {
+        onUpdate(e);
+      }
+    };
+
+    form.addEventListener('input', handleInput);
+    form.addEventListener('change', handleInput);
+  }
+
   return {
     addRow,
     getFormData,
@@ -622,6 +662,8 @@ window.CraftCVForm = window.CVForgeForm = (() => {
     applySectionOrder,
     updateReorderButtonsState,
     initSkillToggles,
-    syncSkillPills
+    syncSkillPills,
+    initRealTimeBinding
   };
 })();
+
