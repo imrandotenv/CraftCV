@@ -2998,27 +2998,53 @@ body.basic-mode .wrap {
   background-image: none !important;
 }
 
-body.basic-mode .pastel-glow-backdrop,
-body.basic-mode .pastel-blob,
+/* Remove all placeholder icons, decorative SVG elements, and visual flair */
+body.basic-mode svg:not(#smart-mode-loader svg),
+.basic-mode svg:not(#smart-mode-loader svg),
+body.basic-mode svg:not(#smart-mode-loader svg) *,
+.basic-mode svg:not(#smart-mode-loader svg) *,
+body.basic-mode .icon,
+body.basic-mode .tip-icon,
+body.basic-mode .clean-check-icon,
+body.basic-mode .badge-dot,
+body.basic-mode .status-dot,
+body.basic-mode .score-svg,
+body.basic-mode .footer-logo-badge,
+body.basic-mode .mini-avatar-ph,
+body.basic-mode .mini-bar,
+body.basic-mode .mini-divider,
 body.basic-mode .scene-glow-disc,
 body.basic-mode .bottom-fade-container,
+body.basic-mode .pastel-blob,
+body.basic-mode .pastel-glow-backdrop,
+html.basic-mode .pastel-glow-backdrop,
+html.basic-mode .pastel-blob,
+body.basic-mode [class*="decor"],
+body.basic-mode [class*="badge-dot"],
 body.basic-mode [class*="glow"],
 body.basic-mode [class*="disc"] {
   display: none !important;
   background: none !important;
 }
 
-/* 2. Strip Glassmorphism & Soft Floating Shadows */
+/* 2. Strip Glassmorphism, Animations, Transitions & Soft Floating Shadows */
 body.basic-mode *,
 body.basic-mode *::before,
 body.basic-mode *::after,
 html.basic-mode *,
 html.basic-mode *::before,
-html.basic-mode *::after {
+html.basic-mode *::after,
+.basic-mode * {
   text-shadow: none !important;
   filter: none !important;
   backdrop-filter: none !important;
   -webkit-backdrop-filter: none !important;
+  transition: none !important;
+  animation: none !important;
+}
+
+.basic-mode * {
+  transition: none !important;
 }
 
 /* 3. Containers & Panels: Flat White/Light-Gray, 1px Border, 4px Radius (Bootstrap Well/Panel) */
@@ -3128,17 +3154,20 @@ body.basic-mode .frosted-glass-pill {
 
 body.basic-mode .bento-pill-btn,
 body.basic-mode .btn-use-tpl {
-  border: 1px solid #000000 !important;
+  border: 1px solid #767676 !important;
   border-radius: 0 !important;
-  background: #ffffff !important;
+  background: #efefef !important;
+  background-color: #efefef !important;
   color: #000000 !important;
   box-shadow: none !important;
 }
 
 body.basic-mode .bento-pill-btn:hover,
 body.basic-mode .btn-use-tpl:hover {
-  background: #000000 !important;
-  color: #ffffff !important;
+  background: #e5e5e5 !important;
+  background-color: #e5e5e5 !important;
+  border-color: #4f4f4f !important;
+  color: #000000 !important;
 }
 
 /* Force main hero headline to generic system serif (Times New Roman) and remove gradient text colors */
@@ -3208,16 +3237,18 @@ body.basic-mode .mobile-bottom-nav-container {
 body.basic-mode .nav-roll-link,
 body.basic-mode .nav-roll-cta {
   border-radius: 0 !important;
-  border: 1px solid #000000 !important;
-  background: #e5e7eb !important;
+  border: 1px solid #767676 !important;
+  background: #efefef !important;
+  background-color: #efefef !important;
   color: #000000 !important;
   box-shadow: none !important;
 }
 
 body.basic-mode .mobile-bottom-nav .bottom-nav-item {
   border-radius: 0 !important;
-  border: 1px solid #000000 !important;
-  background: #e5e7eb !important;
+  border: 1px solid #767676 !important;
+  background: #efefef !important;
+  background-color: #efefef !important;
   color: #000000 !important;
   box-shadow: none !important;
   transform: none !important;
@@ -3225,9 +3256,10 @@ body.basic-mode .mobile-bottom-nav .bottom-nav-item {
 
 body.basic-mode .mobile-bottom-nav .bottom-nav-build {
   border-radius: 0 !important;
-  border: 1px solid #000000 !important;
-  background-color: #000000 !important;
-  color: #ffffff !important;
+  border: 1px solid #767676 !important;
+  background: #efefef !important;
+  background-color: #efefef !important;
+  color: #000000 !important;
   box-shadow: none !important;
   transform: none !important;
 }
@@ -3269,55 +3301,86 @@ body.basic-mode select:focus {
   box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(102, 175, 233, 0.6) !important;
 }
 
-/* 5. Buttons: Standard 2015 Bootstrap Primary & Secondary Buttons */
-body.basic-mode button.btn.pri,
-body.basic-mode .btn.pri,
-body.basic-mode .btn-primary {
-  background-color: #337ab7 !important;
-  border: 1px solid #2e6da4 !important;
-  color: #ffffff !important;
-  border-radius: 4px !important;
-  box-shadow: none !important;
-  text-transform: none !important;
-  letter-spacing: normal !important;
-  font-weight: 600 !important;
-  transform: none !important;
-}
-
-body.basic-mode button.btn.pri:hover,
-body.basic-mode .btn.pri:hover,
-body.basic-mode .btn-primary:hover {
-  background-color: #286090 !important;
-  border-color: #204d74 !important;
-  color: #ffffff !important;
-  transform: none !important;
-}
-
+/* 5. Buttons: Standard Clunky HTML Default Buttons */
 body.basic-mode button,
 body.basic-mode .btn,
+body.basic-mode button.btn.pri,
+body.basic-mode .btn.pri,
+body.basic-mode .btn-primary,
+body.basic-mode .btn-hero-primary,
+body.basic-mode .btn-hero-secondary,
+body.basic-mode #hero-generate-btn,
+body.basic-mode #hero-sample-cta,
+body.basic-mode .btn-generate-cv,
+body.basic-mode .bottom-nav-build,
+body.basic-mode .mobile-bottom-nav .bottom-nav-build,
+body.basic-mode .nav-roll-cta,
+body.basic-mode .bento-pill-btn,
+body.basic-mode .btn-use-tpl,
 body.basic-mode .btn.sec,
 body.basic-mode .btn-export,
-body.basic-mode .btn.add {
-  background-color: #ffffff !important;
-  border: 1px solid #cccccc !important;
-  color: #333333 !important;
-  border-radius: 4px !important;
+body.basic-mode .btn.add,
+body.basic-mode .btn-icon,
+body.basic-mode #to2,
+body.basic-mode #to3,
+body.basic-mode input[type="button"],
+body.basic-mode input[type="submit"],
+body.basic-mode input[type="reset"] {
+  background: #efefef !important;
+  background-color: #efefef !important;
+  color: #000000 !important;
+  border: 1px solid #767676 !important;
+  border-radius: 0 !important;
   box-shadow: none !important;
+  text-shadow: none !important;
   text-transform: none !important;
   letter-spacing: normal !important;
-  font-weight: 500 !important;
+  font-weight: normal !important;
+  font-family: Arial, "Helvetica Neue", Helvetica, sans-serif !important;
   transform: none !important;
+  cursor: pointer !important;
 }
 
 body.basic-mode button:hover,
 body.basic-mode .btn:hover,
+body.basic-mode button.btn.pri:hover,
+body.basic-mode .btn.pri:hover,
+body.basic-mode .btn-primary:hover,
+body.basic-mode .btn-hero-primary:hover,
+body.basic-mode .btn-hero-secondary:hover,
+body.basic-mode #hero-generate-btn:hover,
+body.basic-mode #hero-sample-cta:hover,
+body.basic-mode .btn-generate-cv:hover,
+body.basic-mode .bottom-nav-build:hover,
+body.basic-mode .mobile-bottom-nav .bottom-nav-build:hover,
+body.basic-mode .nav-roll-cta:hover,
+body.basic-mode .bento-pill-btn:hover,
+body.basic-mode .btn-use-tpl:hover,
 body.basic-mode .btn.sec:hover,
 body.basic-mode .btn-export:hover,
-body.basic-mode .btn.add:hover {
-  background-color: #e6e6e6 !important;
-  border-color: #adadad !important;
-  color: #333333 !important;
+body.basic-mode .btn.add:hover,
+body.basic-mode .btn-icon:hover,
+body.basic-mode #to2:hover,
+body.basic-mode #to3:hover {
+  background: #e5e5e5 !important;
+  background-color: #e5e5e5 !important;
+  border-color: #4f4f4f !important;
+  color: #000000 !important;
   transform: none !important;
+}
+
+body.basic-mode button:active,
+body.basic-mode .btn:active,
+body.basic-mode button.btn.pri:active,
+body.basic-mode .btn.pri:active,
+body.basic-mode .btn-primary:active,
+body.basic-mode .btn-hero-primary:active,
+body.basic-mode .bottom-nav-build:active,
+body.basic-mode .mobile-bottom-nav .bottom-nav-build:active,
+body.basic-mode .nav-roll-cta:active {
+  background: #d4d4d4 !important;
+  background-color: #d4d4d4 !important;
+  border-style: inset !important;
 }
 
 /* 6. Disable Premium Features (Step 2 Theme Selection, Accent Pickers, ATS/Smart Features) */
