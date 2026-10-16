@@ -50,7 +50,12 @@ window.CraftCVApp = window.CVForgeApp = (() => {
     const to2Btn = $('#to2');
     if (!to2Btn) return;
 
-    if (hasStoredTheme()) {
+    const isBasic = typeof document !== 'undefined' && document.body && document.body.classList.contains('basic-mode');
+
+    if (isBasic) {
+      to2Btn.textContent = 'Generate My CV →';
+      to2Btn.setAttribute('data-bypass-theme', 'true');
+    } else if (hasStoredTheme()) {
       to2Btn.textContent = 'Generate My CV ->';
       to2Btn.setAttribute('data-bypass-theme', 'true');
     } else {
@@ -65,6 +70,12 @@ window.CraftCVApp = window.CVForgeApp = (() => {
    */
   function go(stepNumber) {
     if (stepNumber < 1 || stepNumber > 3) return;
+
+    const isBasic = typeof document !== 'undefined' && document.body && document.body.classList.contains('basic-mode');
+    if (isBasic && stepNumber === 2) {
+      go(3);
+      return;
+    }
 
     // Validate before moving past step 1
     if (stepNumber > 1 && currentStep === 1) {
@@ -216,14 +227,24 @@ window.CraftCVApp = window.CVForgeApp = (() => {
    */
   function renderCV() {
     const data = CraftCVForm.getFormData();
+    const isBasic = Boolean(
+      (typeof document !== 'undefined' && document.body && document.body.classList.contains('basic-mode')) ||
+      (typeof localStorage !== 'undefined' && (localStorage.getItem('craftcv_smart_mode') === 'basic' || localStorage.getItem('craftcv_smart_mode') === 'off' || localStorage.getItem('craftcv_smart_mode') === 'false' || localStorage.getItem('craftcv_smart_mode') === '0'))
+    );
     data.theme = activeTheme;
     data.accent = activeAccent;
     data.fontSize = activeFontSize;
     data.fitOnePage = activeFitOnePage;
+    data.isBasicMode = isBasic;
     
     const cvContainer = $('#cv');
     CraftCVRender.renderToElement(cvContainer, data);
-    applyFitToOnePage(cvContainer, activeFitOnePage);
+    if (!isBasic) {
+      applyFitToOnePage(cvContainer, activeFitOnePage);
+    } else if (cvContainer) {
+      cvContainer.style.transform = '';
+      cvContainer.style.transformOrigin = '';
+    }
     document.title = (data.name ? `${data.name} - Resume` : 'CraftCV Resume');
   }
 
@@ -852,6 +873,33 @@ window.CraftCVApp = window.CVForgeApp = (() => {
       try {
         localStorage.setItem(STORAGE_KEY_SMART_MODE, basic ? 'basic' : 'smart');
       } catch (e) {}
+
+      // Re-render CV template instantly
+      renderCV();
+
+      if (!basic) {
+        // Smart Mode re-activated:
+        // 1. Re-calculate ATS analysis
+        updateATSAnalysis();
+        // 2. Animate ATS score popping up & resume template reveal
+        if (typeof document !== 'undefined') {
+          const scoreBadges = document.querySelectorAll('#ats-badge-pill, .ats-score-badge, .ats-score-hero-card, #score-ring-progress');
+          scoreBadges.forEach(el => {
+            el.classList.remove('score-pop-animation');
+            void el.offsetWidth; // trigger reflow
+            el.classList.add('score-pop-animation');
+          });
+
+          const cvSheet = document.getElementById('cv');
+          if (cvSheet) {
+            cvSheet.classList.remove('smart-reveal-animation');
+            void cvSheet.offsetWidth;
+            cvSheet.classList.add('smart-reveal-animation');
+          }
+        }
+      }
+
+      updateStep1NextButton();
     }
 
     // Apply initial state
@@ -939,7 +987,8 @@ window.CraftCVApp = window.CVForgeApp = (() => {
     // Next buttons
     $('#to2')?.addEventListener('click', (e) => {
       if (e && e.preventDefault) e.preventDefault();
-      if (hasStoredTheme()) {
+      const isBasic = typeof document !== 'undefined' && document.body && document.body.classList.contains('basic-mode');
+      if (isBasic || hasStoredTheme()) {
         go(3);
       } else {
         go(2);

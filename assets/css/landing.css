@@ -2927,10 +2927,225 @@ body.basic-mode .smart-mode-label {
   color: #9ca3af;
 }
 
-/* Basic Mode Feature Hiding Mechanism */
+/* ==========================================================================
+   EXTREME UI DOWNGRADE: BASIC MODE STYLING & RAW TEMPLATE ENGINE
+   Stark night-and-day contrast for presentation & demo purposes.
+   Strips glassmorphism, shadows, round borders; forces generic serif;
+   disables Step 2, color pickers, and smart features; renders raw text CV.
+   ========================================================================== */
+
+/* 1. Universal Serif Font in Basic Mode */
+body.basic-mode,
+body.basic-mode *,
+html.basic-mode,
+html.basic-mode * {
+  font-family: 'Times New Roman', Times, Georgia, serif !important;
+}
+
+/* 2. Strip All Shadows & Glassmorphism Filters */
+body.basic-mode *,
+body.basic-mode *::before,
+body.basic-mode *::after,
+html.basic-mode *,
+html.basic-mode *::before,
+html.basic-mode *::after {
+  box-shadow: none !important;
+  text-shadow: none !important;
+  filter: none !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+
+/* 3. Strip Glassmorphic Backgrounds to Flat White */
+body.basic-mode header,
+body.basic-mode nav,
+body.basic-mode .top-nav,
+body.basic-mode .mobile-bottom-nav,
+body.basic-mode .card,
+body.basic-mode .bento-card,
+body.basic-mode .frosted-glass-pill,
+body.basic-mode .formatting-controls-card,
+body.basic-mode .notification-pill,
+body.basic-mode .glass,
+body.basic-mode .roll-box,
+body.basic-mode .preview-container {
+  background: #ffffff !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+
+/* 4. Harsh, Square, 1px Solid Black Borders on Interactive & Container Elements */
+body.basic-mode input,
+body.basic-mode textarea,
+body.basic-mode select,
+body.basic-mode button,
+body.basic-mode .btn,
+body.basic-mode .card,
+body.basic-mode .bento-card,
+body.basic-mode .mobile-bottom-nav,
+body.basic-mode .notification-pill,
+body.basic-mode .sheet,
+body.basic-mode .row,
+body.basic-mode .step,
+body.basic-mode fieldset {
+  border-radius: 0 !important;
+  border: 1px solid #000000 !important;
+}
+
+body.basic-mode button,
+body.basic-mode .btn {
+  background-color: #ffffff !important;
+  color: #000000 !important;
+}
+
+body.basic-mode button:hover,
+body.basic-mode .btn:hover {
+  background-color: #000000 !important;
+  color: #ffffff !important;
+}
+
+/* 5. Disable Premium Steps: Hide Step 2 (Theme Selection), Accent Pickers, & ATS/Smart Features */
+body.basic-mode #s2,
+body.basic-mode #d2,
+body.basic-mode #step2,
+body.basic-mode .step2-bento-wrap,
+body.basic-mode .themes,
+body.basic-mode #themes,
+body.basic-mode .colors,
+body.basic-mode #colors,
+body.basic-mode #change-theme-btn,
+body.basic-mode [data-go="2"],
 body.basic-mode .smart-feature,
+body.basic-mode #ats-section,
+body.basic-mode .ats-dashboard-section,
+body.basic-mode #ats-badge-pill,
+body.basic-mode .ats-score-badge,
+body.basic-mode .ats-score-hero-card,
+body.basic-mode #score-ring-progress,
+body.basic-mode #jd-matcher-card,
+body.basic-mode .jd-matcher-card,
+body.basic-mode #ats-tips-container,
+body.basic-mode .ats-tips-card,
+body.basic-mode #formatting-controls-card,
+body.basic-mode .formatting-controls-card,
 html.basic-mode .smart-feature {
   display: none !important;
+}
+
+/* 6. Unstyled 'Raw' Resume Template (Zero CSS Layout - Plain Sequential Document) */
+.sheet.t-raw,
+.sheet.basic-raw-template,
+body.basic-mode .sheet {
+  display: block !important;
+  width: 100% !important;
+  max-width: 210mm !important;
+  min-height: 297mm !important;
+  background: #ffffff !important;
+  color: #000000 !important;
+  padding: 40px !important;
+  border: 1px solid #000000 !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  font-family: 'Times New Roman', Times, Georgia, serif !important;
+  font-size: 11pt !important;
+  line-height: 1.4 !important;
+  text-align: left !important;
+  box-sizing: border-box !important;
+  transform: none !important;
+}
+
+.sheet.t-raw h1,
+.sheet.basic-raw-template h1,
+body.basic-mode .sheet h1 {
+  font-size: 20pt !important;
+  font-weight: bold !important;
+  text-align: center !important;
+  margin: 0 0 6px 0 !important;
+  text-transform: uppercase !important;
+  letter-spacing: normal !important;
+  color: #000000 !important;
+  font-family: 'Times New Roman', Times, Georgia, serif !important;
+}
+
+.sheet.t-raw p,
+.sheet.basic-raw-template p,
+body.basic-mode .sheet p {
+  font-size: 11pt !important;
+  margin: 4px 0 !important;
+  color: #000000 !important;
+  font-family: 'Times New Roman', Times, Georgia, serif !important;
+  line-height: 1.35 !important;
+}
+
+.sheet.t-raw h2,
+.sheet.basic-raw-template h2,
+body.basic-mode .sheet h2 {
+  font-size: 13pt !important;
+  font-weight: bold !important;
+  margin: 16px 0 6px 0 !important;
+  border-bottom: 1px solid #000000 !important;
+  padding-bottom: 2px !important;
+  text-transform: uppercase !important;
+  letter-spacing: normal !important;
+  color: #000000 !important;
+  font-family: 'Times New Roman', Times, Georgia, serif !important;
+}
+
+.sheet.t-raw ul,
+.sheet.basic-raw-template ul,
+body.basic-mode .sheet ul {
+  margin: 4px 0 8px 24px !important;
+  padding: 0 !important;
+  list-style-type: disc !important;
+}
+
+.sheet.t-raw li,
+.sheet.basic-raw-template li,
+body.basic-mode .sheet li {
+  font-size: 10.5pt !important;
+  margin-bottom: 2px !important;
+  color: #000000 !important;
+  font-family: 'Times New Roman', Times, Georgia, serif !important;
+}
+
+/* 7. Transition Animations: Popping ATS Score & Smart UI Reveal */
+@keyframes scorePop {
+  0% {
+    transform: scale(0.6);
+    opacity: 0;
+  }
+  50% {
+    transform: scale(1.18);
+    opacity: 1;
+  }
+  75% {
+    transform: scale(0.95);
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.score-pop-animation {
+  animation: scorePop 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) forwards !important;
+}
+
+@keyframes smartReveal {
+  0% {
+    opacity: 0.4;
+    filter: blur(4px);
+    transform: scale(0.98);
+  }
+  100% {
+    opacity: 1;
+    filter: blur(0px);
+    transform: scale(1);
+  }
+}
+
+.smart-reveal-animation {
+  animation: smartReveal 0.45s cubic-bezier(0.16, 1, 0.3, 1) forwards !important;
 }
 
 @media (max-width: 640px) {

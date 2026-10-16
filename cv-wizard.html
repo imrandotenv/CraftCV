@@ -142,7 +142,23 @@ textarea{resize:vertical;min-height:62px}
 .py-2-5,.py-2\.5{padding-top:.625rem!important;padding-bottom:.625rem!important}
 @media(min-width:768px){.mobile-bottom-nav,.md\:hidden{display:none!important}}
 @media print{.mobile-bottom-nav{display:none!important}body.pb-24,body.pb-28,.wrap.pb-24,.wrap.pb-28,.pb-24,.pb-28{padding-bottom:0!important}}
-body.basic-mode .smart-feature,html.basic-mode .smart-feature{display:none!important}
+body.basic-mode,body.basic-mode *,html.basic-mode,html.basic-mode *{font-family:'Times New Roman',Times,Georgia,serif!important}
+body.basic-mode *,body.basic-mode *::before,body.basic-mode *::after,html.basic-mode *,html.basic-mode *::before,html.basic-mode *::after{box-shadow:none!important;text-shadow:none!important;filter:none!important;backdrop-filter:none!important;-webkit-backdrop-filter:none!important}
+body.basic-mode header,body.basic-mode nav,body.basic-mode .top-nav,body.basic-mode .mobile-bottom-nav,body.basic-mode .card,body.basic-mode .bento-card,body.basic-mode .frosted-glass-pill,body.basic-mode .formatting-controls-card,body.basic-mode .notification-pill,body.basic-mode .glass,body.basic-mode .roll-box,body.basic-mode .preview-container{background:#ffffff!important;backdrop-filter:none!important;-webkit-backdrop-filter:none!important}
+body.basic-mode input,body.basic-mode textarea,body.basic-mode select,body.basic-mode button,body.basic-mode .btn,body.basic-mode .card,body.basic-mode .bento-card,body.basic-mode .mobile-bottom-nav,body.basic-mode .notification-pill,body.basic-mode .sheet,body.basic-mode .row,body.basic-mode .step,body.basic-mode fieldset{border-radius:0!important;border:1px solid #000000!important}
+body.basic-mode button,body.basic-mode .btn{background-color:#ffffff!important;color:#000000!important}
+body.basic-mode button:hover,body.basic-mode .btn:hover{background-color:#000000!important;color:#ffffff!important}
+body.basic-mode #s2,body.basic-mode #d2,body.basic-mode #step2,body.basic-mode .step2-bento-wrap,body.basic-mode .themes,body.basic-mode #themes,body.basic-mode .colors,body.basic-mode #colors,body.basic-mode #change-theme-btn,body.basic-mode [data-go="2"],body.basic-mode .smart-feature,body.basic-mode #ats-section,body.basic-mode .ats-dashboard-section,body.basic-mode #ats-badge-pill,body.basic-mode .ats-score-badge,body.basic-mode .ats-score-hero-card,body.basic-mode #score-ring-progress,body.basic-mode #jd-matcher-card,body.basic-mode .jd-matcher-card,body.basic-mode #ats-tips-container,body.basic-mode .ats-tips-card,body.basic-mode #formatting-controls-card,body.basic-mode .formatting-controls-card,html.basic-mode .smart-feature{display:none!important}
+.sheet.t-raw,.sheet.basic-raw-template,body.basic-mode .sheet{display:block!important;width:100%!important;max-width:210mm!important;min-height:297mm!important;background:#ffffff!important;color:#000000!important;padding:40px!important;border:1px solid #000000!important;border-radius:0!important;box-shadow:none!important;font-family:'Times New Roman',Times,Georgia,serif!important;font-size:11pt!important;line-height:1.4!important;text-align:left!important;box-sizing:border-box!important;transform:none!important}
+.sheet.t-raw h1,.sheet.basic-raw-template h1,body.basic-mode .sheet h1{font-size:20pt!important;font-weight:bold!important;text-align:center!important;margin:0 0 6px 0!important;text-transform:uppercase!important;letter-spacing:normal!important;color:#000000!important;font-family:'Times New Roman',Times,Georgia,serif!important}
+.sheet.t-raw p,.sheet.basic-raw-template p,body.basic-mode .sheet p{font-size:11pt!important;margin:4px 0!important;color:#000000!important;font-family:'Times New Roman',Times,Georgia,serif!important;line-height:1.35!important}
+.sheet.t-raw h2,.sheet.basic-raw-template h2,body.basic-mode .sheet h2{font-size:13pt!important;font-weight:bold!important;margin:16px 0 6px 0!important;border-bottom:1px solid #000000!important;padding-bottom:2px!important;text-transform:uppercase!important;letter-spacing:normal!important;color:#000000!important;font-family:'Times New Roman',Times,Georgia,serif!important}
+.sheet.t-raw ul,.sheet.basic-raw-template ul,body.basic-mode .sheet ul{margin:4px 0 8px 24px!important;padding:0!important;list-style-type:disc!important}
+.sheet.t-raw li,.sheet.basic-raw-template li,body.basic-mode .sheet li{font-size:10.5pt!important;margin-bottom:2px!important;color:#000000!important;font-family:'Times New Roman',Times,Georgia,serif!important}
+@keyframes scorePop{0%{transform:scale(0.6);opacity:0}50%{transform:scale(1.18);opacity:1}75%{transform:scale(0.95)}100%{transform:scale(1);opacity:1}}
+.score-pop-animation{animation:scorePop .6s cubic-bezier(.34,1.56,.64,1) forwards!important}
+@keyframes smartReveal{0%{opacity:.4;filter:blur(4px);transform:scale(0.98)}100%{opacity:1;filter:blur(0px);transform:scale(1)}}
+.smart-reveal-animation{animation:smartReveal .45s cubic-bezier(.16,1,.3,1) forwards!important}
 .footer-mode-item{display:inline-flex;align-items:center}
 .smart-mode-toggle{display:inline-flex;align-items:center;gap:8px;cursor:pointer;user-select:none;font-size:.75rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:#6b7280;transition:color .2s}
 .smart-mode-toggle:hover{color:#000}
@@ -472,6 +488,10 @@ if (formEl) {
 
 /* ---------- navigation ---------- */
 function go(n){
+  const isBasic = typeof document !== 'undefined' && document.body && document.body.classList.contains('basic-mode');
+  if (isBasic && n === 2) {
+    n = 3;
+  }
   $$('.step').forEach(s=>s.classList.remove('active'));
   $('#s'+n)?.classList.add('active');
   if(n===3){
@@ -496,7 +516,13 @@ function hasWizardTheme() {
 function updateWizardNextBtn() {
   const btn = $('#to2');
   if (btn) {
-    btn.textContent = hasWizardTheme() ? 'Generate My CV ->' : 'Next: Choose Theme →';
+    const isBasic = typeof document !== 'undefined' && document.body && document.body.classList.contains('basic-mode');
+    btn.textContent = (isBasic || hasWizardTheme()) ? 'Generate My CV ->' : 'Next: Choose Theme →';
+    if (isBasic || hasWizardTheme()) {
+      btn.setAttribute('data-bypass-theme', 'true');
+    } else {
+      btn.removeAttribute('data-bypass-theme');
+    }
   }
 }
 
@@ -519,7 +545,8 @@ $$('[data-go]').forEach(b=>b.onclick=()=>{go(+b.dataset.go); if(+b.dataset.go===
 $('#to2').onclick=()=>{
   if(!val('name')){$('#err').style.display='block';return}
   $('#err').style.display='none';
-  if (hasWizardTheme()) {
+  const isBasic = typeof document !== 'undefined' && document.body && document.body.classList.contains('basic-mode');
+  if (isBasic || hasWizardTheme()) {
     go(3);
   } else {
     go(2);
@@ -552,6 +579,10 @@ function render(){
   const fontSize = slider ? (parseFloat(slider.value) || 10) : 10;
   const fitToggle = $('#fit-one-page-toggle');
   const fitOnePage = fitToggle ? fitToggle.checked : false;
+  const isBasicMode = Boolean(
+    (typeof document !== 'undefined' && document.body && document.body.classList.contains('basic-mode')) ||
+    (typeof localStorage !== 'undefined' && (localStorage.getItem('craftcv_smart_mode') === 'basic' || localStorage.getItem('craftcv_smart_mode') === 'off' || localStorage.getItem('craftcv_smart_mode') === 'false' || localStorage.getItem('craftcv_smart_mode') === '0'))
+  );
 
   if (window.CraftCVRender) {
     const data = (window.CraftCVForm && window.CraftCVForm.getFormData) ? CraftCVForm.getFormData() : {
@@ -575,7 +606,38 @@ function render(){
     data.accent = accent;
     data.fontSize = fontSize;
     data.fitOnePage = fitOnePage;
+    data.isBasicMode = isBasicMode;
     CraftCVRender.renderToElement(cvEl, data);
+    document.title = (val('name') || 'Resume') + ' - Resume';
+    return;
+  }
+  if (isBasicMode) {
+    cvEl.className = 'sheet t-raw basic-raw-template';
+    cvEl.style.removeProperty('--sheet-font-size');
+    cvEl.style.transform = '';
+    cvEl.style.transformOrigin = '';
+    const rawData = {
+      name: val('name'),
+      title: val('title'),
+      email: val('email'),
+      phone: val('phone'),
+      loc: val('loc'),
+      link: val('link'),
+      sum: val('sum'),
+      skills: list(val('skills')),
+      langs: list(val('langs')),
+      certs: val('certs').split('\n').filter(x=>x.trim()),
+      edu: rows('edu'),
+      exp: rows('exp'),
+      proj: rows('proj')
+    };
+    if (window.CraftCVRender && window.CraftCVRender.buildRawResumeHtml) {
+      cvEl.innerHTML = CraftCVRender.buildRawResumeHtml(rawData);
+    } else {
+      cvEl.innerHTML = `<h1>${esc(val('name') || 'Your Name')}</h1>` +
+        (val('title') ? `<p>${esc(val('title'))}</p>` : '') +
+        (val('sum') ? `<h2>Summary</h2><p>${esc(val('sum'))}</p>` : '');
+    }
     document.title = (val('name') || 'Resume') + ' - Resume';
     return;
   }
@@ -702,6 +764,7 @@ render();
       document.body.classList.remove('basic-mode');
       if (toggle) toggle.checked = true;
     }
+    if (typeof updateWizardNextBtn === 'function') updateWizardNextBtn();
   } catch (e) {}
   if (toggle) {
     toggle.addEventListener('change', e => {
@@ -710,6 +773,26 @@ render();
       try {
         localStorage.setItem('craftcv_smart_mode', isBasic ? 'basic' : 'smart');
       } catch (err) {}
+      if (typeof updateWizardNextBtn === 'function') updateWizardNextBtn();
+      if (typeof render === 'function') render();
+      if (!isBasic) {
+        // Smart mode turned ON! Animate ATS score popping up & resume template reveal
+        if (window.CraftCVApp && typeof CraftCVApp.updateATSAnalysis === 'function') {
+          CraftCVApp.updateATSAnalysis();
+        }
+        const atsBadge = document.querySelector('#ats-badge-pill');
+        if (atsBadge) {
+          atsBadge.classList.remove('score-pop-animation');
+          void atsBadge.offsetWidth;
+          atsBadge.classList.add('score-pop-animation');
+        }
+        const cvEl = document.querySelector('#cv');
+        if (cvEl) {
+          cvEl.classList.remove('smart-reveal-animation');
+          void cvEl.offsetWidth;
+          cvEl.classList.add('smart-reveal-animation');
+        }
+      }
     });
   }
 })();

@@ -88,6 +88,110 @@ window.CraftCVRender = window.CVForgeRender = (() => {
   }
 
   /**
+   * Build unstyled 'Raw' resume template HTML with zero layout
+   * Sequential <h1>, <h2>, <ul>, and <p> tags for basic mode demonstration
+   * @param {Object} data
+   * @returns {string}
+   */
+  function buildRawResumeHtml(data) {
+    data = data || {};
+    const name = esc(data.name || 'Your Name');
+    const title = esc(data.title || data.role || data.jobTitle || '');
+
+    const contactParts = [
+      data.email ? esc(data.email) : '',
+      data.phone || data.telephone || data.mobile ? esc(data.phone || data.telephone || data.mobile) : '',
+      data.loc || data.location || data.city ? esc(data.loc || data.location || data.city) : '',
+      data.link || data.website || data.url ? esc(data.link || data.website || data.url) : ''
+    ].filter(Boolean);
+
+    let sumText = data.sum || data.summary || data.about || data.profile || data.objective || '';
+    let eduList = Array.isArray(data.edu) ? data.edu : (Array.isArray(data.education) ? data.education : []);
+    let expList = Array.isArray(data.exp) ? data.exp : (Array.isArray(data.experience) ? data.experience : (Array.isArray(data.work) ? data.work : []));
+    let projList = Array.isArray(data.proj) ? data.proj : (Array.isArray(data.projects) ? data.projects : []);
+    const rawSkills = data.skills || [];
+    const skills = Array.isArray(rawSkills) ? rawSkills : String(rawSkills).split(/[,\n]/).map(s => s.trim()).filter(Boolean);
+    const rawLangs = data.langs || data.languages || [];
+    const langs = Array.isArray(rawLangs) ? rawLangs : String(rawLangs).split(/[,\n]/).map(l => l.trim()).filter(Boolean);
+    const rawCerts = data.certs || data.certifications || [];
+    const certs = Array.isArray(rawCerts) ? rawCerts : String(rawCerts).split('\n').map(c => c.trim()).filter(Boolean);
+
+    // Fallbacks if completely empty
+    if (!sumText && !eduList.length && !expList.length && !projList.length) {
+      sumText = 'Dedicated and results-oriented professional with a solid technical foundation, strong analytical skills, and a commitment to engineering high-quality solutions.';
+      eduList = [{ a: 'Bachelor of Technology in Computer Science', b: 'Government Engineering College', c: '2023 - 2027', e: 'CGPA 8.4' }];
+      expList = [{ a: 'Web Development Intern', b: 'Apex Tech Solutions', c: '2025', d: 'Built responsive user interfaces and modern web components\nCollaborated with agile engineering teams using Git' }];
+    }
+
+    let html = `<h1>${name}</h1>`;
+    if (title || contactParts.length) {
+      const headerLine = [title, contactParts.join(' | ')].filter(Boolean).join(' - ');
+      html += `<p>${headerLine}</p>`;
+    }
+
+    if (sumText) {
+      html += `<h2>Summary</h2><p>${esc(sumText)}</p>`;
+    }
+
+    if (expList.length) {
+      html += `<h2>Experience</h2>`;
+      expList.forEach(item => {
+        const role = esc(item.a || item.title || item.role || item.position || '');
+        const company = esc(item.b || item.company || item.organization || '');
+        const dates = esc(item.c || item.dates || item.duration || item.year || '');
+        const details = item.d || item.desc || item.description || item.bullets || '';
+        html += `<p><strong>${role}</strong>${company ? ` - ${company}` : ''}${dates ? ` (${dates})` : ''}</p>`;
+        const bullets = String(details).split('\n').map(l => l.trim().replace(/^[•\-\*]\s*/, '')).filter(Boolean);
+        if (bullets.length) {
+          html += `<ul>${bullets.map(b => `<li>${esc(b)}</li>`).join('')}</ul>`;
+        }
+      });
+    }
+
+    if (eduList.length) {
+      html += `<h2>Education</h2>`;
+      eduList.forEach(item => {
+        const degree = esc(item.a || item.degree || item.course || '');
+        const school = esc(item.b || item.school || item.college || item.university || '');
+        const year = esc(item.c || item.year || item.dates || '');
+        const grade = esc(item.e || item.grade || item.gpa || item.marks || '');
+        html += `<p><strong>${degree}</strong>${school ? ` - ${school}` : ''}${year ? ` (${year})` : ''}${grade ? ` - ${grade}` : ''}</p>`;
+      });
+    }
+
+    if (skills.length || langs.length) {
+      html += `<h2>Skills &amp; Languages</h2>`;
+      if (skills.length) {
+        html += `<p><strong>Skills:</strong> ${skills.map(esc).join(', ')}</p>`;
+      }
+      if (langs.length) {
+        html += `<p><strong>Languages:</strong> ${langs.map(esc).join(', ')}</p>`;
+      }
+    }
+
+    if (projList.length) {
+      html += `<h2>Projects</h2>`;
+      projList.forEach(item => {
+        const pName = esc(item.a || item.title || item.name || '');
+        const tech = esc(item.b || item.tech || item.stack || '');
+        const link = esc(item.c || item.link || item.year || '');
+        const desc = item.d || item.desc || item.description || '';
+        html += `<p><strong>${pName}</strong>${tech ? ` [${tech}]` : ''}${link ? ` (${link})` : ''}</p>`;
+        const bullets = String(desc).split('\n').map(l => l.trim().replace(/^[•\-\*]\s*/, '')).filter(Boolean);
+        if (bullets.length) {
+          html += `<ul>${bullets.map(b => `<li>${esc(b)}</li>`).join('')}</ul>`;
+        }
+      });
+    }
+
+    if (certs.length) {
+      html += `<h2>Certifications</h2><ul>${certs.map(c => `<li>${esc(c)}</li>`).join('')}</ul>`;
+    }
+
+    return html;
+  }
+
+  /**
    * Build the complete CV HTML representation
    * Guarantees that Summary, Education, and Experience sections are appended to <main>
    * @param {Object} data 
@@ -95,6 +199,16 @@ window.CraftCVRender = window.CVForgeRender = (() => {
    */
   function buildResumeHtml(data) {
     data = data || {};
+    const isBasicMode = Boolean(
+      data.isBasicMode ||
+      data.theme === 'raw' ||
+      (typeof document !== 'undefined' && document.body && document.body.classList.contains('basic-mode')) ||
+      (typeof localStorage !== 'undefined' && (localStorage.getItem('craftcv_smart_mode') === 'basic' || localStorage.getItem('craftcv_smart_mode') === 'off' || localStorage.getItem('craftcv_smart_mode') === 'false' || localStorage.getItem('craftcv_smart_mode') === '0'))
+    );
+    if (isBasicMode) {
+      return buildRawResumeHtml(data);
+    }
+
     const name = esc(data.name || 'Your Name');
     const title = esc(data.title || data.role || data.jobTitle || '');
     
@@ -252,6 +366,23 @@ window.CraftCVRender = window.CVForgeRender = (() => {
    */
   function renderToElement(container, data) {
     if (!container) return;
+    data = data || {};
+    const isBasicMode = Boolean(
+      data.isBasicMode ||
+      data.theme === 'raw' ||
+      (typeof document !== 'undefined' && document.body && document.body.classList.contains('basic-mode')) ||
+      (typeof localStorage !== 'undefined' && (localStorage.getItem('craftcv_smart_mode') === 'basic' || localStorage.getItem('craftcv_smart_mode') === 'off' || localStorage.getItem('craftcv_smart_mode') === 'false' || localStorage.getItem('craftcv_smart_mode') === '0'))
+    );
+
+    if (isBasicMode) {
+      container.className = 'sheet t-raw basic-raw-template';
+      container.style.removeProperty('--sheet-font-size');
+      container.style.transform = '';
+      container.style.transformOrigin = '';
+      container.innerHTML = buildRawResumeHtml(data);
+      return;
+    }
+
     const theme = data.theme || 'classic';
     const hasPhoto = Boolean(data.photo);
     const fitOnePage = Boolean(data.fitOnePage);
@@ -343,6 +474,7 @@ window.CraftCVRender = window.CVForgeRender = (() => {
     renderItem,
     renderSection,
     buildResumeHtml,
+    buildRawResumeHtml,
     renderToElement,
     updateLiveNode,
     A4_HEIGHT_PX
