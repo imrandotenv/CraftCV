@@ -645,6 +645,13 @@ window.CraftCVForm = window.CVForgeForm = (() => {
 
     form.addEventListener('input', handleInput);
     form.addEventListener('change', handleInput);
+
+    // Global document-level input listener for dynamic rows and inputs
+    document.addEventListener('input', (e) => {
+      if (e.target && e.target.closest('#form')) {
+        handleInput(e);
+      }
+    });
   }
 
   return {

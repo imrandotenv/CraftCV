@@ -1097,6 +1097,14 @@ window.CraftCVApp = window.CVForgeApp = (() => {
       form.addEventListener('change', handleLiveInput);
     }
 
+    // Global document-level input listener to ensure every keystroke instantly re-renders CV on desktop
+    document.addEventListener('input', (e) => {
+      if (e.target && e.target.closest('#form')) {
+        renderCV();
+        onFormChanged();
+      }
+    });
+
     // Load saved state or default
     const saved = CraftCVStorage.loadState();
     const storedTheme = (() => {

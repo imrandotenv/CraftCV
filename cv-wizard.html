@@ -96,25 +96,44 @@ textarea{resize:vertical;min-height:62px}
 
 /* Responsive Two-Column Wizard Grid for Large Screens (Desktop >= 1024px) */
 @media(min-width:1024px){
-  .wrap{max-width:1440px!important;width:96%!important}
+  .wrap,#wizard-main{max-width:1440px!important;width:100%!important;padding-left:24px!important;padding-right:24px!important}
+  .w-full{width:100%!important}
+  .max-w-\[1400px\]{max-width:1400px!important}
+  .mx-auto{margin-left:auto!important;margin-right:auto!important}
+  .items-start{align-items:flex-start!important}
+  .relative{position:relative!important}
   .lg\:grid{display:grid!important}
   .lg\:grid-cols-2{grid-template-columns:repeat(2,minmax(0,1fr))!important}
+  .lg\:gap-10{gap:2.5rem!important}
   .lg\:gap-8{gap:2rem!important}
-  .wizard-grid{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:2rem!important;align-items:start!important}
+  .col-span-1{grid-column:span 1 / span 1!important}
+  .wizard-grid{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:2.5rem!important;align-items:start!important}
   .wizard-left-col,.wizard-form-column{width:100%!important;min-width:0!important}
+  .hidden{display:none}
+  .lg\:block{display:block!important}
+  .sticky{position:sticky!important}
+  .top-24{top:6rem!important}
+  .h-\[calc\(100vh-6rem\)\]{height:calc(100vh - 6rem)!important}
+  .overflow-y-auto{overflow-y:auto!important}
+  .border{border-width:1px!important;border-style:solid!important}
+  .border-gray-200{border-color:#e5e7eb!important}
+  .rounded-xl{border-radius:0.75rem!important}
+  .shadow-lg{box-shadow:0 10px 15px -3px rgba(0,0,0,0.1),0 4px 6px -2px rgba(0,0,0,0.05)!important}
+  .bg-white{background-color:#ffffff!important}
+  .p-4{padding:1rem!important}
   /* Sticky Right Column Live CV Preview - Pinned Stationary */
-  .wizard-right-col,.wizard-preview-column,#wizard-preview-col{position:sticky!important;top:6rem!important;height:calc(100vh - 8rem)!important;overflow-y:auto!important;overflow-x:hidden!important;display:block!important;min-width:0!important}
-  .wizard-preview-column #s3,#wizard-preview-col #s3{display:block!important}
-  .wizard-preview-column .sheet{max-width:100%!important;box-sizing:border-box!important}
+  .wizard-right-col,.wizard-preview-column,#wizard-preview-col{position:sticky!important;top:6rem!important;height:calc(100vh - 8rem);height:calc(100vh - 6rem)!important;overflow-y:auto!important;overflow-x:hidden!important;display:block!important;min-width:0!important}
+  .wizard-preview-column .sheet,#wizard-preview-col .sheet{max-width:100%!important;box-sizing:border-box!important}
 }
 
 /* Mobile Fallback (< 1024px): Strictly single-column sequential layout */
 @media(max-width:1023px){
   .wizard-grid,.lg\:grid{display:block!important}
   .wizard-left-col,.wizard-form-column{display:block!important;width:100%!important}
+  .hidden{display:none}
   .wizard-right-col,.wizard-preview-column,#wizard-preview-col{position:static!important;top:auto!important;height:auto!important;overflow-y:visible!important;overflow-x:visible!important}
-  .wizard-preview-column #s3:not(.active),#wizard-preview-col #s3:not(.active){display:none!important}
-  .wizard-preview-column #s3.active,#wizard-preview-col #s3.active{display:block!important}
+  #wizard-preview-col:not(.mobile-preview-active){display:none!important}
+  #wizard-preview-col.mobile-preview-active{display:block!important;position:static!important;top:auto!important;height:auto!important;overflow-y:visible!important;overflow-x:visible!important;border:none!important;box-shadow:none!important;padding:0!important;background:transparent!important;margin-top:1.5rem!important}
   .step{padding-bottom:3.5rem!important}
   .step .nav,.nav{margin-bottom:4.5rem!important}
 }
@@ -263,8 +282,10 @@ body.basic-mode .smart-mode-label{color:#9ca3af}
   html,body{background:#fff!important;color:#000!important;margin:0!important;padding:0!important;width:210mm!important;height:auto!important}
   .wrap,.cv-wrapper{padding:0!important;max-width:none!important;margin:0!important}
   .wizard-grid,.lg\:grid{display:block!important}
-  .wizard-left-col,.wizard-form-column,#wizard-left-col,#s1,#s2,#s3-left{display:none!important}
-  .wizard-right-col,.wizard-preview-column,#wizard-preview-col{position:static!important;top:auto!important;height:auto!important;overflow:visible!important;display:block!important;padding:0!important;margin:0!important}
+  .wizard-left-col,.wizard-form-column,#wizard-left-col,#s1,#s2{display:none!important}
+  #s3{display:block!important;padding:0!important;margin:0!important}
+  #s3 .card,#s3 .nav,#s3 .export-grid,#s3 .print-tip-pill{display:none!important}
+  .wizard-right-col,.wizard-preview-column,#wizard-preview-col{position:static!important;top:auto!important;height:auto!important;overflow:visible!important;display:block!important;padding:0!important;margin:0!important;border:none!important;box-shadow:none!important;background:transparent!important}
   header,.top-nav,header.top-nav,.brand,.steps,.nav,.noprint,.app-footer,footer,.mobile-bottom-nav,nav.mobile-bottom-nav,.mobile-bottom-nav-container,.bottom-nav-item,.bottom-nav-build,.formatting-controls,.formatting-controls-card,#formatting-controls-card,.sticky-cv-toolbar,.formatting-controls-inner,.export-grid,#export-controls,.secondary-export-bar,.print-tip-pill,.toast-msg,#toast-msg{display:none!important}
   .noprint{display:none!important}
   body.pb-24,body.pb-28,.wrap.pb-24,.wrap.pb-28,.pb-24,.pb-28{padding-bottom:0!important}
@@ -297,10 +318,10 @@ header.header-hidden,
     <div class="dot" id="d3"><i>3</i><span>Download</span></div>
   </div>
 
-  <!-- Main Wizard Container: Two-Column Split on Large Screens (lg:grid lg:grid-cols-2 lg:gap-8) -->
-  <div class="wizard-grid lg:grid lg:grid-cols-2 lg:gap-8" id="wizard-container">
+  <!-- Main Wizard Container: Two-Column Split on Large Screens (w-full max-w-[1400px] mx-auto lg:grid lg:grid-cols-2 lg:gap-10 items-start relative) -->
+  <div class="w-full max-w-[1400px] mx-auto lg:grid lg:grid-cols-2 lg:gap-10 items-start relative wizard-grid" id="wizard-container">
     <!-- Left Column: Entire Input Form (Personal Info, Education, Experience, etc.) & Step Navigation Views -->
-    <div class="wizard-left-col wizard-form-column pb-28" id="wizard-left-col">
+    <div class="col-span-1 wizard-left-col wizard-form-column pb-28" id="wizard-left-col">
       <!-- STEP 1 -->
       <section class="step active pb-28" id="s1">
         <form id="form" onsubmit="return false">
@@ -372,74 +393,58 @@ header.header-hidden,
         <div class="nav noprint pb-8 mb-8" style="margin-bottom: 4rem !important;"><button class="btn sec" data-go="1">← Back</button><button class="btn pri" id="to3">Generate My CV →</button></div>
       </section>
 
-      <!-- STEP 3 ACTIONS FOR DESKTOP LEFT COLUMN -->
-      <section class="step pb-28" id="s3-left">
+      <!-- STEP 3 ACTIONS -->
+      <section class="step pb-28" id="s3">
         <div class="card noprint">
           <h2>🎉 Resume Ready &amp; Actions</h2>
           <p style="color:var(--muted);font-size:0.88rem;margin-bottom:14px;">Your resume is generated and previewed in real-time. Print, export as HTML/JSON, or copy text directly.</p>
-          <div class="nav noprint" style="margin-bottom:12px;display:flex;gap:8px;flex-wrap:wrap">
-            <button class="btn sec" data-go="1">✏️ Edit details</button>
-            <button class="btn sec" id="change-theme-left-btn" data-go="2">🎨 Change Theme</button>
-            <button class="btn pri" onclick="window.print()">🖨️ Print / Save PDF</button>
+          <div class="nav noprint" style="margin-bottom:12px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px">
+            <div style="display:flex;gap:8px">
+              <button class="btn sec" data-go="1">✏️ Edit details</button>
+              <button class="btn sec" id="change-theme-btn" data-go="2">🎨 Change Theme</button>
+            </div>
+            <button class="btn pri" id="print-btn" onclick="window.print()">🖨️ Print / Save as PDF</button>
           </div>
-          <div class="export-grid grid-cols-2 noprint" style="margin-top:12px;">
-            <button type="button" class="btn btn-export" onclick="$('#download-html-btn')?.click()">💾 Download HTML</button>
-            <button type="button" class="btn btn-export" onclick="$('#copy-text-btn')?.click()">📋 Copy Plain Text</button>
-            <button type="button" class="btn btn-export" onclick="$('#export-json-btn')?.click()">📤 Export JSON</button>
-            <button type="button" class="btn btn-export" onclick="$('#import-json-btn')?.click()">📥 Import JSON</button>
+
+          <!-- Secondary Export Buttons (Condensed into 2-column grid on mobile) -->
+          <div class="export-grid grid-cols-2 noprint" id="export-controls" style="margin-top:12px;">
+            <button type="button" class="btn btn-export" id="download-html-btn" title="Download standalone HTML file">💾 Download as HTML</button>
+            <button type="button" class="btn btn-export" id="copy-text-btn" title="Copy formatted text to clipboard">📋 Copy Plain Text</button>
+            <button type="button" class="btn btn-export" id="export-json-btn" title="Save resume JSON backup">📤 Export JSON</button>
+            <button type="button" class="btn btn-export" id="import-json-btn" title="Load resume JSON file">📥 Import JSON</button>
+            <input type="file" id="import-json-input" accept=".json" class="file-input-hidden" style="display:none">
           </div>
+
+          <!-- Print Tip Pill -->
           <div class="print-tip-pill noprint" style="margin-top:12px;">💡 <strong>Print Tip:</strong> In print dialog choose "Save as PDF", set margins to <b>None</b> and turn on <b>Background graphics</b>.</div>
         </div>
       </section>
     </div>
 
     <!-- Right Column: Stationary Live CV Template Preview Pinned via Sticky Positioning -->
-    <div class="wizard-right-col wizard-preview-column pb-28" id="wizard-preview-col">
-      <!-- STEP 3 (Contains Controls, Formatting Toolbar & Live Preview) -->
-      <section class="step pb-28" id="s3">
-        <div class="nav noprint" style="margin-bottom:8px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px">
-          <div style="display:flex;gap:8px">
-            <button class="btn sec" data-go="1">✏️ Edit details</button>
-            <button class="btn sec" id="change-theme-btn" data-go="2">🎨 Change Theme</button>
+    <div class="hidden lg:block sticky top-24 h-[calc(100vh-6rem)] overflow-y-auto border border-gray-200 rounded-xl shadow-lg bg-white p-4 wizard-right-col wizard-preview-column" id="wizard-preview-col">
+      <!-- Formatting Toolbar (Font Size slider, 'Fit to one page' toggle) - Relative/Static positioning immediately before CV wrapper -->
+      <div class="formatting-controls-card card noprint" id="formatting-controls-card" style="position: relative !important; top: auto !important; margin-bottom: 1.25rem !important; z-index: 10 !important;">
+        <div class="formatting-controls-inner">
+          <div class="format-group">
+            <label class="slider-group" for="font-size-slider">
+              <span>Font Size:</span>
+              <input type="range" id="font-size-slider" min="9" max="12" step="0.5" value="10" aria-label="Resume font size slider">
+              <span class="slider-val" id="font-size-val">10 pt</span>
+            </label>
           </div>
-          <button class="btn pri" id="print-btn" onclick="window.print()">🖨️ Print / Save as PDF</button>
-        </div>
-
-        <!-- Secondary Export Buttons (Condensed into 2-column grid on mobile) -->
-        <div class="export-grid grid-cols-2 noprint" id="export-controls">
-          <button type="button" class="btn btn-export" id="download-html-btn" title="Download standalone HTML file">💾 Download as HTML</button>
-          <button type="button" class="btn btn-export" id="copy-text-btn" title="Copy formatted text to clipboard">📋 Copy Plain Text</button>
-          <button type="button" class="btn btn-export" id="export-json-btn" title="Save resume JSON backup">📤 Export JSON</button>
-          <button type="button" class="btn btn-export" id="import-json-btn" title="Load resume JSON file">📥 Import JSON</button>
-          <input type="file" id="import-json-input" accept=".json" class="file-input-hidden" style="display:none">
-        </div>
-
-        <!-- Print Tip Pill -->
-        <div class="print-tip-pill noprint">💡 <strong>Print Tip:</strong> In print dialog choose "Save as PDF", set margins to <b>None</b> and turn on <b>Background graphics</b>.</div>
-
-        <!-- Formatting Toolbar (Font Size slider, 'Fit to one page' toggle) - Relative/Static positioning immediately before CV wrapper -->
-        <div class="formatting-controls-card card noprint" id="formatting-controls-card" style="position: relative !important; top: auto !important; margin-bottom: 1.25rem !important; z-index: 10 !important;">
-          <div class="formatting-controls-inner">
-            <div class="format-group">
-              <label class="slider-group" for="font-size-slider">
-                <span>Font Size:</span>
-                <input type="range" id="font-size-slider" min="9" max="12" step="0.5" value="10" aria-label="Resume font size slider">
-                <span class="slider-val" id="font-size-val">10 pt</span>
-              </label>
-            </div>
-            <div class="format-divider" aria-hidden="true"></div>
-            <div class="format-group">
-              <label class="toggle-group" for="fit-one-page-toggle">
-                <input type="checkbox" id="fit-one-page-toggle">
-                <span>📄 Fit to one page</span>
-              </label>
-            </div>
+          <div class="format-divider" aria-hidden="true"></div>
+          <div class="format-group">
+            <label class="toggle-group" for="fit-one-page-toggle">
+              <input type="checkbox" id="fit-one-page-toggle">
+              <span>📄 Fit to one page</span>
+            </label>
           </div>
         </div>
+      </div>
 
-        <!-- CV Wrapper / Stage -->
-        <div class="stage" id="stage"><div class="cv-wrapper"><article class="sheet" id="cv"></article></div></div>
-      </section>
+      <!-- CV Wrapper / Stage -->
+      <div class="stage" id="stage"><div class="cv-wrapper"><article class="sheet" id="cv"></article></div></div>
     </div>
   </div>
 </main>
@@ -524,6 +529,13 @@ if (formEl) {
   formEl.addEventListener('change', () => render());
 }
 
+// Global document-level input listener ensuring instant CV re-render on desktop on every keystroke
+document.addEventListener('input', (e) => {
+  if (e.target && e.target.closest('#form')) {
+    render();
+  }
+});
+
 /* ---------- navigation ---------- */
 function go(n){
   const isBasic = typeof document !== 'undefined' && document.body && document.body.classList && document.body.classList.contains('basic-mode');
@@ -532,9 +544,13 @@ function go(n){
   }
   $$('.step').forEach(s=>s.classList.remove('active'));
   $('#s'+n)?.classList.add('active');
-  if(n===3){
-    $('#s3-left')?.classList.add('active');
-    $('#s3')?.classList.add('active');
+  const previewCol = $('#wizard-preview-col');
+  if (previewCol) {
+    if (n === 3) {
+      previewCol.classList.add('mobile-preview-active');
+    } else {
+      previewCol.classList.remove('mobile-preview-active');
+    }
   }
   [1,2,3].forEach(i=>$('#d'+i)?.classList.toggle('on',i<=n));
   render();
