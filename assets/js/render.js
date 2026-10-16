@@ -202,7 +202,7 @@ window.CraftCVRender = window.CVForgeRender = (() => {
     const isBasicMode = Boolean(
       data.isBasicMode ||
       data.theme === 'raw' ||
-      (typeof document !== 'undefined' && document.body && document.body.classList.contains('basic-mode')) ||
+      (typeof document !== 'undefined' && document.body && document.body.classList && document.body.classList.contains('basic-mode')) ||
       (typeof localStorage !== 'undefined' && (localStorage.getItem('craftcv_smart_mode') === 'basic' || localStorage.getItem('craftcv_smart_mode') === 'off' || localStorage.getItem('craftcv_smart_mode') === 'false' || localStorage.getItem('craftcv_smart_mode') === '0'))
     );
     if (isBasicMode) {
@@ -370,7 +370,7 @@ window.CraftCVRender = window.CVForgeRender = (() => {
     const isBasicMode = Boolean(
       data.isBasicMode ||
       data.theme === 'raw' ||
-      (typeof document !== 'undefined' && document.body && document.body.classList.contains('basic-mode')) ||
+      (typeof document !== 'undefined' && document.body && document.body.classList && document.body.classList.contains('basic-mode')) ||
       (typeof localStorage !== 'undefined' && (localStorage.getItem('craftcv_smart_mode') === 'basic' || localStorage.getItem('craftcv_smart_mode') === 'off' || localStorage.getItem('craftcv_smart_mode') === 'false' || localStorage.getItem('craftcv_smart_mode') === '0'))
     );
 

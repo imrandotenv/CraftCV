@@ -50,7 +50,7 @@ window.CraftCVApp = window.CVForgeApp = (() => {
     const to2Btn = $('#to2');
     if (!to2Btn) return;
 
-    const isBasic = typeof document !== 'undefined' && document.body && document.body.classList.contains('basic-mode');
+    const isBasic = typeof document !== 'undefined' && document.body && document.body.classList && document.body.classList.contains('basic-mode');
 
     if (isBasic) {
       to2Btn.textContent = 'Generate My CV →';
@@ -71,7 +71,7 @@ window.CraftCVApp = window.CVForgeApp = (() => {
   function go(stepNumber) {
     if (stepNumber < 1 || stepNumber > 3) return;
 
-    const isBasic = typeof document !== 'undefined' && document.body && document.body.classList.contains('basic-mode');
+    const isBasic = typeof document !== 'undefined' && document.body && document.body.classList && document.body.classList.contains('basic-mode');
     if (isBasic && stepNumber === 2) {
       go(3);
       return;
@@ -228,7 +228,7 @@ window.CraftCVApp = window.CVForgeApp = (() => {
   function renderCV() {
     const data = CraftCVForm.getFormData();
     const isBasic = Boolean(
-      (typeof document !== 'undefined' && document.body && document.body.classList.contains('basic-mode')) ||
+      (typeof document !== 'undefined' && document.body && document.body.classList && document.body.classList.contains('basic-mode')) ||
       (typeof localStorage !== 'undefined' && (localStorage.getItem('craftcv_smart_mode') === 'basic' || localStorage.getItem('craftcv_smart_mode') === 'off' || localStorage.getItem('craftcv_smart_mode') === 'false' || localStorage.getItem('craftcv_smart_mode') === '0'))
     );
     data.theme = activeTheme;
@@ -841,8 +841,8 @@ window.CraftCVApp = window.CVForgeApp = (() => {
   const STORAGE_KEY_SMART_MODE = 'craftcv_smart_mode';
 
   /**
-   * Mode Toggle: Switch between Basic Mode and Smart AI/ATS Mode
-   * Default: Smart Mode ON.
+   * Mode Toggle: Switch between Basic Mode and AI Assist Mode
+   * Default: AI Assist Mode ON.
    * When unchecked: adds .basic-mode class to <body> and <html>, saves to localStorage.
    * When checked: removes .basic-mode class from <body> and <html>, saves to localStorage.
    */
@@ -868,8 +868,17 @@ window.CraftCVApp = window.CVForgeApp = (() => {
         }
       }
       toggleInputs.forEach(input => {
-        if (input) input.checked = !basic;
+        if (input) {
+          input.checked = !basic;
+          input.setAttribute('aria-label', 'AI Assist Mode');
+        }
       });
+      if (typeof document !== 'undefined') {
+        const labels = document.querySelectorAll('.smart-mode-label');
+        labels.forEach(l => { l.textContent = 'AI Assist Mode'; });
+        const loaders = document.querySelectorAll('.smart-loader-text');
+        loaders.forEach(t => { t.textContent = 'Initializing AI Assistant & ATS Formatting...'; });
+      }
       try {
         localStorage.setItem(STORAGE_KEY_SMART_MODE, basic ? 'basic' : 'smart');
       } catch (e) {}
@@ -917,20 +926,22 @@ window.CraftCVApp = window.CVForgeApp = (() => {
     function handleModeToggle(checked) {
       if (isTransitioning) return;
       const willBeBasic = !checked;
-      const currentlyBasic = typeof document !== 'undefined' && document.body && document.body.classList.contains('basic-mode');
+      const currentlyBasic = typeof document !== 'undefined' && document.body && document.body.classList && document.body.classList.contains('basic-mode');
 
       // Check if transitioning from Basic to Smart mode
       if (!willBeBasic && currentlyBasic) {
         isTransitioning = true;
 
         // Immediately prevent the UI from changing! Keep basic-mode active during loading
-        if (typeof document !== 'undefined' && document.body && !document.body.classList.contains('basic-mode')) {
+        if (typeof document !== 'undefined' && document.body && document.body.classList && !document.body.classList.contains('basic-mode')) {
           document.body.classList.add('basic-mode');
         }
 
         // Show the full-screen loading overlay (z-[999])
         const loader = typeof document !== 'undefined' ? (document.getElementById('smart-mode-loader') || document.querySelector('.smart-mode-loader')) : null;
         if (loader) {
+          const loaderText = loader.querySelector('.smart-loader-text');
+          if (loaderText) loaderText.textContent = 'Initializing AI Assistant & ATS Formatting...';
           loader.classList.remove('hidden');
           loader.classList.add('active');
           loader.style.display = 'flex';
@@ -1044,7 +1055,7 @@ window.CraftCVApp = window.CVForgeApp = (() => {
     // Next buttons
     $('#to2')?.addEventListener('click', (e) => {
       if (e && e.preventDefault) e.preventDefault();
-      const isBasic = typeof document !== 'undefined' && document.body && document.body.classList.contains('basic-mode');
+      const isBasic = typeof document !== 'undefined' && document.body && document.body.classList && document.body.classList.contains('basic-mode');
       if (isBasic || hasStoredTheme()) {
         go(3);
       } else {
