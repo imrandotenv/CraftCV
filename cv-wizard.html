@@ -327,12 +327,12 @@ header.header-hidden,
         <form id="form" onsubmit="return false">
           <div class="card"><h2>👤 Personal Info</h2>
             <div class="grid">
-              <label class="f">Full name *<input name="name" id="inp-name" placeholder="Aarav Kumar"></label>
+              <label class="f">Full name *<input name="name" id="inp-name" placeholder="Imran Ahmad"></label>
               <label class="f">Job title / Course<input name="title" id="inp-title" placeholder="B.Tech CSE Student"></label>
               <label class="f">Email<input name="email" id="inp-email" type="email" placeholder="you@email.com"></label>
-              <label class="f">Phone<input name="phone" id="inp-phone" placeholder="+91 98765 43210"></label>
+              <label class="f">Phone<input name="phone" id="inp-phone" placeholder="+91 99999 00000"></label>
               <label class="f">Location<input name="loc" id="inp-loc" placeholder="Darbhanga, Bihar"></label>
-              <label class="f">Link (GitHub / LinkedIn)<input name="link" id="inp-link" placeholder="github.com/you"></label>
+              <label class="f">Link (GitHub / LinkedIn)<input name="link" id="inp-link" placeholder="github.com/imrandotenv"></label>
               <label class="f full">Summary<textarea name="sum" id="inp-sum" placeholder="2-3 lines about you and your goals"></textarea></label>
             </div>
           </div>
@@ -790,7 +790,7 @@ $('#import-json-input')?.addEventListener('change', e => {
 
 /* ---------- sample data for quick demo ---------- */
 $('#sample').onclick=()=>{
-  const S={name:'Aarav Kumar',title:'B.Tech Computer Science Student',email:'aarav@email.com',phone:'+91 98765 43210',loc:'Darbhanga, Bihar',link:'github.com/aarav',
+  const S={name:'Imran Ahmad',title:'B.Tech Computer Science Student',email:'imran@email.com',phone:'+91 99999 00000',loc:'Darbhanga, Bihar',link:'github.com/imrandotenv',
    sum:'Motivated engineering student who enjoys building clean, responsive interfaces and solving problems with code. Seeking an internship to apply and grow my skills.',
    skills:'HTML5, CSS3, Python, C, Git, Problem Solving',langs:'English, Hindi, Maithili',certs:'Responsive Web Design - freeCodeCamp\nPython for Everybody - Coursera'};
   Object.entries(S).forEach(([k,v])=>$('#form').elements[k].value=v);

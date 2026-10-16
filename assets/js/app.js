@@ -148,12 +148,12 @@ window.CraftCVApp = window.CVForgeApp = (() => {
     const data = CraftCVForm.getFormData();
     // Provide clean fallback text for empty fields so miniature previews look realistic
     const previewData = {
-      name: data.name || 'Aarav Kumar',
+      name: data.name || 'Imran Ahmad',
       title: data.title || 'Software Engineering Student',
-      email: data.email || 'aarav@email.com',
-      phone: data.phone || '+91 98765 43210',
+      email: data.email || 'imran@email.com',
+      phone: data.phone || '+91 99999 00000',
       loc: data.loc || 'Darbhanga, Bihar',
-      link: data.link || 'github.com/aarav',
+      link: data.link || 'github.com/imrandotenv',
       sum: data.sum || 'Motivated engineering student who enjoys building clean, responsive interfaces and solving problems with code.',
       skills: (data.skills && data.skills.length) ? data.skills : ['HTML5', 'CSS3', 'JavaScript', 'Python', 'Git'],
       langs: (data.langs && data.langs.length) ? data.langs : ['English', 'Hindi'],
@@ -468,12 +468,12 @@ window.CraftCVApp = window.CVForgeApp = (() => {
    */
   function loadSampleData() {
     const sample = {
-      name: 'Aarav Kumar',
+      name: 'Imran Ahmad',
       title: 'B.Tech Computer Science Student',
-      email: 'aarav.kumar@email.com',
-      phone: '+91 98765 43210',
+      email: 'imran.ahmad@email.com',
+      phone: '+91 99999 00000',
       loc: 'Darbhanga, Bihar',
-      link: 'github.com/aarav',
+      link: 'github.com/imrandotenv',
       sum: 'Motivated engineering student who enjoys building clean, responsive interfaces and solving problems with code. Seeking a software internship to apply and expand modern web development skills.',
       skills: ['HTML5', 'CSS3', 'JavaScript', 'Python', 'Git', 'Problem Solving'],
       langs: ['English', 'Hindi', 'Maithili'],
