@@ -165,7 +165,7 @@ textarea{resize:vertical;min-height:62px}
 @media print{.mobile-bottom-nav{display:none!important}body.pb-24,body.pb-28,.wrap.pb-24,.wrap.pb-28,.pb-24,.pb-28{padding-bottom:0!important}}
 html.basic-mode,body.basic-mode{background-color:#f3f4f6!important;background:#f3f4f6!important;background-image:none!important;color:#333333!important;font-family:Arial,"Helvetica Neue",Helvetica,sans-serif!important}
 body.basic-mode input,body.basic-mode button,body.basic-mode select,body.basic-mode textarea,body.basic-mode .btn,body.basic-mode h1,body.basic-mode h2,body.basic-mode h3,body.basic-mode p,body.basic-mode span,body.basic-mode label{font-family:Arial,"Helvetica Neue",Helvetica,sans-serif!important}
-body.basic-mode svg:not(#smart-mode-loader svg),.basic-mode svg:not(#smart-mode-loader svg),body.basic-mode svg:not(#smart-mode-loader svg) *,.basic-mode svg:not(#smart-mode-loader svg) *,body.basic-mode .icon,body.basic-mode .tip-icon,body.basic-mode .clean-check-icon,body.basic-mode .badge-dot,body.basic-mode .status-dot,body.basic-mode .score-svg,body.basic-mode .footer-logo-badge,body.basic-mode .mini-avatar-ph,body.basic-mode .mini-bar,body.basic-mode .mini-divider,body.basic-mode .scene-glow-disc,body.basic-mode .bottom-fade-container,body.basic-mode .pastel-glow-backdrop,body.basic-mode .pastel-blob,html.basic-mode .pastel-glow-backdrop,html.basic-mode .pastel-blob,body.basic-mode [class*="decor"],body.basic-mode [class*="badge-dot"],body.basic-mode [class*="glow"],body.basic-mode [class*="disc"]{display:none!important;background:none!important}
+body.basic-mode svg:not(#smart-mode-loader svg),.basic-mode svg:not(#smart-mode-loader svg),body.basic-mode svg:not(#smart-mode-loader svg) *,.basic-mode svg:not(#smart-mode-loader svg) *,body.basic-mode .icon,body.basic-mode .tip-icon,body.basic-mode .clean-check-icon,body.basic-mode .badge-dot,body.basic-mode .status-dot,body.basic-mode .score-svg,body.basic-mode .footer-logo-badge,body.basic-mode .mini-avatar-ph,body.basic-mode .mini-bar,body.basic-mode .mini-divider,body.basic-mode .scene-glow-disc,body.basic-mode .bottom-fade-container,body.basic-mode .pastel-glow-backdrop,body.basic-mode .pastel-blob,html.basic-mode .pastel-glow-backdrop,html.basic-mode .pastel-blob,body.basic-mode [class*="decor"],body.basic-mode [class*="badge-dot"],body.basic-mode [class*="glow"],body.basic-mode [class*="disc"]{display: none !important; background: none !important;}
 body.basic-mode *,body.basic-mode *::before,body.basic-mode *::after,html.basic-mode *,html.basic-mode *::before,html.basic-mode *::after,.basic-mode *{text-shadow:none!important;filter:none!important;backdrop-filter:none!important;-webkit-backdrop-filter:none!important;transition:none!important;animation:none!important}
 .basic-mode *{transition:none!important}
 body.basic-mode .card,body.basic-mode .bento-card,body.basic-mode .panel,body.basic-mode .formatting-controls-card,body.basic-mode .notification-pill,body.basic-mode .frosted-glass-pill,body.basic-mode .glass,body.basic-mode .roll-box,body.basic-mode .preview-container{background:#ffffff!important;background-color:#ffffff!important;border:1px solid #d1d5db!important;border-radius:4px!important;box-shadow:none!important}
@@ -203,11 +203,15 @@ body.basic-mode .sheet .tags li:not(:last-child)::after{content:", "!important}
 .z-\[999\],.z-999{z-index:999!important}
 @keyframes spin{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
 .animate-spin{animation:spin .85s linear infinite!important}
-#smart-mode-loader,body.basic-mode #smart-mode-loader{position:fixed!important;inset:0!important;top:0!important;left:0!important;right:0!important;bottom:0!important;width:100vw!important;height:100vh!important;z-index:999!important;background:rgba(15,23,42,.75)!important;backdrop-filter:blur(12px)!important;-webkit-backdrop-filter:blur(12px)!important;display:none;align-items:center!important;justify-content:center!important;font-family:'Inter',-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif!important}
-#smart-mode-loader.active,#smart-mode-loader:not(.hidden){display:flex!important}
-#smart-mode-loader .smart-loader-box,body.basic-mode #smart-mode-loader .smart-loader-box{display:flex!important;flex-direction:column!important;align-items:center!important;justify-content:center!important;padding:2rem 2.5rem!important;border-radius:1.25rem!important;background:rgba(15,23,42,.9)!important;border:1px solid rgba(255,255,255,.2)!important;box-shadow:0 25px 50px -12px rgba(0,0,0,.6)!important;max-width:24rem!important;margin:0 1rem!important;text-align:center!important;color:#fff!important}
-#smart-mode-loader .smart-loader-spinner,body.basic-mode #smart-mode-loader .smart-loader-spinner{width:3rem!important;height:3rem!important;margin-bottom:1.25rem!important;border:4px solid rgba(255,255,255,.2)!important;border-top-color:#fff!important;border-radius:9999px!important;animation:spin .85s linear infinite!important}
-#smart-mode-loader .smart-loader-text,body.basic-mode #smart-mode-loader .smart-loader-text{font-size:.95rem!important;font-weight:600!important;letter-spacing:.025em!important;color:#fff!important;margin:0!important;font-family:'Inter',-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif!important}
+/* Tiny text-less CSS spinner directly inside toggle button during 800ms transition */
+body.basic-mode #smart-mode-loader{display:none!important}
+.smart-toggle-switch.is-loading .smart-toggle-slider::after,
+.smart-mode-toggle.is-loading .smart-toggle-slider::after{content:"";position:absolute;top:50%;left:50%;width:9px;height:9px;margin-top:-4.5px;margin-left:-4.5px;border:1.5px solid rgba(255,255,255,.4);border-top-color:#fff;border-radius:50%;animation:toggleMiniSpin .6s linear infinite;z-index:10;pointer-events:none}
+.smart-mode-toggle.is-loading input:not(:checked)+.smart-toggle-slider::after,
+.smart-toggle-switch.is-loading input:not(:checked)+.smart-toggle-slider::after{border-color:rgba(0,0,0,.2);border-top-color:#000}
+@keyframes toggleMiniSpin{to{transform:rotate(360deg)}}
+.smart-mode-toggle.is-loading{cursor:wait!important}
+.smart-mode-toggle input:disabled+.smart-toggle-slider{opacity:.85;cursor:wait!important}
 .footer-mode-item{display:inline-flex;align-items:center}
 .smart-mode-toggle{display:inline-flex;align-items:center;gap:8px;cursor:pointer;user-select:none;font-size:.75rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:#6b7280;transition:color .2s}
 .smart-mode-toggle:hover{color:#000}
@@ -481,13 +485,6 @@ header.header-hidden,
   </div>
 </footer>
 
-<!-- Full-Screen AI ATS Optimization & Formatting Loading Overlay (AI Assist Mode Transition) -->
-<div id="smart-mode-loader" class="fixed inset-0 z-[999] hidden flex flex-col items-center justify-center bg-black/75 backdrop-blur-md text-white transition-opacity duration-300 noprint" role="status" aria-live="polite" style="display: none;">
-  <div class="smart-loader-box flex flex-col items-center justify-center p-8 rounded-2xl bg-black/80 border border-white/20 shadow-2xl max-w-sm mx-4 text-center">
-    <div class="smart-loader-spinner w-12 h-12 mb-4 border-4 border-white/20 border-t-white rounded-full animate-spin"></div>
-    <p class="smart-loader-text text-sm font-semibold tracking-wide text-white">Initializing AI Assistant &amp; ATS Formatting...</p>
-  </div>
-</div>
 
 <script>
 const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
@@ -824,62 +821,50 @@ render();
     let isTransitioning = false;
     toggle.addEventListener('change', e => {
       if (isTransitioning) return;
+      isTransitioning = true;
       const willBeBasic = !e.target.checked;
-      const currentlyBasic = document.body.classList.contains('basic-mode');
 
-      if (!willBeBasic && currentlyBasic) {
-        isTransitioning = true;
-        // Keep basic-mode active during loading
-        document.body.classList.add('basic-mode');
+      // Temporarily disable toggle switch so it can't be spammed
+      toggle.disabled = true;
+      const toggleWraps = document.querySelectorAll('.smart-toggle-switch, .smart-mode-toggle');
+      toggleWraps.forEach(wrap => wrap.classList.add('is-loading'));
 
-        const loader = document.getElementById('smart-mode-loader');
-        if (loader) {
-          const loaderText = loader.querySelector('.smart-loader-text');
-          if (loaderText) loaderText.textContent = 'Initializing AI Assistant & ATS Formatting...';
-          loader.classList.remove('hidden');
-          loader.classList.add('active');
-          loader.style.display = 'flex';
-          loader.style.opacity = '1';
-        }
-
-        setTimeout(() => {
-          if (loader) {
-            loader.classList.add('hidden');
-            loader.classList.remove('active');
-            loader.style.display = 'none';
-          }
-          document.body.classList.remove('basic-mode');
+      // Non-blocking 800ms delay before applying mode change
+      setTimeout(() => {
+        try {
+          document.body.classList.toggle('basic-mode', willBeBasic);
           try {
-            localStorage.setItem('craftcv_smart_mode', 'smart');
+            localStorage.setItem('craftcv_smart_mode', willBeBasic ? 'basic' : 'smart');
           } catch (err) {}
           if (typeof updateWizardNextBtn === 'function') updateWizardNextBtn();
           if (typeof render === 'function') render();
 
-          if (window.CraftCVApp && typeof CraftCVApp.updateATSAnalysis === 'function') {
-            CraftCVApp.updateATSAnalysis();
+          if (!willBeBasic) {
+            if (window.CraftCVApp && typeof CraftCVApp.updateATSAnalysis === 'function') {
+              CraftCVApp.updateATSAnalysis();
+            }
+            const atsBadge = document.querySelector('#ats-badge-pill');
+            if (atsBadge) {
+              atsBadge.classList.remove('score-pop-animation');
+              void atsBadge.offsetWidth;
+              atsBadge.classList.add('score-pop-animation');
+            }
+            const cvEl = document.querySelector('#cv');
+            if (cvEl) {
+              cvEl.classList.remove('smart-reveal-animation');
+              void cvEl.offsetWidth;
+              cvEl.classList.add('smart-reveal-animation');
+            }
           }
-          const atsBadge = document.querySelector('#ats-badge-pill');
-          if (atsBadge) {
-            atsBadge.classList.remove('score-pop-animation');
-            void atsBadge.offsetWidth;
-            atsBadge.classList.add('score-pop-animation');
-          }
-          const cvEl = document.querySelector('#cv');
-          if (cvEl) {
-            cvEl.classList.remove('smart-reveal-animation');
-            void cvEl.offsetWidth;
-            cvEl.classList.add('smart-reveal-animation');
-          }
+        } catch (err) {
+          console.error('Mode transition error:', err);
+        } finally {
+          // Strictly completes and re-enables toggle switch
+          toggle.disabled = false;
+          toggleWraps.forEach(wrap => wrap.classList.remove('is-loading'));
           isTransitioning = false;
-        }, 1500);
-      } else {
-        document.body.classList.toggle('basic-mode', willBeBasic);
-        try {
-          localStorage.setItem('craftcv_smart_mode', willBeBasic ? 'basic' : 'smart');
-        } catch (err) {}
-        if (typeof updateWizardNextBtn === 'function') updateWizardNextBtn();
-        if (typeof render === 'function') render();
-      }
+        }
+      }, 800);
     });
   }
 })();

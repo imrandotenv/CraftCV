@@ -2936,6 +2936,46 @@ footer,
   transform: translateX(14px);
 }
 
+/* Tiny text-less CSS spinner directly inside toggle button during 800ms transition */
+.smart-toggle-switch.is-loading .smart-toggle-slider::after,
+.smart-mode-toggle.is-loading .smart-toggle-slider::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 9px;
+  height: 9px;
+  margin-top: -4.5px;
+  margin-left: -4.5px;
+  border: 1.5px solid rgba(255, 255, 255, 0.4);
+  border-top-color: #ffffff;
+  border-radius: 50%;
+  animation: toggleMiniSpin 0.6s linear infinite;
+  z-index: 10;
+  pointer-events: none;
+}
+
+.smart-mode-toggle.is-loading input:not(:checked) + .smart-toggle-slider::after,
+.smart-toggle-switch.is-loading input:not(:checked) + .smart-toggle-slider::after {
+  border-color: rgba(0, 0, 0, 0.2);
+  border-top-color: #000000;
+}
+
+@keyframes toggleMiniSpin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.smart-mode-toggle.is-loading {
+  cursor: wait !important;
+}
+
+.smart-mode-toggle input:disabled + .smart-toggle-slider {
+  opacity: 0.85;
+  cursor: wait !important;
+}
+
 .smart-mode-label {
   display: inline-block;
   font-weight: 700;

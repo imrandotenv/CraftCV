@@ -876,8 +876,6 @@ window.CraftCVApp = window.CVForgeApp = (() => {
       if (typeof document !== 'undefined') {
         const labels = document.querySelectorAll('.smart-mode-label');
         labels.forEach(l => { l.textContent = 'AI Assist Mode'; });
-        const loaders = document.querySelectorAll('.smart-loader-text');
-        loaders.forEach(t => { t.textContent = 'Initializing AI Assistant & ATS Formatting...'; });
       }
       try {
         localStorage.setItem(STORAGE_KEY_SMART_MODE, basic ? 'basic' : 'smart');
@@ -917,60 +915,48 @@ window.CraftCVApp = window.CVForgeApp = (() => {
     let isTransitioning = false;
 
     /**
-     * Handle mode toggle with realistic loading state
-     * When switching from Basic to Smart mode:
-     * - Immediately prevents the UI from changing (preserves basic-mode)
-     * - Shows full-screen loading overlay for 1500ms using setTimeout
-     * - After 1500ms: hides overlay, removes basic-mode class, triggers ATS score animation, and re-renders CV preview
+     * Handle mode toggle with non-blocking 800ms transition
+     * - Does NOT block the screen (no intrusive full-screen overlay)
+     * - Temporarily disables toggle switch so it can't be spammed
+     * - Adds a minimal 800ms delay (setTimeout) before actually removing or adding basic-mode to body
+     * - Displays tiny text-less CSS spinner directly inside the toggle button
+     * - JavaScript execution strictly completes and re-enables switch via finally
      */
     function handleModeToggle(checked) {
       if (isTransitioning) return;
+      isTransitioning = true;
       const willBeBasic = !checked;
-      const currentlyBasic = typeof document !== 'undefined' && document.body && document.body.classList && document.body.classList.contains('basic-mode');
 
-      // Check if transitioning from Basic to Smart mode
-      if (!willBeBasic && currentlyBasic) {
-        isTransitioning = true;
+      // Temporarily disable toggle switch so it can't be spammed
+      toggleInputs.forEach(input => {
+        if (input) input.disabled = true;
+      });
 
-        // Immediately prevent the UI from changing! Keep basic-mode active during loading
-        if (typeof document !== 'undefined' && document.body && document.body.classList && !document.body.classList.contains('basic-mode')) {
-          document.body.classList.add('basic-mode');
-        }
+      // Show tiny text-less CSS spinner inside toggle button during 800ms window
+      const toggleWraps = typeof document !== 'undefined'
+        ? document.querySelectorAll('.smart-toggle-switch, .smart-mode-toggle')
+        : [];
+      toggleWraps.forEach(wrap => {
+        if (wrap && wrap.classList) wrap.classList.add('is-loading');
+      });
 
-        // Show the full-screen loading overlay (z-[999])
-        const loader = typeof document !== 'undefined' ? (document.getElementById('smart-mode-loader') || document.querySelector('.smart-mode-loader')) : null;
-        if (loader) {
-          const loaderText = loader.querySelector('.smart-loader-text');
-          if (loaderText) loaderText.textContent = 'Initializing AI Assistant & ATS Formatting...';
-          loader.classList.remove('hidden');
-          loader.classList.add('active');
-          loader.style.display = 'flex';
-          loader.style.opacity = '1';
-        }
-
-        // Keep toggle inputs checked to show intent
-        toggleInputs.forEach(input => {
-          if (input) input.checked = true;
-        });
-
-        // 1500ms delay for realistic heavy process completion
-        setTimeout(() => {
-          // Hide overlay
-          if (loader) {
-            loader.classList.add('hidden');
-            loader.classList.remove('active');
-            loader.style.display = 'none';
-          }
-
-          // Complete Smart Mode switch:
-          // Remove basic-mode class, trigger ATS score animation, and re-render CV preview
-          applyMode(false);
+      // Minimal 800ms delay before actually removing or adding the basic-mode class to the body
+      setTimeout(() => {
+        try {
+          applyMode(willBeBasic);
+        } catch (err) {
+          console.error('Mode toggle error:', err);
+        } finally {
+          // Strictly completes and re-enables the toggle switch, guaranteeing the app never gets stuck
+          toggleInputs.forEach(input => {
+            if (input) input.disabled = false;
+          });
+          toggleWraps.forEach(wrap => {
+            if (wrap && wrap.classList) wrap.classList.remove('is-loading');
+          });
           isTransitioning = false;
-        }, 1500);
-      } else {
-        // Switching to Basic mode
-        applyMode(willBeBasic);
-      }
+        }
+      }, 800);
     }
 
     // Bind change listeners on all toggle inputs
