@@ -2746,6 +2746,114 @@ footer,
   outline: none;
 }
 
+/* ==============================================
+   SMART MODE / BASIC MODE TOGGLE & UTILITY SYSTEM
+   Sleek minimal toggle switch next to Support link
+   When <body> has .basic-mode, hide all advanced AI/ATS features
+   ============================================== */
+.footer-mode-item {
+  display: inline-flex;
+  align-items: center;
+}
+
+.smart-mode-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  user-select: none;
+  font-family: 'Satoshi', 'Plus Jakarta Sans', sans-serif;
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: #6b7280;
+  transition: color 0.2s ease;
+  padding: 4px 0;
+}
+
+.smart-mode-toggle:hover {
+  color: #000000;
+}
+
+.smart-toggle-switch {
+  position: relative;
+  display: inline-block;
+  width: 32px;
+  height: 18px;
+  flex-shrink: 0;
+}
+
+.smart-mode-input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+  position: absolute;
+  margin: 0;
+  padding: 0;
+  pointer-events: none;
+}
+
+.smart-toggle-slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #d1d5db;
+  border-radius: 9999px;
+  transition: background-color 0.2s ease, box-shadow 0.2s ease;
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.08);
+}
+
+.smart-toggle-slider::before {
+  position: absolute;
+  content: "";
+  height: 12px;
+  width: 12px;
+  left: 3px;
+  bottom: 3px;
+  background-color: #ffffff;
+  border-radius: 50%;
+  transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.25);
+}
+
+.smart-mode-input:checked + .smart-toggle-slider {
+  background-color: #000000;
+}
+
+.smart-mode-input:focus-visible + .smart-toggle-slider {
+  outline: 2px solid #000000;
+  outline-offset: 2px;
+}
+
+.smart-mode-input:checked + .smart-toggle-slider::before {
+  transform: translateX(14px);
+}
+
+.smart-mode-label {
+  display: inline-block;
+  font-weight: 700;
+  color: inherit;
+  white-space: nowrap;
+}
+
+body:not(.basic-mode) .smart-mode-label {
+  color: #111827;
+}
+
+body.basic-mode .smart-mode-label {
+  color: #9ca3af;
+}
+
+/* Basic Mode Feature Hiding Mechanism */
+body.basic-mode .smart-feature,
+html.basic-mode .smart-feature {
+  display: none !important;
+}
+
 @media (max-width: 640px) {
   .footer-container {
     flex-direction: column;

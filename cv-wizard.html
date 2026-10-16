@@ -97,6 +97,19 @@ textarea{resize:vertical;min-height:62px}
 .py-2-5,.py-2\.5{padding-top:.625rem!important;padding-bottom:.625rem!important}
 @media(min-width:768px){.mobile-bottom-nav,.md\:hidden{display:none!important}}
 @media print{.mobile-bottom-nav{display:none!important}body.pb-24,.wrap.pb-24{padding-bottom:0!important}}
+body.basic-mode .smart-feature,html.basic-mode .smart-feature{display:none!important}
+.footer-mode-item{display:inline-flex;align-items:center}
+.smart-mode-toggle{display:inline-flex;align-items:center;gap:8px;cursor:pointer;user-select:none;font-size:.75rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:#6b7280;transition:color .2s}
+.smart-mode-toggle:hover{color:#000}
+.smart-toggle-switch{position:relative;display:inline-block;width:32px;height:18px;flex-shrink:0}
+.smart-mode-input{opacity:0;width:0;height:0;position:absolute;margin:0;pointer-events:none}
+.smart-toggle-slider{position:absolute;cursor:pointer;top:0;left:0;right:0;bottom:0;background-color:#d1d5db;border-radius:9999px;transition:.2s}
+.smart-toggle-slider::before{position:absolute;content:"";height:12px;width:12px;left:3px;bottom:3px;background-color:#fff;border-radius:50%;transition:.2s;box-shadow:0 1px 3px rgba(0,0,0,.25)}
+.smart-mode-input:checked+.smart-toggle-slider{background-color:#000}
+.smart-mode-input:checked+.smart-toggle-slider::before{transform:translateX(14px)}
+.smart-mode-label{display:inline-block;font-weight:700;color:inherit;white-space:nowrap}
+body:not(.basic-mode) .smart-mode-label{color:#111827}
+body.basic-mode .smart-mode-label{color:#9ca3af}
 
 /* theme picker */
 .themes{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px}
@@ -199,6 +212,33 @@ textarea{resize:vertical;min-height:62px}
       <div class="card"><h2>🏅 Certifications &amp; Achievements</h2>
         <label class="f">One per line<textarea name="certs" placeholder="Python for Everybody - Coursera"></textarea></label>
       </div>
+
+      <!-- ATS Score, Job Matcher & Smart Auditor Dashboard (Smart Feature) -->
+      <section class="card smart-feature ats-dashboard-section" id="ats-section" style="margin-top:16px;">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">
+          <div>
+            <h2 style="margin:0;">⚡ ATS Intelligence Dashboard</h2>
+            <small style="color:var(--muted);">Real-time algorithmic auditing &amp; AI keyword matcher</small>
+          </div>
+          <div class="ats-score-badge smart-feature" id="ats-badge-pill" style="font-weight:700;padding:6px 14px;border-radius:9999px;background:#000;color:#fff;">
+            SCORE: <span id="ats-badge-score">0</span>/100
+          </div>
+        </div>
+
+        <!-- Job Description Keyword Matcher -->
+        <div class="card smart-feature jd-matcher-card" style="margin-top:10px;background:#f9fafb;border:1px solid var(--line);border-radius:8px;padding:12px;">
+          <h3 style="font-size:.9rem;margin-bottom:6px;">🎯 Role Specification Analysis (Keyword Matcher)</h3>
+          <textarea id="jd-input-text" class="jd-input smart-feature" placeholder="Paste target job description to extract high-priority keywords..." style="width:100%;height:70px;padding:8px;border:1px solid var(--line);border-radius:6px;font-family:inherit;font-size:.85rem;"></textarea>
+          <button type="button" class="btn sec smart-feature" id="jd-analyze-btn" style="margin-top:8px;padding:6px 12px;font-size:.8rem;">⚡ Analyze Keywords</button>
+        </div>
+
+        <!-- Immediate Score Boosts Recommendation Box -->
+        <div class="card ats-tips-card smart-feature" id="ats-tips-container" style="margin-top:10px;background:#eff6ff;border:1px solid #bfdbfe;border-radius:8px;padding:12px;display:none;">
+          <h3 style="font-size:.9rem;color:#1e40af;margin-bottom:4px;" class="smart-feature">🚀 Immediate Score Boosts</h3>
+          <p style="font-size:.8rem;color:#1e3a8a;margin:0;" class="smart-feature">Recommended Fixes &amp; AI optimizations</p>
+          <ul id="ats-tips-list" class="smart-feature" style="margin:8px 0 0 18px;font-size:.8rem;color:#1e3a8a;"></ul>
+        </div>
+      </section>
     </form>
     <p class="err" id="err">Please enter your name to continue.</p>
     <div class="nav"><button class="btn sec" id="sample">✨ Fill sample data</button><button class="btn pri" id="to2">Next: Choose Theme →</button></div>
@@ -283,6 +323,15 @@ textarea{resize:vertical;min-height:62px}
         <li><a href="privacy.html" class="footer-link">Privacy</a></li>
         <li><a href="terms.html" class="footer-link">Terms</a></li>
         <li><a href="mailto:help@ceimran.in" class="footer-link" title="Contact">Support</a></li>
+        <li class="footer-mode-item">
+          <label class="smart-mode-toggle" for="smart-mode-toggle" title="Toggle AI / ATS Smart Mode">
+            <span class="smart-toggle-switch">
+              <input type="checkbox" id="smart-mode-toggle" class="smart-mode-input" checked aria-label="Smart Mode">
+              <span class="smart-toggle-slider" aria-hidden="true"></span>
+            </span>
+            <span class="smart-mode-label">Smart Mode</span>
+          </label>
+        </li>
         <li><a href="https://github.com/imrandotenv/CraftCV" target="_blank" rel="noopener noreferrer" class="footer-link">GitHub</a></li>
       </ul>
     </nav>
@@ -524,6 +573,31 @@ $('#sample').onclick=()=>{
   addRow('exp',{a:'Web Development Intern',b:'Company Name',c:'Jun - Aug 2025',d:'Built 5 responsive pages, improving mobile usability by 30%\nWorked in a team of 4 using Git workflows'});
   addRow('proj',{a:'CraftCV Resume Builder',b:'HTML, CSS, JS',c:'2025',d:'3-step resume wizard with 4 templates and print-ready A4 output'});
 };
+
+// Mode Toggle initialization & synchronization
+(function() {
+  const toggle = document.querySelector('#smart-mode-toggle');
+  try {
+    const saved = localStorage.getItem('craftcv_smart_mode');
+    const isBasic = saved === 'basic' || saved === 'off' || saved === 'false' || saved === '0';
+    if (isBasic) {
+      document.body.classList.add('basic-mode');
+      if (toggle) toggle.checked = false;
+    } else {
+      document.body.classList.remove('basic-mode');
+      if (toggle) toggle.checked = true;
+    }
+  } catch (e) {}
+  if (toggle) {
+    toggle.addEventListener('change', e => {
+      const isBasic = !e.target.checked;
+      document.body.classList.toggle('basic-mode', isBasic);
+      try {
+        localStorage.setItem('craftcv_smart_mode', isBasic ? 'basic' : 'smart');
+      } catch (err) {}
+    });
+  }
+})();
 </script>
 <!-- Modular Scripts -->
 <script src="assets/js/storage.js"></script>

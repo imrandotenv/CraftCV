@@ -817,10 +817,72 @@ window.CraftCVApp = window.CVForgeApp = (() => {
     });
   }
 
+  const STORAGE_KEY_SMART_MODE = 'craftcv_smart_mode';
+
+  /**
+   * Mode Toggle: Switch between Basic Mode and Smart AI/ATS Mode
+   * Default: Smart Mode ON.
+   * When unchecked: adds .basic-mode class to <body> and <html>, saves to localStorage.
+   * When checked: removes .basic-mode class from <body> and <html>, saves to localStorage.
+   */
+  function setupModeToggle() {
+    const toggleInputs = $$('#smart-mode-toggle, .smart-mode-input');
+
+    let isBasic = false;
+    try {
+      const saved = localStorage.getItem(STORAGE_KEY_SMART_MODE);
+      if (saved === 'basic' || saved === 'off' || saved === 'false' || saved === '0') {
+        isBasic = true;
+      }
+    } catch (e) {}
+
+    function applyMode(basic) {
+      if (typeof document !== 'undefined') {
+        if (basic) {
+          if (document.body && document.body.classList) document.body.classList.add('basic-mode');
+          if (document.documentElement && document.documentElement.classList) document.documentElement.classList.add('basic-mode');
+        } else {
+          if (document.body && document.body.classList) document.body.classList.remove('basic-mode');
+          if (document.documentElement && document.documentElement.classList) document.documentElement.classList.remove('basic-mode');
+        }
+      }
+      toggleInputs.forEach(input => {
+        if (input) input.checked = !basic;
+      });
+      try {
+        localStorage.setItem(STORAGE_KEY_SMART_MODE, basic ? 'basic' : 'smart');
+      } catch (e) {}
+    }
+
+    // Apply initial state
+    applyMode(isBasic);
+
+    // Bind change listeners on all toggle inputs
+    toggleInputs.forEach(input => {
+      if (input && input.addEventListener) {
+        input.addEventListener('change', (e) => {
+          applyMode(!e.target.checked);
+        });
+      }
+    });
+
+    // Delegated listener on document for any dynamically added toggle inputs
+    if (typeof document !== 'undefined' && document.addEventListener) {
+      document.addEventListener('change', (e) => {
+        if (e && e.target && (e.target.id === 'smart-mode-toggle' || (e.target.classList && e.target.classList.contains('smart-mode-input')))) {
+          applyMode(!e.target.checked);
+        }
+      });
+    }
+  }
+
   /**
    * Bind all event handlers and initialize app
    */
   function init() {
+    // Setup Smart / Basic Mode Toggle
+    setupModeToggle();
+
     // Setup themes and colors
     setupColorSwatches();
     setupThemeCards();
@@ -1659,11 +1721,42 @@ body { background: #eef1f6; font-family: 'Inter', sans-serif; display: flex; jus
     A4_HEIGHT_PX: () => A4_HEIGHT_PX,
     downloadHtmlResume,
     copyPlainTextResume,
-    exportJsonResume
+    exportJsonResume,
+    setupModeToggle,
+    setSmartMode: (enabled) => {
+      const basic = !enabled;
+      if (typeof document !== 'undefined') {
+        if (basic) {
+          if (document.body && document.body.classList) document.body.classList.add('basic-mode');
+          if (document.documentElement && document.documentElement.classList) document.documentElement.classList.add('basic-mode');
+        } else {
+          if (document.body && document.body.classList) document.body.classList.remove('basic-mode');
+          if (document.documentElement && document.documentElement.classList) document.documentElement.classList.remove('basic-mode');
+        }
+        if (document.querySelectorAll) {
+          document.querySelectorAll('#smart-mode-toggle, .smart-mode-input').forEach(i => { if (i) i.checked = Boolean(enabled); });
+        }
+      }
+      try { localStorage.setItem('craftcv_smart_mode', basic ? 'basic' : 'smart'); } catch (e) {}
+    },
+    isSmartMode: () => Boolean(typeof document !== 'undefined' && document.body && document.body.classList && !document.body.classList.contains('basic-mode'))
   };
 })();
 
+// Immediately restore mode on script load to eliminate visual flicker
+try {
+  const savedMode = localStorage.getItem('craftcv_smart_mode');
+  if (savedMode === 'basic' || savedMode === 'off' || savedMode === 'false' || savedMode === '0') {
+    if (typeof document !== 'undefined') {
+      if (document.documentElement && document.documentElement.classList) document.documentElement.classList.add('basic-mode');
+      if (document.body && document.body.classList) document.body.classList.add('basic-mode');
+    }
+  }
+} catch (e) {}
+
 // Bootstrap on DOM ready
-document.addEventListener('DOMContentLoaded', () => {
-  (window.CraftCVApp || window.CVForgeApp).init();
-});
+if (typeof document !== 'undefined' && document.addEventListener) {
+  document.addEventListener('DOMContentLoaded', () => {
+    (window.CraftCVApp || window.CVForgeApp).init();
+  });
+}

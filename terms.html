@@ -144,6 +144,15 @@
         <li><a href="privacy.html" class="footer-link">Privacy</a></li>
         <li><a href="terms.html" class="footer-link">Terms</a></li>
         <li><a href="mailto:help@ceimran.in" class="footer-link" title="Contact">Support</a></li>
+        <li class="footer-mode-item">
+          <label class="smart-mode-toggle" for="smart-mode-toggle" title="Toggle AI / ATS Smart Mode">
+            <span class="smart-toggle-switch">
+              <input type="checkbox" id="smart-mode-toggle" class="smart-mode-input" checked aria-label="Smart Mode">
+              <span class="smart-toggle-slider" aria-hidden="true"></span>
+            </span>
+            <span class="smart-mode-label">Smart Mode</span>
+          </label>
+        </li>
         <li><a href="https://github.com/imrandotenv/CraftCV" target="_blank" rel="noopener noreferrer" class="footer-link">GitHub</a></li>
       </ul>
     </nav>
@@ -158,5 +167,30 @@
     <a href="index.html#builder" class="bottom-nav-item bottom-nav-build bg-black text-white px-6 py-2.5 rounded-full text-xs font-black uppercase shadow-sm transition-transform active:scale-95">Build</a>
   </div>
 </nav>
+<script>
+(function() {
+  const toggle = document.querySelector('#smart-mode-toggle');
+  try {
+    const saved = localStorage.getItem('craftcv_smart_mode');
+    const isBasic = saved === 'basic' || saved === 'off' || saved === 'false' || saved === '0';
+    if (isBasic) {
+      document.body.classList.add('basic-mode');
+      if (toggle) toggle.checked = false;
+    } else {
+      document.body.classList.remove('basic-mode');
+      if (toggle) toggle.checked = true;
+    }
+  } catch (e) {}
+  if (toggle) {
+    toggle.addEventListener('change', e => {
+      const isBasic = !e.target.checked;
+      document.body.classList.toggle('basic-mode', isBasic);
+      try {
+        localStorage.setItem('craftcv_smart_mode', isBasic ? 'basic' : 'smart');
+      } catch (err) {}
+    });
+  }
+})();
+</script>
 </body>
 </html>
