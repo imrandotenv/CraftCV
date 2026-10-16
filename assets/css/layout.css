@@ -1399,83 +1399,200 @@ body.basic-mode .smart-mode-label {
 }
 
 /* ==========================================================================
-   EXTREME UI DOWNGRADE: BASIC MODE STYLING & RAW TEMPLATE ENGINE
-   Stark night-and-day contrast for presentation & demo purposes.
-   Strips glassmorphism, shadows, round borders; forces generic serif;
-   disables Step 2, color pickers, and smart features; renders raw text CV.
+   BASIC MODE STYLING: 2015 BOOTSTRAP-INSPIRED FORM & WORD-EXPORT CV
+   Replaces the modern luxury glassmorphism with a clean, classic, functional
+   web application aesthetic (2015 Bootstrap 3/4 feel) while preserving full
+   structural integrity, flexbox/grid layout, and form padding.
    ========================================================================== */
 
-/* 1. Universal Serif Font in Basic Mode */
-body.basic-mode,
-body.basic-mode *,
+/* 1. Typography & Background Downgrade (System Arial/Sans-Serif & Dull Gray-100) */
 html.basic-mode,
-html.basic-mode * {
-  font-family: 'Times New Roman', Times, Georgia, serif !important;
+body.basic-mode {
+  background-color: #f3f4f6 !important;
+  background: #f3f4f6 !important;
+  background-image: none !important;
+  color: #333333 !important;
+  font-family: Arial, "Helvetica Neue", Helvetica, sans-serif !important;
 }
 
-/* 2. Strip All Shadows & Glassmorphism Filters */
+body.basic-mode input,
+body.basic-mode button,
+body.basic-mode select,
+body.basic-mode textarea,
+body.basic-mode .btn,
+body.basic-mode h1,
+body.basic-mode h2,
+body.basic-mode h3,
+body.basic-mode p,
+body.basic-mode span,
+body.basic-mode label {
+  font-family: Arial, "Helvetica Neue", Helvetica, sans-serif !important;
+}
+
+body.basic-mode .pastel-glow-backdrop,
+body.basic-mode .pastel-blob,
+html.basic-mode .pastel-glow-backdrop,
+html.basic-mode .pastel-blob {
+  display: none !important;
+}
+
+/* 2. Strip Glassmorphism & Soft Floating Shadows */
 body.basic-mode *,
 body.basic-mode *::before,
 body.basic-mode *::after,
 html.basic-mode *,
 html.basic-mode *::before,
 html.basic-mode *::after {
-  box-shadow: none !important;
   text-shadow: none !important;
   filter: none !important;
   backdrop-filter: none !important;
   -webkit-backdrop-filter: none !important;
 }
 
-/* 3. Strip Glassmorphic Backgrounds to Flat White */
-body.basic-mode header,
-body.basic-mode nav,
-body.basic-mode .top-nav,
-body.basic-mode .mobile-bottom-nav,
+/* 3. Containers & Panels: Flat White/Light-Gray, 1px Border, 4px Radius (Bootstrap Well/Panel) */
 body.basic-mode .card,
 body.basic-mode .bento-card,
-body.basic-mode .frosted-glass-pill,
+body.basic-mode .panel,
 body.basic-mode .formatting-controls-card,
 body.basic-mode .notification-pill,
+body.basic-mode .frosted-glass-pill,
 body.basic-mode .glass,
 body.basic-mode .roll-box,
 body.basic-mode .preview-container {
   background: #ffffff !important;
+  background-color: #ffffff !important;
+  border: 1px solid #d1d5db !important;
+  border-radius: 4px !important;
+  box-shadow: none !important;
+}
+
+/* Structural Integrity: Keep flexbox, grid, and spacing intact; subtle border on repeating rows */
+body.basic-mode .row {
+  background: #f9fafb !important;
+  border: 1px solid #e5e7eb !important;
+  border-radius: 4px !important;
+  box-shadow: none !important;
+}
+
+body.basic-mode .step {
+  border: none !important;
+  box-shadow: none !important;
+}
+
+body.basic-mode header.top-nav,
+body.basic-mode .top-nav,
+body.basic-mode header.brand {
+  background: #ffffff !important;
+  border-bottom: 1px solid #e5e7eb !important;
+  box-shadow: none !important;
+  border-radius: 0 !important;
+}
+
+/* Mobile bottom nav override for 2015 look */
+body.basic-mode .mobile-bottom-nav {
+  background: #ffffff !important;
+  border: 1px solid #d1d5db !important;
+  border-radius: 4px !important;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1) !important;
   backdrop-filter: none !important;
   -webkit-backdrop-filter: none !important;
 }
 
-/* 4. Harsh, Square, 1px Solid Black Borders on Interactive & Container Elements */
-body.basic-mode input,
-body.basic-mode textarea,
-body.basic-mode select,
-body.basic-mode button,
-body.basic-mode .btn,
-body.basic-mode .card,
-body.basic-mode .bento-card,
-body.basic-mode .mobile-bottom-nav,
-body.basic-mode .notification-pill,
-body.basic-mode .sheet,
-body.basic-mode .row,
-body.basic-mode .step,
-body.basic-mode fieldset {
-  border-radius: 0 !important;
-  border: 1px solid #000000 !important;
-}
-
-body.basic-mode button,
-body.basic-mode .btn {
-  background-color: #ffffff !important;
-  color: #000000 !important;
-}
-
-body.basic-mode button:hover,
-body.basic-mode .btn:hover {
-  background-color: #000000 !important;
+body.basic-mode .mobile-bottom-nav .bottom-nav-build {
+  border-radius: 4px !important;
+  background-color: #337ab7 !important;
   color: #ffffff !important;
 }
 
-/* 5. Disable Premium Steps: Hide Step 2 (Theme Selection), Accent Pickers, & ATS/Smart Features */
+body.basic-mode .satoshi-black,
+body.basic-mode .tracking-tighter-h,
+body.basic-mode .tracking-tighter {
+  font-family: Arial, "Helvetica Neue", Helvetica, sans-serif !important;
+  letter-spacing: normal !important;
+  font-weight: 700 !important;
+}
+
+/* Heavy radius override to standard rounded-sm (4px) */
+body.basic-mode .rounded-full,
+body.basic-mode .rounded-2xl,
+body.basic-mode .rounded-xl,
+body.basic-mode .rounded-lg,
+body.basic-mode .dot i {
+  border-radius: 4px !important;
+}
+
+/* 4. Form Inputs: Classic 2015 Bootstrap Form Controls */
+body.basic-mode input,
+body.basic-mode textarea,
+body.basic-mode select {
+  background-color: #ffffff !important;
+  border: 1px solid #cccccc !important;
+  border-radius: 4px !important;
+  color: #333333 !important;
+  box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075) !important;
+  font-size: 0.9rem !important;
+}
+
+body.basic-mode input:focus,
+body.basic-mode textarea:focus,
+body.basic-mode select:focus {
+  border-color: #66afe9 !important;
+  outline: 0 !important;
+  box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(102, 175, 233, 0.6) !important;
+}
+
+/* 5. Buttons: Standard 2015 Bootstrap Primary & Secondary Buttons */
+body.basic-mode button.btn.pri,
+body.basic-mode .btn.pri,
+body.basic-mode .btn-primary {
+  background-color: #337ab7 !important;
+  border: 1px solid #2e6da4 !important;
+  color: #ffffff !important;
+  border-radius: 4px !important;
+  box-shadow: none !important;
+  text-transform: none !important;
+  letter-spacing: normal !important;
+  font-weight: 600 !important;
+  transform: none !important;
+}
+
+body.basic-mode button.btn.pri:hover,
+body.basic-mode .btn.pri:hover,
+body.basic-mode .btn-primary:hover {
+  background-color: #286090 !important;
+  border-color: #204d74 !important;
+  color: #ffffff !important;
+  transform: none !important;
+}
+
+body.basic-mode button,
+body.basic-mode .btn,
+body.basic-mode .btn.sec,
+body.basic-mode .btn-export,
+body.basic-mode .btn.add {
+  background-color: #ffffff !important;
+  border: 1px solid #cccccc !important;
+  color: #333333 !important;
+  border-radius: 4px !important;
+  box-shadow: none !important;
+  text-transform: none !important;
+  letter-spacing: normal !important;
+  font-weight: 500 !important;
+  transform: none !important;
+}
+
+body.basic-mode button:hover,
+body.basic-mode .btn:hover,
+body.basic-mode .btn.sec:hover,
+body.basic-mode .btn-export:hover,
+body.basic-mode .btn.add:hover {
+  background-color: #e6e6e6 !important;
+  border-color: #adadad !important;
+  color: #333333 !important;
+  transform: none !important;
+}
+
+/* 6. Disable Premium Features (Step 2 Theme Selection, Accent Pickers, ATS/Smart Features) */
 body.basic-mode #s2,
 body.basic-mode #d2,
 body.basic-mode #step2,
@@ -1485,6 +1602,7 @@ body.basic-mode #themes,
 body.basic-mode .colors,
 body.basic-mode #colors,
 body.basic-mode #change-theme-btn,
+body.basic-mode #change-theme-left-btn,
 body.basic-mode [data-go="2"],
 body.basic-mode .smart-feature,
 body.basic-mode #ats-section,
@@ -1503,80 +1621,167 @@ html.basic-mode .smart-feature {
   display: none !important;
 }
 
-/* 6. Unstyled 'Raw' Resume Template (Zero CSS Layout - Plain Sequential Document) */
+/* 7. Plain Microsoft Word Export Fallback for CV Preview */
+body.basic-mode .sheet,
 .sheet.t-raw,
-.sheet.basic-raw-template,
-body.basic-mode .sheet {
+.sheet.basic-raw-template {
   display: block !important;
   width: 100% !important;
   max-width: 210mm !important;
   min-height: 297mm !important;
   background: #ffffff !important;
   color: #000000 !important;
-  padding: 40px !important;
-  border: 1px solid #000000 !important;
+  padding: 24mm 20mm !important; /* Standard Word 1-inch margins */
+  border: 1px solid #d1d5db !important;
   border-radius: 0 !important;
-  box-shadow: none !important;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1) !important;
   font-family: 'Times New Roman', Times, Georgia, serif !important;
   font-size: 11pt !important;
-  line-height: 1.4 !important;
+  line-height: 1.35 !important;
   text-align: left !important;
   box-sizing: border-box !important;
   transform: none !important;
 }
 
+/* Force single-column sequential layout across all sections */
+body.basic-mode .sheet header,
+body.basic-mode .sheet aside,
+body.basic-mode .sheet main,
+body.basic-mode .sheet section,
+body.basic-mode .sheet .grid,
+body.basic-mode .sheet .cols,
+body.basic-mode .sheet .side,
+body.basic-mode .sheet .main-col,
+body.basic-mode .sheet .sidebar,
+.sheet.t-raw header,
+.sheet.t-raw aside,
+.sheet.t-raw main,
+.sheet.basic-raw-template header,
+.sheet.basic-raw-template aside,
+.sheet.basic-raw-template main {
+  display: block !important;
+  width: 100% !important;
+  float: none !important;
+  clear: both !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  background: transparent !important;
+  grid-template-columns: none !important;
+  grid-template-areas: none !important;
+  border: none !important;
+}
+
+body.basic-mode .sheet h1,
 .sheet.t-raw h1,
-.sheet.basic-raw-template h1,
-body.basic-mode .sheet h1 {
-  font-size: 20pt !important;
+.sheet.basic-raw-template h1 {
+  font-size: 18pt !important;
   font-weight: bold !important;
   text-align: center !important;
-  margin: 0 0 6px 0 !important;
+  margin: 0 0 4px 0 !important;
   text-transform: uppercase !important;
   letter-spacing: normal !important;
   color: #000000 !important;
   font-family: 'Times New Roman', Times, Georgia, serif !important;
+  border: none !important;
 }
 
+body.basic-mode .sheet header p,
+body.basic-mode .sheet .role,
+.sheet.t-raw p:first-of-type,
+.sheet.basic-raw-template p:first-of-type {
+  text-align: center !important;
+  font-size: 10.5pt !important;
+  color: #333333 !important;
+  margin: 0 0 14px 0 !important;
+  font-weight: normal !important;
+  font-family: 'Times New Roman', Times, Georgia, serif !important;
+}
+
+body.basic-mode .sheet h2,
+body.basic-mode .sheet h3,
+body.basic-mode .sheet .section-title,
+.sheet.t-raw h2,
+.sheet.basic-raw-template h2 {
+  font-size: 12pt !important;
+  font-weight: bold !important;
+  margin: 14px 0 6px 0 !important;
+  border: none !important;
+  border-bottom: 1px solid #000000 !important;
+  padding-bottom: 2px !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.5px !important;
+  color: #000000 !important;
+  background: transparent !important;
+  font-family: 'Times New Roman', Times, Georgia, serif !important;
+  text-align: left !important;
+}
+
+body.basic-mode .sheet p,
 .sheet.t-raw p,
-.sheet.basic-raw-template p,
-body.basic-mode .sheet p {
-  font-size: 11pt !important;
+.sheet.basic-raw-template p {
+  font-size: 10.5pt !important;
   margin: 4px 0 !important;
   color: #000000 !important;
   font-family: 'Times New Roman', Times, Georgia, serif !important;
   line-height: 1.35 !important;
 }
 
-.sheet.t-raw h2,
-.sheet.basic-raw-template h2,
-body.basic-mode .sheet h2 {
-  font-size: 13pt !important;
-  font-weight: bold !important;
-  margin: 16px 0 6px 0 !important;
-  border-bottom: 1px solid #000000 !important;
-  padding-bottom: 2px !important;
-  text-transform: uppercase !important;
-  letter-spacing: normal !important;
-  color: #000000 !important;
-  font-family: 'Times New Roman', Times, Georgia, serif !important;
+body.basic-mode .sheet .it,
+.sheet.t-raw .it,
+.sheet.basic-raw-template .it {
+  margin-bottom: 8px !important;
 }
 
+body.basic-mode .sheet .it b,
+body.basic-mode .sheet strong,
+.sheet.t-raw strong,
+.sheet.basic-raw-template strong {
+  font-weight: bold !important;
+  color: #000000 !important;
+  font-size: 10.5pt !important;
+}
+
+body.basic-mode .sheet .it span {
+  display: inline !important;
+  color: #333333 !important;
+  font-size: 10pt !important;
+  margin-left: 4px !important;
+}
+
+body.basic-mode .sheet ul,
 .sheet.t-raw ul,
-.sheet.basic-raw-template ul,
-body.basic-mode .sheet ul {
-  margin: 4px 0 8px 24px !important;
+.sheet.basic-raw-template ul {
+  margin: 3px 0 6px 20px !important;
   padding: 0 !important;
   list-style-type: disc !important;
 }
 
+body.basic-mode .sheet li,
 .sheet.t-raw li,
-.sheet.basic-raw-template li,
-body.basic-mode .sheet li {
-  font-size: 10.5pt !important;
+.sheet.basic-raw-template li {
+  font-size: 10pt !important;
   margin-bottom: 2px !important;
   color: #000000 !important;
+  line-height: 1.35 !important;
   font-family: 'Times New Roman', Times, Georgia, serif !important;
+}
+
+/* Neutralize colored tags/badges in preview to plain comma-separated text */
+body.basic-mode .sheet .tags,
+body.basic-mode .sheet ul.p,
+body.basic-mode .sheet .tags li {
+  display: inline !important;
+  background: transparent !important;
+  border: none !important;
+  border-radius: 0 !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  color: #000000 !important;
+  font-size: 10pt !important;
+}
+
+body.basic-mode .sheet .tags li:not(:last-child)::after {
+  content: ", " !important;
 }
 
 /* 7. Transition Animations: Popping ATS Score & Smart UI Reveal */
