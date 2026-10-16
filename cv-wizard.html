@@ -76,6 +76,17 @@ textarea{resize:vertical;min-height:62px}
   .slider-group input[type="range"]{width:110px!important}
 }
 
+/* Mobile Bottom Navigation Bar */
+.pb-24{padding-bottom:6rem!important}
+.mobile-bottom-nav{position:fixed!important;bottom:0!important;left:0!important;width:100%!important;z-index:100!important;display:flex!important;background:rgba(255,255,255,.85)!important;-webkit-backdrop-filter:blur(20px)!important;backdrop-filter:blur(20px)!important;border-top:1px solid rgba(0,0,0,.05)!important;box-shadow:0 -4px 20px rgba(0,0,0,.04)!important}
+.mobile-bottom-nav-container{display:flex!important;justify-content:space-around!important;align-items:center!important;padding:.75rem 1rem!important;width:100%!important;max-width:440px!important;margin:0 auto!important}
+.bottom-nav-item{display:inline-flex!important;align-items:center!important;justify-content:center!important;min-height:40px!important;padding:.5rem 1rem!important;font-size:.875rem!important;font-weight:700!important;color:#1f2937!important;text-decoration:none!important;border-radius:9999px!important;transition:all .2s ease!important;cursor:pointer!important}
+.bottom-nav-item:hover{color:#000!important;background:rgba(0,0,0,.05)!important}
+.bottom-nav-build{background-color:#000!important;color:#fff!important;padding:.5rem 1.25rem!important;border-radius:9999px!important;font-weight:700!important;box-shadow:0 2px 8px rgba(0,0,0,.15)!important}
+.bottom-nav-build:hover{background-color:#171717!important;color:#fff!important}
+@media(min-width:768px){.mobile-bottom-nav,.md\:hidden{display:none!important}}
+@media print{.mobile-bottom-nav{display:none!important}body.pb-24,.wrap.pb-24{padding-bottom:0!important}}
+
 /* theme picker */
 .themes{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px}
 .th{border:2.5px solid var(--line);border-radius:12px;padding:10px;cursor:pointer;transition:.25s;background:var(--panel)}
@@ -144,8 +155,8 @@ textarea{resize:vertical;min-height:62px}
 }
 </style>
 </head>
-<body>
-<div class="wrap">
+<body class="pb-24">
+<div class="wrap pb-24">
   <div class="brand"><a href="index.html" style="text-decoration:none;color:inherit;" aria-label="CraftCV Home"><h1>📄 CraftCV</h1></a><p>Build a professional resume in 3 simple steps</p></div>
   <div class="steps">
     <div class="dot on" id="d1"><i>1</i><span>Details</span></div>
@@ -509,5 +520,14 @@ $('#sample').onclick=()=>{
 <script src="assets/js/form.js"></script>
 <script src="assets/js/ats.js"></script>
 <script src="assets/js/app.js"></script>
+
+<!-- Mobile Bottom Navigation Bar -->
+<nav class="mobile-bottom-nav flex md:hidden fixed bottom-0 left-0 w-full z-[100] noprint" style="background: rgba(255, 255, 255, 0.85); -webkit-backdrop-filter: blur(20px); backdrop-filter: blur(20px); border-top: 1px solid rgba(0, 0, 0, 0.05);" aria-label="Mobile Navigation">
+  <div class="mobile-bottom-nav-container flex justify-around items-center py-3 px-4 w-full max-w-md mx-auto">
+    <a href="index.html" class="bottom-nav-item font-bold text-sm text-gray-800 hover:text-black py-2 px-4 rounded-full transition-colors">Home</a>
+    <a href="index.html#templates" class="bottom-nav-item font-bold text-sm text-gray-800 hover:text-black py-2 px-4 rounded-full transition-colors">Templates</a>
+    <a href="index.html#builder" class="bottom-nav-item bottom-nav-build bg-black text-white px-5 py-2 rounded-full font-bold text-sm shadow-sm transition-transform active:scale-95">Build</a>
+  </div>
+</nav>
 </body>
 </html>

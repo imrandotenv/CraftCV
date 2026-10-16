@@ -15,7 +15,7 @@
   <!-- Master Stylesheet with Dark Luxury Design & Print Isolation -->
   <link rel="stylesheet" href="assets/css/landing.css">
 </head>
-<body id="terms-page">
+<body id="terms-page" class="pb-24">
 
 <!-- Abstract Pastel Gradient Glow Blobs (Peach, Light Orange & Pink with blur(100px)) -->
 <div class="pastel-glow-backdrop noprint" aria-hidden="true">
@@ -74,7 +74,7 @@
     </nav>
 
     <!-- Far Right: Primary Solid-Black CTA Button ('Build') -->
-    <div class="nav-right">
+    <div class="nav-right hidden md:flex">
       <a href="index.html#builder" class="nav-roll-link nav-roll-cta" aria-label="Build your resume">
         <span class="roll-box">
           <span class="roll-primary" aria-hidden="true">
@@ -93,7 +93,7 @@
      MAIN CONTENT AREA (SINGLE-COLUMN READING LAYOUT)
      pt-32, px-6, min-h-screen, text-center
      ============================================== -->
-<main class="pt-32 px-6 min-h-screen text-center">
+<main class="pt-32 px-6 min-h-screen text-center pb-24">
   <div class="max-w-3xl mx-auto">
     <h1 class="text-4xl font-bold">Terms &amp; Conditions</h1>
     <div class="reading-meta" style="margin-top: 1.5rem; text-align: center;">Last Updated: October 2026 • MIT Open-Source Guidelines • TERMS OF SERVICE</div>
@@ -150,5 +150,13 @@
   </div>
 </footer>
 
+<!-- Mobile Bottom Navigation Bar -->
+<nav class="mobile-bottom-nav flex md:hidden fixed bottom-0 left-0 w-full z-[100] noprint" style="background: rgba(255, 255, 255, 0.85); -webkit-backdrop-filter: blur(20px); backdrop-filter: blur(20px); border-top: 1px solid rgba(0, 0, 0, 0.05);" aria-label="Mobile Navigation">
+  <div class="mobile-bottom-nav-container flex justify-around items-center py-3 px-4 w-full max-w-md mx-auto">
+    <a href="index.html" class="bottom-nav-item font-bold text-sm text-gray-800 hover:text-black py-2 px-4 rounded-full transition-colors">Home</a>
+    <a href="index.html#templates" class="bottom-nav-item font-bold text-sm text-gray-800 hover:text-black py-2 px-4 rounded-full transition-colors">Templates</a>
+    <a href="index.html#builder" class="bottom-nav-item bottom-nav-build bg-black text-white px-5 py-2 rounded-full font-bold text-sm shadow-sm transition-transform active:scale-95">Build</a>
+  </div>
+</nav>
 </body>
 </html>
