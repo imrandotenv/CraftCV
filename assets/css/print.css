@@ -71,8 +71,11 @@
   .pb-28,
   body.pb-24,
   body.pb-28,
+  main.pb-24,
+  main.pb-28,
   .wrap.pb-24,
-  .wrap.pb-28 {
+  .wrap.pb-28,
+  .step.pb-28 {
     padding-bottom: 0 !important;
   }
 

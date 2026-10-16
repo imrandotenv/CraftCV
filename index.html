@@ -92,8 +92,8 @@
 <!-- ==============================================
      HERO LANDING SECTION (FULL-SCREEN 2-COLUMN)
      ============================================== -->
-<section class="landing-hero-fullscreen noprint" id="hero">
-  <div class="hero-container">
+<section class="landing-hero-fullscreen noprint pb-28" id="hero">
+  <div class="hero-container pb-28">
     <div class="hero-grid">
       <!-- Left Column: Stark Display Typography & Primary Actions -->
       <div class="hero-left-col">
@@ -102,7 +102,7 @@
           <span class="gold-gradient">CAREER</span>
         </h1>
 
-        <div class="hero-actions">
+        <div class="hero-actions pb-8">
           <button type="button" class="btn-hero-primary btn-generate-cv" id="hero-generate-btn">GENERATE MY CV</button>
           <button type="button" class="btn-hero-secondary" id="hero-sample-cta">Try Sample Data</button>
           <a href="#templates" class="btn-hero-secondary">Templates</a>
@@ -434,7 +434,7 @@
   <!-- ==============================================
        STEP 1: DETAILS & CONTENT
        ============================================== -->
-  <section class="step active" id="s1" aria-labelledby="step1-heading">
+  <section class="step active pb-28" id="s1" aria-labelledby="step1-heading">
     <form id="form" onsubmit="return false;" novalidate>
       <!-- Personal Info Card -->
       <fieldset class="card">
@@ -765,7 +765,7 @@
     </form>
 
     <!-- Step 1 Navigation & Actions -->
-    <div class="nav noprint">
+    <div class="nav noprint pb-8 mb-8" style="margin-bottom: 4rem !important;">
       <div class="nav-group">
         <button type="button" class="btn sec" id="sample">✨ Fill sample data</button>
         <button type="button" class="btn btn-danger" id="clear-data">🗑️ Clear all data</button>
@@ -777,7 +777,7 @@
   <!-- ==============================================
        STEP 2: THEME & COLOR PICKER (ASYMMETRIC BENTO GRID)
        ============================================== -->
-  <section class="step" id="s2" aria-labelledby="step2-heading">
+  <section class="step pb-28" id="s2" aria-labelledby="step2-heading">
     <div class="step2-bento-wrap">
       <div class="step2-header">
         <span class="bento-subhead">THEME SELECTION ENGINE</span>
@@ -902,7 +902,7 @@
     </div>
 
     <!-- Step 2 Navigation -->
-    <div class="nav noprint">
+    <div class="nav noprint pb-8 mb-8" style="margin-bottom: 4rem !important;">
       <button type="button" class="btn sec" data-go="1">← Back to Details</button>
       <button type="button" class="btn pri" id="to3">Generate My CV →</button>
     </div>
@@ -911,7 +911,7 @@
   <!-- ==============================================
        STEP 3: PREVIEW & DOWNLOAD
        ============================================== -->
-  <section class="step" id="s3" aria-labelledby="step3-heading">
+  <section class="step pb-28" id="s3" aria-labelledby="step3-heading">
     <!-- Primary Action Navigation: Edit Details, Change Theme, and Prominent Print / PDF CTA -->
     <div class="step3-action-row noprint">
       <div class="step3-nav-group">
@@ -941,10 +941,10 @@
       <span><strong>Print Tip:</strong> Choose <strong>Save as PDF</strong>, set Margins to <strong>None</strong>, and enable <strong>Background graphics</strong> for flawless A4 alignment.</span>
     </div>
 
-    <!-- CV Stage Container with Directly Attached Sticky Formatting Toolbar -->
+    <!-- CV Stage Container with Directly Attached Formatting Toolbar Above CV Wrapper -->
     <div class="cv-stage-container" id="cv-stage-container">
-      <!-- Sticky Compact Glassmorphic Toolbar directly attached to top edge of CV preview -->
-      <div class="formatting-controls sticky-cv-toolbar noprint">
+      <!-- Formatting Toolbar (Font Size slider, 'Fit to one page' toggle) - Relative positioning above CV wrapper, zero overlap -->
+      <div class="formatting-controls sticky-cv-toolbar noprint" id="formatting-controls" style="position: relative !important; top: auto !important; left: auto !important; transform: none !important; margin: 0 auto 1.25rem auto !important; z-index: 10 !important;">
         <div class="format-group">
           <div class="slider-group">
             <label for="font-size-slider">Font Size:</label>
@@ -962,7 +962,7 @@
       </div>
 
       <!-- CV Stage (Pristine White A4 Sheet) -->
-      <div class="stage">
+      <div class="stage" style="margin-top: 0 !important;">
         <article class="sheet" id="cv" aria-label="Printable Resume"></article>
       </div>
     </div>

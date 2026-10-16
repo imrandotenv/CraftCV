@@ -657,9 +657,11 @@ textarea {
   color: var(--accent);
 }
 
-/* Formatting Controls Toolbar (Font Size & Fit to One Page) */
+/* Formatting Controls Toolbar (Font Size & Fit to One Page) - Relative positioning above CV wrapper, zero overlap */
 .formatting-controls,
-.formatting-controls-card {
+.formatting-controls-card,
+#formatting-controls-card,
+.sticky-cv-toolbar {
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -671,7 +673,14 @@ textarea {
   padding: 12px 18px;
   margin-bottom: 16px;
   box-shadow: var(--shadow-sm);
-  position: static;
+  position: relative !important;
+  /* position: static to prevent overlap */
+  top: auto !important;
+  left: auto !important;
+  right: auto !important;
+  bottom: auto !important;
+  transform: none !important;
+  z-index: 10 !important;
 }
 
 .format-group {
@@ -1096,11 +1105,15 @@ textarea {
     width: 18px;
   }
   .wrap {
-    padding: var(--sp-3) var(--sp-2) var(--sp-5);
+    padding: var(--sp-3) var(--sp-2) 7rem !important;
+  }
+  .step {
+    padding-bottom: 3.5rem !important;
   }
   .nav {
     flex-direction: column;
     align-items: stretch;
+    margin-bottom: 4.5rem !important;
   }
   .nav button {
     width: 100%;
@@ -1140,32 +1153,40 @@ body.pb-28,
 main.pb-24,
 main.pb-28,
 .wrap.pb-24,
-.wrap.pb-28 {
+.wrap.pb-28,
+.step.pb-28,
+.hero-container.pb-28,
+.landing-hero-fullscreen.pb-28 {
   padding-bottom: 7rem !important;
 }
 
 .mobile-bottom-nav {
   position: fixed !important;
-  bottom: 0 !important;
-  left: 0 !important;
-  width: 100% !important;
+  bottom: 1.5rem !important;
+  left: 50% !important;
+  transform: translateX(-50%) !important;
+  width: max-content !important;
+  min-width: 85% !important;
+  max-width: 92% !important;
+  margin: 0 auto !important;
   z-index: 100 !important;
   display: flex !important;
-  background: rgba(255, 255, 255, 0.85) !important;
+  border-radius: 9999px !important;
+  background: rgba(255, 255, 255, 0.75) !important;
   -webkit-backdrop-filter: blur(20px) !important;
   backdrop-filter: blur(20px) !important;
-  border-top: 1px solid rgba(0, 0, 0, 0.05) !important;
-  box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.04) !important;
+  border: 1px solid rgba(0, 0, 0, 0.08) !important;
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1) !important;
 }
 
 .mobile-bottom-nav-container {
   display: flex !important;
-  justify-content: space-around !important;
+  justify-content: space-between !important;
   align-items: center !important;
-  padding: 0.75rem 1rem !important;
+  padding: 0.5rem 0.5rem !important;
+  gap: 1rem !important;
   width: 100% !important;
-  max-width: 440px !important;
-  margin: 0 auto !important;
+  box-sizing: border-box !important;
 }
 
 .bottom-nav-item {

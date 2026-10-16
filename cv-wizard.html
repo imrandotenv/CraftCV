@@ -115,10 +115,12 @@ textarea{resize:vertical;min-height:62px}
   .wizard-right-col,.wizard-preview-column,#wizard-preview-col{position:static!important;top:auto!important;height:auto!important;overflow-y:visible!important;overflow-x:visible!important}
   .wizard-preview-column #s3:not(.active),#wizard-preview-col #s3:not(.active){display:none!important}
   .wizard-preview-column #s3.active,#wizard-preview-col #s3.active{display:block!important}
+  .step{padding-bottom:3.5rem!important}
+  .step .nav,.nav{margin-bottom:4.5rem!important}
 }
 
 /* Mobile Bottom Navigation Bar - High-Depth Floating Pill */
-.pb-24,.pb-28,body.pb-24,body.pb-28,.wrap.pb-24,.wrap.pb-28{padding-bottom:7rem!important}
+.pb-24,.pb-28,body.pb-24,body.pb-28,.wrap.pb-24,.wrap.pb-28,.step.pb-28{padding-bottom:7rem!important}
 .toast-msg{position:fixed;bottom:24px;right:24px;background:#065f46;color:#ecfdf5;padding:10px 18px;border-radius:9999px;box-shadow:0 8px 30px rgba(0,0,0,.15);font-size:.88rem;font-weight:600;z-index:2000;display:none;animation:toastFadeIn .3s ease}
 .toast-msg.visible{display:block}
 @keyframes toastFadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
@@ -286,7 +288,7 @@ header.header-hidden,
 </style>
 </head>
 <body class="pb-28 pb-24">
-<div class="wrap pb-28 pb-24">
+<main class="wrap pb-28 pb-24" id="wizard-main">
   <header class="brand top-nav-brand"><a href="index.html" style="text-decoration:none;color:inherit;" aria-label="CraftCV Home"><h1>📄 CraftCV</h1></a><p>Build a professional resume in 3 simple steps</p></header>
   <div class="steps">
     <div class="dot on" id="d1"><i>1</i><span>Details</span></div>
@@ -297,9 +299,9 @@ header.header-hidden,
   <!-- Main Wizard Container: Two-Column Split on Large Screens (lg:grid lg:grid-cols-2 lg:gap-8) -->
   <div class="wizard-grid lg:grid lg:grid-cols-2 lg:gap-8" id="wizard-container">
     <!-- Left Column: Entire Input Form (Personal Info, Education, Experience, etc.) & Step Navigation Views -->
-    <div class="wizard-left-col wizard-form-column" id="wizard-left-col">
+    <div class="wizard-left-col wizard-form-column pb-28" id="wizard-left-col">
       <!-- STEP 1 -->
-      <section class="step active" id="s1">
+      <section class="step active pb-28" id="s1">
         <form id="form" onsubmit="return false">
           <div class="card"><h2>👤 Personal Info</h2>
             <div class="grid">
@@ -351,11 +353,11 @@ header.header-hidden,
           </section>
         </form>
         <p class="err" id="err">Please enter your name to continue.</p>
-        <div class="nav"><button class="btn sec" id="sample">✨ Fill sample data</button><button class="btn pri" id="to2">Next: Choose Theme →</button></div>
+        <div class="nav noprint pb-8 mb-8" style="margin-bottom: 4rem !important;"><button class="btn sec" id="sample">✨ Fill sample data</button><button class="btn pri" id="to2">Next: Choose Theme →</button></div>
       </section>
 
       <!-- STEP 2 -->
-      <section class="step" id="s2">
+      <section class="step pb-28" id="s2">
         <div class="card"><h2>🎨 Pick a template</h2>
           <div class="themes" id="themes">
             <div class="th sel" data-t="classic"><div class="mini m-classic"></div><b>Classic</b><small>Elegant serif, centered</small></div>
@@ -366,11 +368,11 @@ header.header-hidden,
           <h2 style="margin-top:18px">Accent colour</h2>
           <div class="colors" id="colors"></div>
         </div>
-        <div class="nav"><button class="btn sec" data-go="1">← Back</button><button class="btn pri" id="to3">Generate My CV →</button></div>
+        <div class="nav noprint pb-8 mb-8" style="margin-bottom: 4rem !important;"><button class="btn sec" data-go="1">← Back</button><button class="btn pri" id="to3">Generate My CV →</button></div>
       </section>
 
       <!-- STEP 3 ACTIONS FOR DESKTOP LEFT COLUMN -->
-      <section class="step" id="s3-left">
+      <section class="step pb-28" id="s3-left">
         <div class="card noprint">
           <h2>🎉 Resume Ready &amp; Actions</h2>
           <p style="color:var(--muted);font-size:0.88rem;margin-bottom:14px;">Your resume is generated and previewed in real-time. Print, export as HTML/JSON, or copy text directly.</p>
@@ -391,9 +393,9 @@ header.header-hidden,
     </div>
 
     <!-- Right Column: Stationary Live CV Template Preview Pinned via Sticky Positioning -->
-    <div class="wizard-right-col wizard-preview-column" id="wizard-preview-col">
+    <div class="wizard-right-col wizard-preview-column pb-28" id="wizard-preview-col">
       <!-- STEP 3 (Contains Controls, Formatting Toolbar & Live Preview) -->
-      <section class="step" id="s3">
+      <section class="step pb-28" id="s3">
         <div class="nav noprint" style="margin-bottom:8px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px">
           <div style="display:flex;gap:8px">
             <button class="btn sec" data-go="1">✏️ Edit details</button>
@@ -415,7 +417,7 @@ header.header-hidden,
         <div class="print-tip-pill noprint">💡 <strong>Print Tip:</strong> In print dialog choose "Save as PDF", set margins to <b>None</b> and turn on <b>Background graphics</b>.</div>
 
         <!-- Formatting Toolbar (Font Size slider, 'Fit to one page' toggle) - Relative/Static positioning immediately before CV wrapper -->
-        <div class="formatting-controls-card card noprint" id="formatting-controls-card" style="position: relative;">
+        <div class="formatting-controls-card card noprint" id="formatting-controls-card" style="position: relative !important; top: auto !important; margin-bottom: 1.25rem !important; z-index: 10 !important;">
           <div class="formatting-controls-inner">
             <div class="format-group">
               <label class="slider-group" for="font-size-slider">
@@ -439,7 +441,7 @@ header.header-hidden,
       </section>
     </div>
   </div>
-</div>
+</main>
 
 <!-- Structured Professional Footer -->
 <footer class="app-footer noprint py-8" style="position: relative; z-index: 100; background: transparent;">
